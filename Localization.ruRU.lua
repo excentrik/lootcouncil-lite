@@ -1,0 +1,89 @@
+if GetLocale() == "ruRU" then
+	if not LootCouncilLocalization then
+		LootCouncilLocalization = {}
+	end
+	LootCouncilLocalization["ACCEPT"] = "Принять" -- Needs review
+	LootCouncilLocalization["AGAINST"] = "Против"
+	LootCouncilLocalization["AWARD"] = "Передать вещь"
+	LootCouncilLocalization["BAD_CMD"] = "%s не является поддерживаемой опцией /lc"
+	LootCouncilLocalization["BAD_GUILD_RANK"] = "Вы должны выбрать существующий ранг гильдии"
+	LootCouncilLocalization["BAD_MANUAL_ADD"] = "Неверная команда. Шаблон команды: /lc add (имяПерсонажа) (ссылка)"
+	LootCouncilLocalization["BAD_SLOT"] = "ОШИБКА!!! Вы предоставили ссылку на НЕВЕРНЫЙ СЛОТ и пока еще не рассматриваетесь как претендент на %s. Пожалуйста, исправьтесь!"
+	LootCouncilLocalization["CANCEL"] = "Отмена"
+	LootCouncilLocalization["CLEAR_SELECTION"] = "Очистить выделение"
+	LootCouncilLocalization["CLOSE"] = "Закрыть"
+	LootCouncilLocalization["CMD_ADD"] = " - add (имя) (ссылка) - вручную добавить игрока в рассмотрение"
+	LootCouncilLocalization["CMD_CONFIG"] = " - config - открывает окно опций"
+	LootCouncilLocalization["CMD_END"] = " - end - завершает сессию лут консула" -- Needs review
+	LootCouncilLocalization["CMD_HIDE"] = " - hide - скрыть главное окно"
+	LootCouncilLocalization["CMD_MAIN"] = "Команды лут консула:" -- Needs review
+	LootCouncilLocalization["CMD_PREFIX"] = "префикс:/lc"
+	LootCouncilLocalization["CMD_RANK"] = " - rank - открывает окно выбора ранга консулов"
+	LootCouncilLocalization["CMD_SHOW"] = " - show - открывает главное окно"
+	LootCouncilLocalization["CMD_START"] = " - start (ссылка) - начинает сессию лут консула" -- Needs review
+	LootCouncilLocalization["CONFIRM_AWARD"] = "Вы точно хотите передать %s в руки %s?"
+	LootCouncilLocalization["CONFIRM_END"] = "Вы действительно хотите завершить сессию лут консула?" -- Needs review
+	LootCouncilLocalization["CONFIRM_END_SESSION"] = "Подтвердите завершение сессии:"
+	LootCouncilLocalization["CURRENT_COUNCIL"] = "Текущий состав:"
+	LootCouncilLocalization["CURRENT_ITEM"] = "Текущая вещь:" -- Needs review
+	LootCouncilLocalization["DISENCHANT"] = "Распылить вещь"
+	LootCouncilLocalization["END_FIRED"] = "---=== ЗАВЕРШЕНО ===---"
+	LootCouncilLocalization["END_SESSION"] = "Завершить сессию"
+	LootCouncilLocalization["FAILED_START_NO_LINK"] = "Правильный шаблон: /lc start (ссылка)"
+	LootCouncilLocalization["FAILED_START_NO_VALID_LINK"] = "ОШИБКА ПРИ ЗАПУСКЕ: Отсутствует ссылка на вещь!"
+	LootCouncilLocalization["FOR"] = "Для" -- Needs review
+	LootCouncilLocalization["GUILD_RANK"] = "Ранг в гильдии:"
+	LootCouncilLocalization["ITEM_LEVEL"] = "иЛвл вещи:"
+	LootCouncilLocalization["LINK_GUILD"] = "Разрешить ссылки в гильд-чате"
+	LootCouncilLocalization["LINK_OFFICERS"] = "Разрешить ссылки в офицерском чате:"
+	LootCouncilLocalization["LINK_RAID"] = "Разрешить ссылки в рейд-чате:"
+	LootCouncilLocalization["LINK_WHISPERS"] = "Разрешить ссылки через шепот:"
+	LootCouncilLocalization["LOADING"] = "Загрузка..."
+	LootCouncilLocalization["LOOTMENU_AWARD"] = "Передать вещь"
+	LootCouncilLocalization["LOOTMENU_END"] = "Завершить текущую сессию"
+	LootCouncilLocalization["LOOTMENU_ERROR1"] = "ОШИБКА: Невозможно автоматически передать вещь %s. Попробуйте передать ее вручную."
+	LootCouncilLocalization["LOOTMENU_ERROR2"] = "ОШИБКА: Должен быть выбран игрок и открыто окно лута."
+	LootCouncilLocalization["LOOTMENU_ERROR3"] = "Ошибка при передаче вещи. Пожалуйста, попробуйте снова."
+	LootCouncilLocalization["LOOTMENU_START"] = "Начать новую сессию"
+	LootCouncilLocalization["MAIN_FRAME_SCALE"] = "Масштаб основного окна:"
+	LootCouncilLocalization["MASTER_LOOT_INTEGRATE"] = "Интеграция в окно ответственного за добычу:"
+	LootCouncilLocalization["MIN_RANK"] = "Минимальный ранг для участия в совете:"
+	LootCouncilLocalization["NEW_ENTRY"] = "Теперь вы являетесь претендентом на %s"
+	LootCouncilLocalization["NEW_ENTRY_SPEC"] = "Вы в настоящее время рассматривается %s SPEC для %s"
+	LootCouncilLocalization["NONE"] = "Ничего" -- Needs review
+	LootCouncilLocalization["NOSTART_1"] = "Вы не можете начать новую сессию лут консула." -- Needs review
+	LootCouncilLocalization["NOSTART_NOT_GM"] = "Вы должны быть в Рейде или быть Лидером гильдии для начала новой сессии лут консула"
+	LootCouncilLocalization["NOSTART_NOT_RAIDASSIST"] = "Вы должны быть назначены помошником лидера рейда для начала новой сессии лут консула"
+	LootCouncilLocalization["OUTDATED"] = "ВАША ВЕРСИЯ ЛУТ КОНСУЛА УСТАРЕЛА. Пожалуйста, обновите до версии %s!"
+	LootCouncilLocalization["PRIVATE_VOTING"] = "Закрытое голосование:"
+	LootCouncilLocalization["RAIDER"] = "Член"
+	LootCouncilLocalization["REMOVE_FROM_CONSIDERATION"] = "Исключить из рассмотрения"
+	LootCouncilLocalization["SELECTION"] = "Выбранное:" -- Needs review
+	LootCouncilLocalization["SELF_VOTE"] = "Члены совета могут голосовать за себя:"
+	LootCouncilLocalization["SINGLE_VOTE"] = "Режим \"одного голоса\":"
+	LootCouncilLocalization["SPEC"] = "Спек"
+	LootCouncilLocalization["SPEC_INFO"] = "Отображать информацию об мейн-/оффспеке:"
+	LootCouncilLocalization["START_FIRED"] = "---=== НАЧАЛО СЕССИИ ===---" -- Needs review
+	LootCouncilLocalization["START_MSG_PULSE1"] = "Сейчас рассматривается %s !"
+	LootCouncilLocalization["START_MSG_PULSE2"] = "Если вам хочется %s, напишите ссылку на вашу текущую вещь в необходимый канал чата."
+	LootCouncilLocalization["START_WHILE_GOING1"] = "%s хотел начать новое совещание" -- Needs review
+	LootCouncilLocalization["START_WHILE_GOING2"] = "но одно совещание уже идет!"
+	LootCouncilLocalization["START_WHILE_SESSION1"] = "Не могу начать новое совещание"
+	LootCouncilLocalization["START_WHILE_SESSION2"] = "Уже идет совещание по %s"
+	LootCouncilLocalization["START_WHILE_SESSION2_NOLINK"] = "Сессия лут консула уже идет."
+	LootCouncilLocalization["SUGGEST_ABORT"] = "%s предложил прервать текущую сессию лут консула."
+	LootCouncilLocalization["TOO_LOW_RANK"] = "%s пытался начать новое совещание, но у него недостаточно прав."
+	LootCouncilLocalization["TOTAL_VOTES"] = "Всего голосов (+/-)"
+	LootCouncilLocalization["UPDATE_PROCESSED"] = "Получено обновление по совещанию относительно %s"
+	LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK1"] = "- Ваша текущая вещь:"
+	LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK2"] = "- Ваши текущие вещи:"
+	LootCouncilLocalization["UPDATE_PROCESSED_SPEC"] = "Поступило обновление с учетом %s SPEC для %s"
+	LootCouncilLocalization["UPGRADED_ITEM"] = "Текущий элемент"
+	LootCouncilLocalization["VOTES_AGAINST"] = "Против:"
+	LootCouncilLocalization["VOTES_FOR"] = "За:"
+	LootCouncilLocalization["YOUR_VOTE"] = "Ваш голос"
+	LootCouncilLocalization["NO_VOTES_FOR"] = "Нет голосов"
+	LootCouncilLocalization["NO_VOTES_AGAINST"] = "Против не проголосовал никто"
+
+
+end

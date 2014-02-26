@@ -1,0 +1,124 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="TestFrame.lua" />
+	<Frame name="LCTestFrame" parent="UIParent" toplevel="true" movable="true">
+		<Size>
+			<AbsDimension x="360" y="380" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="386" y="-100" />
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<Button name="RunTestButton" inherits="UIPanelButtonTemplate" text="Test Council">
+				<Size>
+					<AbsDimension x="120" y="22" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="30" y="-269" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+		        	    LootCouncil_Browser.RunTests()
+        		  </OnClick>
+				  <OnLoad>
+				 	self:SetText(LootCouncilLocalization["RUN_TEST"]);
+				</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="TestCancelButton" inherits="UIPanelButtonTemplate" text="Close">
+				<Size>
+					<AbsDimension x="120" y="22" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="210" y="-269" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+		        	    LCTestFrame:Hide()
+        		  </OnClick>
+				  <OnLoad>
+				  	self:SetText(LootCouncilLocalization["CLOSE"])
+					</OnLoad>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="CouncilApprovedListLabel" inherits="GameFontNormal" text="Approved Council:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="190" y="32" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-16" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CouncilApprovedList" inherits="GameFontWhite" text="" justifyH="LEFT" justifyV="TOP">
+					<Size>
+						<AbsDimension x="190" y="200" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="36" y="-40" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="InsuffPrivilegesLabel" inherits="GameFontNormal" text="Insufficient Privileges:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="289" y="32" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="162" y="-16" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="InsuffPrivList" inherits="GameFontWhite" text="" justifyH="LEFT" justifyV="TOP">
+					<Size>
+						<AbsDimension x="190" y="200" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="180" y="-40" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="LCInfoString" inherits="GameFontWhiteSmall" text="" justifyH="LEFT" justifyV="TOP">
+					<Size>
+						<AbsDimension x="330" y="200" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-293" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+		        LCTestFrame:RegisterEvent("CHAT_MSG_ADDON");
+				LCTestFrame:RegisterEvent("VARIABLES_LOADED");
+        		LCTestFrame:SetScript("OnEvent", TestFrame_EventHandler);
+    	    	LCTestFrame:Hide()
+	      </OnLoad>
+		</Scripts>
+	</Frame>
+</Ui>

@@ -1,0 +1,938 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="MainFrame.lua" />
+	<Button name="LootCouncil_Header" virtual="true">
+		<Scripts>
+			<OnClick>
+        LootCouncil_Browser.sortTable(self:GetID())
+      </OnClick>
+			<OnEnter>
+        _G[self:GetName().."BG"]:SetVertexColor(1, 1, 1, 1)
+      </OnEnter>
+			<OnLeave>
+        _G[self:GetName().."BG"]:SetVertexColor(0.7, 0.7, 0.7, 0.7)
+      </OnLeave>
+			<OnLoad>
+        self:GetScript("OnLeave")(self)
+      </OnLoad>
+		</Scripts>
+		<NormalTexture name="$parentBG">
+			<Color r="0.4" g="0.4" b="0.04" a="0.4" />
+		</NormalTexture>
+		<ButtonText>
+			<Anchors>
+				<Anchor point="LEFT">
+					<Offset>
+						<AbsDimension x="4" y="0" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+		</ButtonText>
+		<NormalFont style="GameFontHighlight" />
+		<HighlightFont style="GameFontNormal" />
+	</Button>
+	<Button name="LootCouncil_Entry" virtual="true" hidden="true">
+		<Size>
+			<!--<AbsDimension x="687" y="24" />-->
+			<RelDimension x="0.7" y="0.018"/>
+		</Size>
+		<Layers>
+			<Layer>
+				<FontString name="$parentCharName" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="69" y="24" />-->
+						<RelDimension x="0.07" y="0.018"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT">
+							<Offset>
+								<AbsDimension x="4" y="0" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentItem" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="338" y="24" />-->
+						<RelDimension x="0.28" y="0.018"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentCharName" relativePoint="RIGHT">
+							<Offset x="0" y="0" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentItemlvl" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="74" y="24" />-->
+						<RelDimension x="0.07" y="0.018"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentItem" relativePoint="RIGHT" />
+					</Anchors>
+				</FontString>
+				<FontString name="$parentSpec" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="70" y="24" />-->
+						<RelDimension x="0.05" y="0.018"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentItemlvl" relativePoint="RIGHT" />
+					</Anchors>
+				</FontString>
+				<FontString name="$parentVotesTotal" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="110" y="24" />-->
+						<RelDimension x="0.1" y="0.018"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentSpec" relativePoint="RIGHT" />
+					</Anchors>
+				</FontString>
+				<FontString name="$parentBlank" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="86" y="24" />-->
+						<RelDimension x="0.05" y="0.018"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentVotesTotal" relativePoint="RIGHT" />
+					</Anchors>
+				</FontString>
+				<FontString name="$parentYourVote" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="70" y="24" />-->
+						<RelDimension x="0.07" y="0.018"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentBlank" relativePoint="RIGHT" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentItemFrame">
+				<Size>
+					<!--<AbsDimension x="338" y="24" />-->
+					<RelDimension x="0.28" y="0.018"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentCharName" relativePoint="RIGHT" />
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+            LootCouncil_Browser.toolMouseOver((self:GetParent()):GetID())
+            _G[(self:GetParent()):GetName().."BG"]:Show()
+          </OnEnter>
+					<OnLeave>
+            LootCouncil_Browser.toolMouseLeave()
+            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            _G[(self:GetParent()):GetName().."BG"]:Hide()
+            end
+          </OnLeave>
+					<OnClick>
+            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            LootCouncil_Browser.SelectEntry(self:GetParent():GetID())
+            end
+          </OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentItemFrame2" hidden="true" frameStrata="HIGH">
+				<Size>
+					<!--<AbsDimension x="338" y="12" />-->
+					<RelDimension x="0.28" y="0.01"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentCharName" relativePoint="RIGHT">
+						<Offset x="0" y="-6" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+            LootCouncil_Browser.toolMouseOverDual((self:GetParent()):GetID())
+           _G[(self:GetParent()):GetName().."BG"]:Show()
+          </OnEnter>
+					<OnLeave>
+            LootCouncil_Browser.toolMouseLeave()
+            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            _G[(self:GetParent()):GetName().."BG"]:Hide()
+            end
+          </OnLeave>
+					<OnClick>
+            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            LootCouncil_Browser.SelectEntry(self:GetParent():GetID())
+            end
+          </OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentVoteHover1" frameStrata="HIGH">
+				<Size>
+					<!--<AbsDimension x="89" y="24" />-->
+					<RelDimension x="0.07" y="0.02"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT">
+						<Offset>
+							<AbsDimension x="4" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+            LootCouncil_Browser.voteToolActivate(self:GetParent():GetID())
+            _G[(self:GetParent()):GetName().."BG"]:Show()
+          </OnEnter>
+					<OnLeave>
+            LootCouncil_Browser.toolMouseLeave()
+            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            _G[(self:GetParent()):GetName().."BG"]:Hide()
+            end
+          </OnLeave>
+					<OnClick>
+            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            LootCouncil_Browser.SelectEntry(self:GetParent():GetID())
+            end
+          </OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentForButton" inherits="UIPanelButtonTemplate" text="">
+				<Size>
+					<AbsDimension x="21" y="21" />
+				</Size>
+				<Anchors>
+				<Anchor point="LEFT" relativeTo="$parentVotesTotal" relativePoint="RIGHT">
+						<Offset x="5" y="0" />
+					</Anchor>
+					<!--<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" />-->
+				</Anchors>
+				<NormalTexture inherits="UIPanelButtonUpTexture" file="Interface\BUTTONS\UI-CheckBox-Check">
+					<TexCoords left=".17" right=".8" top=".17" bottom=".8" />
+				</NormalTexture>
+				<PushedTexture inherits="UIPanelButtonDownTexture" file="Interface\BUTTONS\UI-CheckBox-Check-Disabled">
+					<TexCoords left="0.17" right="0.8" top="0.17" bottom="0.8" />
+				</PushedTexture>
+				<DisabledTexture inherits="UIPanelButtonDisabledTexture" file="Interface\BUTTONS\UI-CheckBox-Check-Disabled">
+					<TexCoords left="0.17" right="0.8" top="0.17" bottom="0.8" />
+				</DisabledTexture>
+				<HighlightTexture inherits="UIPanelButtonHighlightTexture" file="Interface\BUTTONS\UI-CheckBox-Check-Disabled" alphaMode="ADD">
+					<TexCoords left="0.17" right="0.8" top="0.17" bottom="0.8" />
+				</HighlightTexture>
+				<Scripts>
+					<OnLoad>
+						self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+        			</OnLoad>
+					<OnEnter>
+			            LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["FOR"])
+            			_G[(self:GetParent()):GetName().."BG"]:Show()
+			          </OnEnter>
+			          <OnLeave>
+			            LootCouncil_Browser.toolMouseLeave()
+            			if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+				            _G[(self:GetParent()):GetName().."BG"]:Hide()
+			            end
+			          </OnLeave>
+					<OnClick>
+            			LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "For", "LeftButton");
+			          </OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentAgainstButton" inherits="UIPanelButtonTemplate" text="">
+				<Size>
+					<AbsDimension x="21" y="21" />
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentForButton" relativePoint="RIGHT">
+						<Offset x="5" y="0" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+				self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+				</OnLoad>
+					<OnEnter>
+				LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["AGAINST"])
+				_G[(self:GetParent()):GetName().."BG"]:Show()
+				</OnEnter>
+				<OnLeave>
+				LootCouncil_Browser.toolMouseLeave()
+	            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+		        _G[(self:GetParent()):GetName().."BG"]:Hide()
+			    end
+				</OnLeave>
+				<OnClick>
+				LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "Against", "LeftButton");
+	            </OnClick>
+				</Scripts>
+				<NormalTexture inherits="UIPanelButtonUpTexture" file="Interface\BUTTONS\UI-Panel-MinimizeButton-Up">
+					<TexCoords left="0.19" right="0.81" top="0.19" bottom="0.81" />
+				</NormalTexture>
+				<PushedTexture inherits="UIPanelButtonDownTexture" file="Interface\BUTTONS\UI-Panel-MinimizeButton-Down">
+					<TexCoords left="0.19" right="0.81" top="0.19" bottom="0.81" />
+				</PushedTexture>
+				<DisabledTexture inherits="UIPanelButtonDisabledTexture" file="Interface\BUTTONS\UI-Panel-MinimizeButton-Disabled">
+					<TexCoords left="0.19" right="0.81" top="0.19" bottom="0.81" />
+				</DisabledTexture>
+				<HighlightTexture inherits="UIPanelButtonHighlightTexture" file="Interface\BUTTONS\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD">
+					<TexCoords left="0.19" right="0.81" top="0.19" bottom="0.81" />
+				</HighlightTexture>
+			</Button>
+			<Button name="$parentCancelButton" inherits="UIPanelButtonTemplate" text="">
+				<Size>
+					<AbsDimension x="21" y="21" />
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentAgainstButton" relativePoint="RIGHT">
+						<Offset x="5" y="0" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+						<OnLoad>
+					self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+				  </OnLoad>
+							<OnEnter>
+					LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["CANCEL"])
+				   _G[(self:GetParent()):GetName().."BG"]:Show()
+				  </OnEnter>
+							<OnLeave>
+					LootCouncil_Browser.toolMouseLeave()
+					if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+					_G[(self:GetParent()):GetName().."BG"]:Hide()
+					end
+				  </OnLeave>
+							<OnClick>
+					LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "None", "LeftButton");
+					 </OnClick>
+				</Scripts>
+				<NormalTexture inherits="UIPanelButtonUpTexture" file="Interface\BUTTONS\UI-GroupLoot-Pass-Up">
+					<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95" />
+				</NormalTexture>
+				<PushedTexture inherits="UIPanelButtonDownTexture" file="Interface\BUTTONS\UI-GroupLoot-Pass-Down">
+					<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95" />
+				</PushedTexture>
+				<DisabledTexture inherits="UIPanelButtonDisabledTexture" file="Interface\BUTTONS\UI-GroupLoot-Pass-Up">
+					<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95" />
+				</DisabledTexture>
+				<HighlightTexture inherits="UIPanelButtonHighlightTexture" file="Interface\BUTTONS\UI-GroupLoot-Pass-Highlight" alphaMode="ADD">
+					<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95" />
+				</HighlightTexture>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+        _G[self:GetName().."BG"]:Hide()
+      </OnLoad>
+			<OnClick>
+        if not LootCouncil_Browser.IsSelected(self:GetID()) then
+        LootCouncil_Browser.SelectEntry(self:GetID())
+        end
+      </OnClick>
+			<OnEnter>
+        _G[self:GetName().."BG"]:Show()
+      </OnEnter>
+			<OnLeave>
+        if not LootCouncil_Browser.IsSelected(self:GetID()) then
+        _G[self:GetName().."BG"]:Hide()
+        end
+      </OnLeave>
+		</Scripts>
+		<NormalTexture name="$parentBG">
+			<Color r="0" g="0" b="0.6" a="0.35" />
+		</NormalTexture>
+	</Button>
+	<Frame name="MainFrame" parent="UIParent" toplevel="true" movable="true">
+		<Size>
+<!--		 <AbsDimension x="900" y="339" /> -->
+			<RelDimension x="0.75" y="0.31"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset x="0" y="0" />
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<Button name="CloseButton" inherits="UIPanelButtonTemplate" text="Close">
+				<Size>
+					<AbsDimension x="172" y="26" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="480" y="43" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>CloseButton_OnClick();</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["CLOSE"])</OnLoad>
+				</Scripts>
+			</Button>
+			<Frame name="EntryFrame">
+				<Size>
+					<!--					<AbsDimension x="800" y="96" />-->
+					<RelDimension x="0.7" y="0.10"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset x="-1" y="-16" />
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<TileSize>
+						<AbsValue val="16" />
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="16" />
+					</EdgeSize>
+				</Backdrop>
+				<Frames>
+					<Button name="$parentHeaderCharName" inherits="LootCouncil_Header" id="1" text="Raider">
+						<Size>
+							<!--<AbsDimension x="89" y="24" />-->
+							<RelDimension x="0.07" y="0.02"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="4" y="-4" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								self:SetText(LootCouncilLocalization["RAIDER"]);
+								self:GetScript("OnLeave")(self)
+							</OnLoad>
+						</Scripts>
+					</Button>
+					<Button name="$parentHeaderItem" inherits="LootCouncil_Header" id="2" text="Upgraded Item">
+						<Size>
+							<!--<AbsDimension x="338" y="24" />-->
+							<RelDimension x="0.28" y="0.02"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentHeaderCharName" relativePoint="RIGHT" />
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								self:SetText(LootCouncilLocalization["UPGRADED_ITEM"]);
+								self:GetScript("OnLeave")(self)
+							</OnLoad>
+						</Scripts>
+					</Button>
+					<Button name="$parentHeaderItemlvl" inherits="LootCouncil_Header" id="3" text="Guild Rank">
+						<Size>
+							<!-- <AbsDimension x="74" y="24" />-->
+							<RelDimension x="0.07" y="0.02"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentHeaderItem" relativePoint="RIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								self:SetText(LootCouncilLocalization["GUILD_RANK"])
+								self:GetScript("OnLeave")(self)
+							</OnLoad>
+						</Scripts>
+					</Button>
+					<Button name="$parentHeaderSpec" inherits="LootCouncil_Header" id="11" text="   Spec">
+						<Size>
+							<!--<AbsDimension x="60" y="24" />-->
+							<RelDimension x="0.05" y="0.02"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentHeaderItemlvl" relativePoint="RIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								self:SetText(LootCouncilLocalization["SPEC"]);
+								self:GetScript("OnLeave")(self)
+							</OnLoad>
+						</Scripts>
+					</Button>
+					<Button name="$parentHeaderVotesTotal" inherits="LootCouncil_Header" id="6" text="Total Votes (+/-)">
+						<Size>
+							<!--<AbsDimension x="110" y="24" />-->
+							<RelDimension x="0.1" y="0.02"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentHeaderSpec" relativePoint="RIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								self:SetText(LootCouncilLocalization["TOTAL_VOTES"]);
+								self:GetScript("OnLeave")(self)
+							</OnLoad>
+						</Scripts>
+					</Button>
+					<Button name="$parentHeaderBlank" inherits="LootCouncil_Header" id="7" text="">
+						<Size>
+							<!--<AbsDimension x="86" y="24" />-->
+							<RelDimension x="0.05" y="0.02"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentHeaderVotesTotal" relativePoint="RIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parentHeaderVoteSelection" inherits="LootCouncil_Header" id="8" text="Your Vote">
+						<Size>
+							<!--<AbsDimension x="70" y="24" />-->
+							<RelDimension x="0.07" y="0.02"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentHeaderBlank" relativePoint="RIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								self:SetText(LootCouncilLocalization["YOUR_VOTE"]);
+								self:GetScript("OnLeave")(self)
+							</OnLoad>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+			<Frame name="CurrentItemHover" frameStrata="HIGH">
+				<Size>
+					<!--<AbsDimension x="195" y="48" />-->
+					<RelDimension x="0.14" y="0.04"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="44" y="156" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+            self:Hide()
+          </OnLoad>
+					<OnEnter>
+            LootCouncil_Browser.ShowCurrentItemTooltip();
+          </OnEnter>
+					<OnLeave>
+            LootCouncil_Browser.toolMouseLeave();
+          </OnLeave>
+				</Scripts>
+			</Frame>
+			<Frame name="CurrentSelectionHover" hidden="true" frameStrata="MEDIUM">
+				<Size>
+					<AbsDimension x="195" y="48" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="252" y="156" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+            LootCouncil_Browser.ShowCurrentSelectionTooltip();
+          </OnEnter>
+					<OnLeave>
+            LootCouncil_Browser.toolMouseLeave();
+          </OnLeave>
+				</Scripts>
+			</Frame>
+			<Button name="AbortButton" inherits="UIPanelButtonTemplate" hidden="true" text="End Session">
+				<Size>
+					<!--<AbsDimension x="172" y="26" />-->
+					<RelDimension x="0.14" y="0.021"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="55" y="43" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+            LootCouncil_Browser.initiateAbort();
+          </OnClick>
+		  	<OnLoad>
+				self:SetText(LootCouncilLocalization["END_SESSION"]);
+			</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="SyncButton" inherits="UIPanelButtonTemplate" hidden="true" text="Resync">
+				<Size>
+					<AbsDimension x="55" y="32" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="650" y="223" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+					LootCouncil_Browser.resync_start();
+				  </OnClick>
+					<OnLoad>
+						self:SetText(LootCouncilLocalization["RESYNC"]);
+					</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="ClearSelectionButton" inherits="UIPanelButtonTemplate" hidden="true" text="Clear Selection">
+				<Size>
+					<!--<AbsDimension x="200" y="26" />-->
+					<RelDimension x="0.15" y="0.021"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="255" y="43" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>LootCouncil_Browser.ClearSelection()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["CLEAR_SELECTION"])</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="RemoveButton" inherits="UIPanelButtonTemplate" hidden="true" text="Remove From Consideration">
+				<Size>
+					<!--<AbsDimension x="200" y="26" />-->
+					<RelDimension x="0.15" y="0.021"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="255" y="73" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>LootCouncil_Browser.RemoveSelection()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["REMOVE_FROM_CONSIDERATION"])</OnLoad>
+				</Scripts>
+			</Button>
+			<Frame name="CurrentSelectionHover2" hidden="true" frameStrata="HIGH">
+				<Size>
+					<!--<AbsDimension x="195" y="30" />-->
+					<RelDimension x="0.14" y="0.025"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="252" y="119" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+            LootCouncil_Browser.ShowCurrentSelectionDualTooltip();
+          </OnEnter>
+					<OnLeave>
+            LootCouncil_Browser.toolMouseLeave();
+          </OnLeave>
+				</Scripts>
+			</Frame>
+			<Button name="DisenchantButton" inherits="UIPanelButtonTemplate" text="Disenchant Item" hidden="true">
+				<Size>
+					<!--<AbsDimension x="172" y="26" />-->
+					<RelDimension x="0.14" y="0.021"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="430" y="73" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:SetText(LootCouncilLocalization["DISENCHANT"]);
+					</OnLoad>
+				</Scripts>
+      </Button>
+      <Button name="AwardButton" inherits="UIPanelButtonTemplate" hidden="true" text="Award Item">
+        <Size>
+          <!--<AbsDimension x="172" y="26" />-->
+		  <RelDimension x="0.14" y="0.021"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+            <Offset x="55" y="73" />
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            LootCouncil_Browser.awardItemButtonClick();
+          </OnClick>
+		  <OnLoad>
+			  self:SetText(LootCouncilLocalization["AWARD"]);
+			</OnLoad>
+        </Scripts>
+      </Button>
+    </Frames>
+		<Layers>
+			<Layer>
+				<Texture name="CurrentItemTexture" hidden="true" file="Interface\Icons\Ability_Creature_Disease_05">
+					<Size>
+						<AbsDimension x="44" y="45" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="43" y="157" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="CurrentSelectionTexture" hidden="true" file="Interface\Icons\Ability_Creature_Disease_05">
+					<Size>
+						<AbsDimension x="44" y="45" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="252" y="157" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="EmptyTexture" file="Interface\BUTTONS\UI-Slot-Background">
+					<Size>
+						<AbsDimension x="70" y="73" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="43" y="156" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="DualItemTexture1" hidden="true">
+					<Size>
+						<AbsDimension x="28" y="28" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="252" y="156" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="DualItemTexture2" hidden="true">
+					<Size>
+						<AbsDimension x="28" y="28" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="252" y="118" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString name="CurrentItemLink" inherits="GameFontNormal" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="140" y="45" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="100" y="154" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CurrentSelectionLink" inherits="GameFontNormal" hidden="true" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="140" y="45" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="308" y="154" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CurrentItemLabel" inherits="GameFontNormal" text="Current Item:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="95" y="17" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="25" y="179" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CurrentSelectionLabel" inherits="GameFontNormal" hidden="true" text="Selection:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="68" y="17" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="249" y="179" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CurrentSelectionItemLevelLabel" inherits="GameFontNormal" hidden="true" text="Item Lvl:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="77" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="249" y="105" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CurrentSelectionName" inherits="GameFontNormal" hidden="true" text="" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="132" y="17" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="315" y="179" />
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="CurrentItemLvl" inherits="GameFontNormal" text="" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="123" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="98" y="105" />
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="CurrentItemLevelLabel" inherits="GameFontNormal" hidden="true" text="Item Lvl:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="70" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="25" y="105" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CurrentCouncilLabel" inherits="GameFontNormal" hidden="true" text="Current Council:" justifyV="TOP" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="103" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="25" y="224" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="CurrentCouncilList" inherits="GameFontNormal" hidden="true" text="" justifyV="TOP" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="317" y="32" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="128" y="224" />
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="CurrentSelectionItemLevel" inherits="GameFontNormal" hidden="true" text="" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="118" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="330" y="105" />
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="VotesForLabel" inherits="GameFontNormal" hidden="true" text="Votes For:" justifyV="TOP" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="88" y="16" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="451" y="224" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="VotesAgainstLabel" inherits="GameFontNormal" hidden="true" text="Votes Against:" justifyV="TOP" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="140" y="16" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="451" y="149" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="VotesFor" inherits="GameFontNormal" hidden="true" text="" justifyV="TOP" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="220" y="61" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="451" y="210" />
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="VotesAgainst" inherits="GameFontNormal" hidden="true" text="" justifyV="TOP" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="220" y="61" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="451" y="133" />
+						</Anchor>
+					</Anchors>
+					<Color r="1" g="1" b="1" />
+				</FontString>
+				<FontString name="DualItem1" inherits="GameFontNormal" text="" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="165" y="26" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="285" y="157" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</FontString>
+				<FontString name="DualItem2" inherits="GameFontNormal" text="" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="165" y="26" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset x="285" y="118" />
+						</Anchor>
+					</Anchors>
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+        self.TimeSinceLastUpdate = 0;
+        self:RegisterForDrag("LeftButton")
+        MainFrame_OnLoad();
+      </OnLoad>
+			<OnDragStart>
+        self:StartMoving()
+      </OnDragStart>
+			<OnDragStop>
+        self:StopMovingOrSizing()
+      </OnDragStop>
+			<OnUpdate />
+		</Scripts>
+	</Frame>
+	<GameTooltip name="LootCouncil_Scan" inherits="GameTooltipTemplate">
+		<Scripts>
+			<OnLoad>
+        self:SetOwner(WorldFrame, "ANCHOR_NONE");
+      </OnLoad>
+		</Scripts>
+	</GameTooltip>
+	<Frame name="GroupLootDropDownLCL" inherits="UIDropDownMenuTemplate" id="1" hidden="true">
+		<Anchors>
+		  <Anchor point="TOPLEFT"/>
+		</Anchors>
+		<Scripts>
+		  <OnLoad function="GroupLootDropDownLCL_OnLoad"/>
+		</Scripts>
+	</Frame>
+</Ui>

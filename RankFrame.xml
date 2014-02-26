@@ -1,0 +1,95 @@
+﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="RankFrame.lua" />
+	<Frame name="RankFrame" parent="UIParent">
+		<Size>
+			<AbsDimension x="443" y="108" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="386" y="-100" />
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<Frame name="RankDropDown" inherits="UIDropDownMenuTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="276" y="-17" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+            UIDropDownMenu_Initialize(self, LootCouncil_Browser.DropDown_OnLoad);
+          </OnLoad>
+				</Scripts>
+			</Frame>
+			<Button name="RankAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
+				<Size>
+					<AbsDimension x="180" y="22" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="17" y="-64" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+            LootCouncil_Browser.acceptRank()
+          </OnClick>
+				  <OnLoad>
+				 	self:SetText(LootCouncilLocalization["ACCEPT"]);
+				</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="RankCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
+				<Size>
+					<AbsDimension x="180" y="22" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset x="-14" y="-64" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+            LootCouncil_Browser.cancelRank()
+          </OnClick>
+		  <OnLoad>
+		  	self:SetText(LootCouncilLocalization["CANCEL"])
+			</OnLoad>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="RankDropLabel" inherits="GameFontNormal" text="Minimum rank to participate in Loot Council: " justifyH="LEFT">
+					<Size>
+						<AbsDimension x="289" y="32" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-16" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+        RankFrame:RegisterEvent("VARIABLES_LOADED");
+        RankFrame:SetScript("OnEvent", RankFrame_EventHandler);
+        RankFrame:Hide()
+      </OnLoad>
+		</Scripts>
+	</Frame>
+</Ui>

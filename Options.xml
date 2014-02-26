@@ -1,0 +1,360 @@
+﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Options.lua" />
+	<Frame name="LCOptionsFrame" parent="UIParent" toplevel="true" movable="true">
+		<Size>
+			<AbsDimension x="443" y="336" />
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="386" y="-100" />
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32" />
+			</EdgeSize>
+		</Backdrop>
+		<Frames>
+			<Slider name="ScaleSlider" enableMouse="true" minValue="0.5" maxValue="1" defaultValue="0" valueStep="0.02" orientation="HORIZONTAL">
+				<Size>
+					<AbsDimension x="197" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset x="-76" y="-270" />
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="6" bottom="6" />
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="8" />
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="8" />
+					</EdgeSize>
+				</Backdrop>
+				<Layers>
+					<Layer>
+						<FontString name="ScaleSliderLabel" inherits="GameFontNormalSmall" text="">
+							<Anchors>
+								<Anchor point="LEFT" relativePoint="RIGHT">
+									<Offset>
+										<AbsDimension x="40" y="0" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnUpdate>
+            LootCouncil_scale = self:GetValue();
+
+            MainFrame:SetScale(LootCouncil_scale);
+            MainFrame:Show();
+            ScaleSliderLabel:SetText(floor(self:GetValue()*100)/100);
+          </OnUpdate>
+					<OnLoad>
+          </OnLoad>
+				</Scripts>
+				<ThumbTexture name="$parentThumb" file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
+					<Size>
+						<AbsDimension x="32" y="32" />
+					</Size>
+				</ThumbTexture>
+			</Slider>
+			<Frame name="OptDropDown" inherits="UIDropDownMenuTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="276" y="-17" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+            UIDropDownMenu_Initialize(self, LootCouncil_Browser.OptDropDown_OnLoad);
+          </OnLoad>
+				</Scripts>
+			</Frame>
+			<Button name="OptAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
+				<Size>
+					<AbsDimension x="180" y="22" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="17" y="-298" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+				<OnClick>
+    		        LootCouncil_Browser.acceptOptions()
+	         	 </OnClick>
+				 <OnLoad>
+				 	self:SetText(LootCouncilLocalization["ACCEPT"]);
+				</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="OptCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
+				<Size>
+					<AbsDimension x="180" y="22" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset x="-16" y="-298" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+            LootCouncil_Browser.cancelOptions()
+          </OnClick>
+		  	<OnLoad>
+				self:SetText(LootCouncilLocalization["CANCEL"]);
+			</OnLoad>
+				</Scripts>
+			</Button>
+			<CheckButton name="PrivateVoteMode" inherits="UICheckButtonTemplate" text="CheckButton1">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="145" y="-59" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="SingleVoteMode" inherits="UICheckButtonTemplate" text="CheckButton2">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="362" y="-59" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="SelfVoteMode" inherits="UICheckButtonTemplate" text="CheckButton1">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="145" y="-99" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="DisplaySpecMode" inherits="UICheckButtonTemplate" text="CheckButton2">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="362" y="-99" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="WhisperLinkMode" inherits="UICheckButtonTemplate" text="CheckButton1">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="145" y="-139" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="OfficerLinkMode" inherits="UICheckButtonTemplate" text="CheckButton2">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="362" y="-139" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="RaidLinkMode" inherits="UICheckButtonTemplate" text="CheckButton1">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="145" y="-179" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="ConfirmEnding" inherits="UICheckButtonTemplate" text="CheckButton1">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="145" y="-219" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="MasterLootIntegration" inherits="UICheckButtonTemplate" text="CheckButton1">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="362" y="-219" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="GuildLinkMode" inherits="UICheckButtonTemplate" text="CheckButton2">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="362" y="-179" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+		</Frames>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="OptDropLabel" inherits="GameFontNormal" text="Minimum rank to participate in Loot Council: " justifyH="LEFT">
+					<Size>
+						<AbsDimension x="289" y="32" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-16" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="PrivateVotingLabel" inherits="GameFontNormal" text="Private Voting:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="135" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-65" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="SingleVotingLabel" inherits="GameFontNormal" text="Single Vote Mode:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="114" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-65" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="SelfVotingLabel" inherits="GameFontNormal" text="Council members can vote for self:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-105" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="DisplaySpecLabel" inherits="GameFontNormal" text="Display Main/Off Spec Information:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-105" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="WhisperLinkLabel" inherits="GameFontNormal" text="Allow links through whisper:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-145" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="OfficerLinkLabel" inherits="GameFontNormal" text="Allow links through officer chat:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="136" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-145" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="RaidLinkLabel" inherits="GameFontNormal" text="Allow links through raid chat:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-185" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ConfirmEndingLabel" inherits="GameFontNormal" text="Confirm Ending Session:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-225" />
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnLoad>
+							self:SetText(LootCouncilLocalization["CONFIRM_END_SESSION"])
+						</OnLoad>
+					</Scripts>
+				</FontString>
+				<FontString name="GuildLinkLabel" inherits="GameFontNormal" text="Allow links through guild chat:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="136" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-185" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ScaleLabel" inherits="GameFontNormal" text="Main Frame Scale:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="20" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-270" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="MasterLootLabel" inherits="GameFontNormal" text="Master Loot Integration:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-225" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+        LCOptionsFrame:RegisterEvent("VARIABLES_LOADED");
+        LCOptionsFrame:SetScript("OnEvent", LCOptionsFrame_EventHandler);
+        LCOptionsFrame:Hide()
+      </OnLoad>
+		</Scripts>
+	</Frame>
+</Ui>
