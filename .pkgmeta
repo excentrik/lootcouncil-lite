@@ -1,0 +1,80 @@
+package-as: LootCouncil_Lite
+
+externals:
+	Libs/AceAddon-3.0:
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
+		tag: latest
+	Libs/AceAddon-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
+		tag: latest
+	Libs/AceComm-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceComm-3.0
+		tag: latest
+	Libs/AceConfig-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
+		tag: latest
+	Libs/AceConsole-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConsole-3.0
+		tag: latest
+	Libs/AceDB-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDB-3.0
+		tag: latest
+	Libs/AceDBOptions-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDBOptions-3.0
+		tag: latest
+	Libs/AceEvent-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
+		tag: latest
+	Libs/AceGUI-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
+		tag: latest
+	Libs/AceHook-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceHook-3.0
+		tag: latest
+	Libs/AceLibrary: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLibrary
+		tag: latest
+	Libs/AceLocale-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLocale-3.0
+		tag: latest
+	Libs/AceSerializer-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceSerializer-3.0
+		tag: latest
+	Libs/AceTimer-3.0: 
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceTimer-3.0
+		tag: latest
+	Libs/CallbackHandler-1.0:
+		url: svn://svn.wowace.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
+		tag: latest
+	Libs/ChatThrottleLib:
+		url: svn://svn.wowace.com/wow/chatthrottlelib/mainline/trunk
+		tag: latest
+	Libs/Dewdrop-2.0: 
+		url: svn://svn.wowace.com/wow/dewdroplib/mainline/trunk
+		tag: lastest
+	Libs/LibStub: 
+		url: svn://svn.wowace.com/wow/Libstub/mainline/trunk
+		tag: latest
+
+#move-folders:
+#   Monkey/Modules/Suit: Monkey_Suit
+ 
+
+#ignore:
+#    - Scripts # ignore the scripts folder
+#    - Some/File.txt # ignore a specific file
+
+#required-dependencies:
+#    - monkey-town
+
+#optional-dependencies:
+#    - monkey-city
+
+#manual-changelog: CHANGELOG.txt
+
+#license-output: LICENSE.txt
+
+#tools-used:
+#    - data-tools # same as data-tools/mainline
+
+enable-nolib-creation: no

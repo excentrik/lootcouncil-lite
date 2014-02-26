@@ -1,5 +1,6 @@
-﻿-- Author      : Matthew Enthoven (Alias: Blacksen)
+﻿-- Author      : Matthew Enthoven (Alias: Blacksen) & Nicolau Goncalves (Alias: Excentrik)
 -- Create Date : 1/04/2010 1:32:25 PM
+-- Modification Date: 21/02/2014 1:48:00 PM
 -- MainFrame.lua: Manages the main voting interface and host/client communication
 
 -- 4.0 Change On
