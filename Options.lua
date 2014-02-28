@@ -10,6 +10,7 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		LootCouncil_Browser.spec = LootCouncil_displaySpec;
 		LootCouncil_Browser.self = LootCouncil_selfVoting;
 		LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
+		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters); -- make a List of out the string
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
 		SingleVoteMode:SetChecked(LootCouncil_singleVote)
 		PrivateVoteMode:SetChecked(LootCouncil_privateVoting)
@@ -24,7 +25,9 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		ScaleSlider:SetValue(LootCouncil_scale);
 		ScaleSliderLabel:SetText(LootCouncil_scale);
 		MainFrame:SetScale(LootCouncil_scale);
-		
+		EnchantersTable:SetText(LootCouncil_Enchanters);
+		EnchantersTable:SetJustifyV("TOP")
+
 		ConfirmEndingLabel:SetText(LootCouncilLocalization["CONFIRM_END_SESSION"]);
 		GuildLinkLabel:SetText(LootCouncilLocalization["LINK_GUILD"]);
 		OfficerLinkLabel:SetText(LootCouncilLocalization["LINK_OFFICERS"]);
@@ -37,6 +40,7 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		SelfVotingLabel:SetText(LootCouncilLocalization["SELF_VOTE"]);
 		SingleVotingLabel:SetText(LootCouncilLocalization["SINGLE_VOTE"]);
 		DisplaySpecLabel:SetText(LootCouncilLocalization["SPEC_INFO"]);
+		EnchantersTableLabel:SetText("Enchanters"); -- Needs localization
 		
 		
 		if LootCouncil_minRank > 0 then
@@ -113,11 +117,15 @@ function LootCouncil_Browser.acceptOptions()
 			LootCouncil_masterLootIntegration = 0;
 		end
 		
+		
+		LootCouncil_Enchanters = EnchantersTable:GetText();		
+
 		LootCouncil_Browser.private = LootCouncil_privateVoting;
 		LootCouncil_Browser.single = LootCouncil_singleVote;
 		LootCouncil_Browser.spec = LootCouncil_displaySpec;
 		LootCouncil_Browser.self = LootCouncil_selfVoting;
 		LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
+		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
 		LCOptionsFrame:Hide()
 		if different then

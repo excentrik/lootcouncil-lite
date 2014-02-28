@@ -1,6 +1,54 @@
 ﻿-- Author      : Matthew Enthoven (Alias: Blacksen)
 -- Create Date : 1/04/2010 12:24:31 PM
 
+LootCouncil_debugMode = 0; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
+-- 1 = debug on (no messages sent)
+-- 0 = debug off (messages sent as normal)
+
+------------- isBlank ---------------------------------
+-- Checks if a string is blank
+-------------------------------------------------------
+function LootCouncil_isBlank(x)
+  return not not tostring(x):find("^%s*$")
+end
+
+------------- convertStringList -----------------------
+-- Converts a string to a list
+-------------------------------------------------------
+function LootCouncil_convertStringList(str)
+	-- STILL NEEDS ERROR PROTECTION
+	if not LootCouncil_isBlank(str) then
+		if (LootCouncil_debugMode==1) then
+			print("Converting string to list:"..str)
+		end
+		local div='[^%a%såÅäÄöÖÖáàãâæçéèêëüÜíìîïñóòõôøœßúùû]' -- NEED TO CHECK BETTER UTF-8 SUPPORT
+		--local div='[^[%z%s\65-\90\97-\122\194-\244][\128-\191]*]' 
+		local pos,arr = 0,{}
+		local tmp_str
+		for st,sp in function() return string.find(str,div,pos,false) end do
+			tmp_str=strtrim(string.sub(str,pos,st-1))
+			if not LootCouncil_isBlank(tmp_str) then
+				if (LootCouncil_debugMode==1) then
+					print("Adding string ("..tmp_str..") to list")
+				end
+				table.insert(arr,tmp_str)
+			end
+			pos = sp + 1
+		end
+		tmp_str=strtrim(string.sub(str,pos))
+		if not LootCouncil_isBlank(tmp_str) then
+			table.insert(arr,tmp_str)
+		end
+		if (LootCouncil_debugMode==1) then
+			print("Adding string ("..tmp_str..") to list")
+		end
+
+		return arr
+	else
+		return nil
+	end
+end
+
 
 LootCouncil_TheCouncil = {};
 LootCouncil_Browser = {}
@@ -18,6 +66,7 @@ LootCouncil_selfVoting = 1;
 LootCouncil_scale = 1;
 LootCouncil_confirmEnding = 1;
 LootCouncil_masterLootIntegration = 1;
+LootCouncil_Enchanters = "";
 
 LootCouncil_awaitingItem = false;
 
@@ -26,17 +75,15 @@ LootCouncil_Browser.single = LootCouncil_singleVote;
 LootCouncil_Browser.spec = LootCouncil_displaySpec;
 LootCouncil_Browser.self = LootCouncil_selfVoting;
 LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
+LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
 LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
 
 LootCouncil_LinkWhisper = 1;
 LootCouncil_LinkOfficer = 1;
 LootCouncil_LinkRaid = 0;
 LootCouncil_LinkGuild = 0;
-LootCouncil_Version="2.2"
+--LootCouncil_Version="2.3"
 
-LootCouncil_debugMode = 0; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
--- 1 = debug on (no messages sent)
--- 0 = debug off (messages sent as normal)
 
 RegisterAddonMessagePrefix("L00TCOUNCIL");
 
@@ -87,20 +134,6 @@ do
 			LCOptionsFrame:Hide()
 		elseif cmd == "reset" then
 			LootCouncil_Browser.resetMainFrame()
---		elseif cmd == "matthew" then
---			local link = GetContainerItemLink(0, 1);
---			local printable = gsub(link, "\124", "\124\124");
---			ChatFrame1:AddMessage("Here's what it really looks like: \"" .. printable .. "\"");
---			
---			
---			local fullstring = "mainspec " .. link .. " test!";
---			print(fullstring);
---			local testgsub = string.gsub(fullstring, "^|c%x+|H(item[%d:]+)|h%[", "");
---		    printable = gsub(testgsub, "\124", "\124\124");
---			ChatFrame1:AddMessage("Here's what it really looks like: \"" .. printable .. "\"");
---			print("-----");
---			print(string.find(fullstring, "\124h%["));
---			print(string.find(fullstring, "%]\124h"));
 		elseif cmd == "" then
 			print(LootCouncilLocalization["CMD_MAIN"]);
 			print(LootCouncilLocalization["CMD_PREFIX"]);
@@ -118,3 +151,4 @@ do
 		end
 	end
 end
+

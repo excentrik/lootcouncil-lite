@@ -2,7 +2,7 @@
 	<Script file="Options.lua" />
 	<Frame name="LCOptionsFrame" parent="UIParent" toplevel="true" movable="true">
 		<Size>
-			<AbsDimension x="443" y="336" />
+			<AbsDimension x="443" y="366" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT">
@@ -20,14 +20,59 @@
 				<AbsValue val="32" />
 			</EdgeSize>
 		</Backdrop>
+		<Layers>
+					<Layer level="OVERLAY">
+					<FontString name="EnchantersTableLabel" inherits="GameFontNormal" text="Enchanters:" justifyH="LEFT">
+						<Size>
+							<AbsDimension x="122" y="20" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="17" y="-270" />
+							</Anchor>
+						</Anchors>
+					</FontString>
+					</Layer>
+				</Layers>
 		<Frames>
+				<EditBox  name="EnchantersTable" text="Enchanters" JustifyV="TOP">
+				<Size>
+					<AbsDimension x="300" y="22" />
+				</Size>
+				<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="100" y="-270" />
+						</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="-10" right="6" top="6" bottom="6" />
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="8" />
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="8" />
+					</EdgeSize>
+				</Backdrop>
+				<FontString inherits="GameFontNormal"/>
+				<Scripts>
+					<OnUpdate>
+					</OnUpdate>
+					<OnLoad>
+					-- read Enchanters
+					self:SetText(LootCouncil_Enchanters);
+					</OnLoad>
+				</Scripts>
+				</EditBox >
+
 			<Slider name="ScaleSlider" enableMouse="true" minValue="0.5" maxValue="1" defaultValue="0" valueStep="0.02" orientation="HORIZONTAL">
 				<Size>
 					<AbsDimension x="197" y="20" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset x="-76" y="-270" />
+						<Offset x="-76" y="-300" />
 					</Anchor>
 				</Anchors>
 				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
@@ -89,7 +134,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="17" y="-298" />
+						<Offset x="17" y="-328" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -107,7 +152,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPRIGHT">
-						<Offset x="-16" y="-298" />
+						<Offset x="-16" y="-328" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -333,7 +378,7 @@
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-270" />
+							<Offset x="17" y="-300" />
 						</Anchor>
 					</Anchors>
 				</FontString>

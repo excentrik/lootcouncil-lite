@@ -28,8 +28,8 @@ local itemRemember = nil;
 local awardShow = false;
 local sanityCheck = 0;
 
-local EnchantersList = " "; -- List of enchanters in the group
-local EnchantersNum = 0; -- Number of enchanters in the group
+local EnchantersList = {}; -- List of enchanters in the group
+--local EnchantersNum = table.getn(EnchantersList); -- Number of enchanters in the group
 
 local entryLinkWaiting = false;
 local entryPings = {};
@@ -39,7 +39,7 @@ local clientEntryPings = {};
 
 local MAX_ENTRIES = 25;
 local MAX_VOTERS = 20;
-local MAX_RAIDERS = 100;
+local MAX_RAIDERS = 60;
 local MAX_ENTRIES = 12;
 local MIN_SIZE = 96;
 local oldEntry = 0;
@@ -51,12 +51,7 @@ local currSortIndex = 0
 
 local L = LootCouncilLocalization;
 
-
-LootCouncil_debugMode = 0; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
--- 1 = debug on (no messages sent)
--- 0 = debug off (messages sent as normal)
-
-LootCouncil_Browser.MainDebug = 0; -- Note: This is a variable for ACTIVIATNG all debug text. Lots of random stuff. Highly recommended to turn OFF
+LootCouncil_Browser.MainDebug = 0; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
 -- 1 = debug on (all print commands fired)
 -- 0 = debuf off (no print commands)
 
@@ -355,7 +350,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				print(LootCouncilLocalization["NOSTART_NOT_GM"]);
 			elseif isValid == 1 or (isValid ==3 and LootCouncil_Browser.MainDebug==1) then -- Fires when player is either a raid officer or guild leader
 				GuildRoster();
-				LootCouncil_Browser.updateEnchantersList()
+				--LootCouncil_Browser.updateEnchantersList()
 				LootCouncil_Browser.WhisperList = {}
 				LootCouncil_Browser.itemAwarded = false;
 				entryLinkWaiting = false;
@@ -1920,7 +1915,7 @@ function LootCouncil_Browser.isValidVoter(name)
 			end
 		end
 	end
-	print("Error in voting")
+	LootCouncil_Browser.printd("Error in voting: "..name.." - "..theName)
 	return 0 -- They weren't in guild or on the whisper list, so trash um
 end
 
@@ -2480,43 +2475,21 @@ end
 
 function GroupLootDropDownLCL_Initialize()
 
-	LootCouncil_Browser.updateEnchantersList()
+	--LootCouncil_Browser.updateEnchantersList()
 	local candidate;
 	local info = UIDropDownMenu_CreateInfo();
-		
+	
 	if ( UIDROPDOWNMENU_MENU_LEVEL == 2 ) then
 		local lastIndex = UIDROPDOWNMENU_MENU_VALUE * 5;
+		
 		if (lastIndex <=40) then			
-			for i=1, GetNumGroupMembers() do
-				local name, rank , partyNum = LootCouncil_Browser.getRaidCharInfo(i);
+			for i=1, MAX_RAIDERS do				
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
-				if partyNum==UIDROPDOWNMENU_MENU_VALUE and candidate then
-					-- Add candidate button
-					local pClass, eClass = UnitClass(candidate)
-					local extra = "";
-					if (pClass ~= nil) then
-						local cColor = RAID_CLASS_COLORS[eClass]
-						extra = string.format("|cff%02x%02x%02x", cColor["r"]*255, cColor["g"]*255, cColor["b"]*255)
-					end
-					
-					info.text = extra .. candidate;
-					info.fontObject = GameFontNormalLeft;
-					info.value = i;
-					info.notCheckable = 1;
-					info.func = GroupLootDropDown_GiveLoot;
-					info.arg1 = LootFrame.selectedSlot;
-					info.arg2 = i;
-					UIDropDownMenu_AddButton(info,UIDROPDOWNMENU_MENU_LEVEL);
-				end
-			end
-		elseif (lastIndex >70 and lastIndex <105) then
-			-- DISENCHANT GROUP
-			for i=1, GetNumGroupMembers() do
-				local name, rank , partyNum = LootCouncil_Browser.getRaidCharInfo(i);
-				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
-				for j=1, EnchantersNum do
-					-- Add candidate button
-					if EnchantersList[j]==Ambiguate(name,"none") then
+				if candidate then
+					index=LootCouncil_Browser.searchCharName(candidate);
+					local name, rank , partyNum = LootCouncil_Browser.getRaidCharInfo(index);
+					if partyNum==UIDROPDOWNMENU_MENU_VALUE then
+						-- Add candidate button
 						local pClass, eClass = UnitClass(candidate)
 						local extra = "";
 						if (pClass ~= nil) then
@@ -2533,6 +2506,34 @@ function GroupLootDropDownLCL_Initialize()
 						info.arg2 = i;
 						UIDropDownMenu_AddButton(info,UIDROPDOWNMENU_MENU_LEVEL);
 					end
+				end
+			end
+		elseif (lastIndex == 100) then
+			-- DISENCHANT GROUP			
+			for i=1, MAX_RAIDERS do			
+				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);				
+				if candidate then
+					index=LootCouncil_Browser.inTable(LootCouncil_Browser.EnchantersList, Ambiguate(candidate,"none"))					
+					if index then
+						-- Add candidate button						
+							local pClass, eClass = UnitClass(candidate)
+							local extra = "";
+							if (pClass ~= nil) then
+								local cColor = RAID_CLASS_COLORS[eClass]
+								extra = string.format("|cff%02x%02x%02x", cColor["r"]*255, cColor["g"]*255, cColor["b"]*255)
+							end
+							
+							info.text = extra .. candidate;
+							info.fontObject = GameFontNormalLeft;
+							info.value = i;
+							info.notCheckable = 1;
+							info.func = GroupLootDropDown_GiveLoot;
+							info.arg1 = LootFrame.selectedSlot;
+							info.arg2 = i;
+							UIDropDownMenu_AddButton(info,UIDROPDOWNMENU_MENU_LEVEL);
+					end
+				else
+					break
 				end
 			end
 		else
@@ -2643,14 +2644,25 @@ function GroupLootDropDownLCL_Initialize()
 		UIDropDownMenu_AddButton(info);
 		
 		local partyArray = {0, 0, 0, 0, 0, 0, 0, 0}
+		local name, subgroup, index
 
-		for i=1, 40 do
-			local name, rank , partyNum, level, class, fileName, zone, online, isDead, role, isML= LootCouncil_Browser.getRaidCharInfo(i)
-			if name and partyArray[partyNum]== 0 and online and not isDead then
-				partyArray[partyNum]=true;
+		if LootFrame.selectedSlot then
+			for i=1, MAX_RAIDERS do
+				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
+				if candidate then
+					index= LootCouncil_Browser.searchCharName(candidate)
+					if index then
+						name, _, subgroup, _, _, _, _, _, isDead =LootCouncil_Browser.getRaidCharInfo(index)
+						if partyArray[subgroup]== false then
+							partyArray[subgroup]=true;
+						end
+					end
+				else 
+					break
+				end
 			end
 		end
-		for i=1, 5 do
+		for i=1, #partyArray do
 			if partyArray[i]==true then 
 				info.isTitle = nil;
 				info.text = PARTY.." ".. i;
@@ -2663,15 +2675,17 @@ function GroupLootDropDownLCL_Initialize()
 			end
 		end
 
---		-- Add disenchanters group
---		info.isTitle = nil;
---		info.text = "Disenchanters";
---		info.fontObject = GameFontNormalLeft;
---		info.hasArrow = 1;
---		info.notCheckable = 1;
---		info.value = 100;
---		info.func = nil;
---		UIDropDownMenu_AddButton(info);		
+		-- Add disenchanters group
+		if LootCouncil_Browser.EnchantersList then
+			info.isTitle = nil;
+			info.text = "Disenchanters";
+			info.fontObject = GameFontNormalLeft;
+			info.hasArrow = 1;
+			info.notCheckable = 1;
+			info.value = 20;
+			info.func = nil;
+			UIDropDownMenu_AddButton(info);
+		end
 		
 	else
 		LootCouncil_Lite:OnDisable();
@@ -3197,7 +3211,7 @@ end
 
 ------------- updateEnchantersList -----------------------
 -- Update information about enchanters in raid 
-------------------------------------------------------
+----------------------------------------------------------
 
 function LootCouncil_Browser.updateEnchantersList()
 	
@@ -3227,4 +3241,32 @@ function LootCouncil_Browser.updateEnchantersList()
 				enchant0Id=nil
 				enchant1Id=nil
 			end
+end
+
+------------- searchCharName -----------------------
+-- Search by the name of a character in the MasterLootCandidates
+----------------------------------------------------------
+
+function LootCouncil_Browser.searchCharName(candidate)
+	if candidate then
+		local name,index
+		for i = 1, 40 do --GetNumRaidMembers() do
+			name = LootCouncil_Browser.getRaidCharInfo(i)
+			if (candidate == Ambiguate(name,"none")) then
+				index=i
+				return index
+			end
+		end
+	end
+	return nil
+end
+
+------------- Array Lookup -----------------------
+-- Checking if an array contains a given value
+----------------------------------------------------------
+function LootCouncil_Browser.inTable(tbl, item)
+	for key, value in pairs(tbl) do	
+		if value == item then return key end
+	end
+	return false
 end
