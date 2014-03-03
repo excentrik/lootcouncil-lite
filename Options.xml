@@ -21,52 +21,177 @@
 			</EdgeSize>
 		</Backdrop>
 		<Layers>
-					<Layer level="OVERLAY">
-					<FontString name="EnchantersTableLabel" inherits="GameFontNormal" text="Enchanters:" justifyH="LEFT">
-						<Size>
-							<AbsDimension x="122" y="20" />
-						</Size>
-						<Anchors>
-							<Anchor point="TOPLEFT">
-								<Offset x="17" y="-270" />
-							</Anchor>
-						</Anchors>
-					</FontString>
-					</Layer>
-				</Layers>
+			<Layer level="OVERLAY">
+				<FontString name="EnchantersTableLabel" inherits="GameFontNormal" text="Enchanters:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="20" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-270" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString name="OptDropLabel" inherits="GameFontNormal" text="Minimum rank to participate in Loot Council: " justifyH="LEFT">
+					<Size>
+						<AbsDimension x="289" y="32" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-16" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="PrivateVotingLabel" inherits="GameFontNormal" text="Private Voting:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="135" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-65" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="SingleVotingLabel" inherits="GameFontNormal" text="Single Vote Mode:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="114" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-65" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="SelfVotingLabel" inherits="GameFontNormal" text="Council members can vote for self:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-105" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="DisplaySpecLabel" inherits="GameFontNormal" text="Display Main/Off Spec Information:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-105" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="WhisperLinkLabel" inherits="GameFontNormal" text="Allow links through whisper:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-145" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="OfficerLinkLabel" inherits="GameFontNormal" text="Allow links through officer chat:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="136" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-145" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="RaidLinkLabel" inherits="GameFontNormal" text="Allow links through raid chat:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-185" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ConfirmEndingLabel" inherits="GameFontNormal" text="Confirm Ending Session:" justifyH="LEFT">
+					<Scripts>
+						<OnLoad>
+							self:SetText(LootCouncilLocalization["CONFIRM_END_SESSION"])
+						</OnLoad>
+					</Scripts>
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-225" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="GuildLinkLabel" inherits="GameFontNormal" text="Allow links through guild chat:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="136" y="30" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-185" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="ScaleLabel" inherits="GameFontNormal" text="Main Frame Scale:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="20" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-300" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="MasterLootLabel" inherits="GameFontNormal" text="Master Loot Integration:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="122" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="220" y="-225" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
 		<Frames>
-				<EditBox  name="EnchantersTable" text="Enchanters" JustifyV="TOP">
+			<EditBox text="Enchanters" JustifyV="TOP" name="EnchantersTable">
 				<Size>
 					<AbsDimension x="300" y="22" />
 				</Size>
 				<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="100" y="-270" />
-						</Anchor>
+					<Anchor point="TOPLEFT">
+						<Offset x="100" y="-269" />
+					</Anchor>
 				</Anchors>
 				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
 					<BackgroundInsets>
-						<AbsInset left="-10" right="6" top="6" bottom="6" />
+						<AbsInset left="-6" right="6" top="6" bottom="6" />
 					</BackgroundInsets>
 					<TileSize>
 						<AbsValue val="8" />
 					</TileSize>
-					<EdgeSize>
-						<AbsValue val="8" />
-					</EdgeSize>
+					<EdgeSize val="8" />
 				</Backdrop>
-				<FontString inherits="GameFontNormal"/>
 				<Scripts>
 					<OnUpdate>
+
 					</OnUpdate>
 					<OnLoad>
-					-- read Enchanters
-					self:SetText(LootCouncil_Enchanters);
+						-- read Enchanters
+						self:SetText(LootCouncil_Enchanters);
 					</OnLoad>
 				</Scripts>
-				</EditBox >
-
-			<Slider name="ScaleSlider" enableMouse="true" minValue="0.5" maxValue="1" defaultValue="0" valueStep="0.02" orientation="HORIZONTAL">
+				<FontString inherits="GameFontNormal" />
+			</EditBox>
+			<Slider name="ScaleSlider" enableMouse="true" minValue="0.5" maxValue="1" valueStep="0.02" orientation="HORIZONTAL">
 				<Size>
 					<AbsDimension x="197" y="20" />
 				</Size>
@@ -101,14 +226,15 @@
 				</Layers>
 				<Scripts>
 					<OnUpdate>
-            LootCouncil_scale = self:GetValue();
+						            LootCouncil_scale = self:GetValue();
 
-            MainFrame:SetScale(LootCouncil_scale);
-            MainFrame:Show();
-            ScaleSliderLabel:SetText(floor(self:GetValue()*100)/100);
-          </OnUpdate>
+						            MainFrame:SetScale(LootCouncil_scale);
+						            MainFrame:Show();
+						            ScaleSliderLabel:SetText(floor(self:GetValue()*100)/100);
+					</OnUpdate>
 					<OnLoad>
-          </OnLoad>
+
+					</OnLoad>
 				</Scripts>
 				<ThumbTexture name="$parentThumb" file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
 					<Size>
@@ -124,8 +250,8 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>
-            UIDropDownMenu_Initialize(self, LootCouncil_Browser.OptDropDown_OnLoad);
-          </OnLoad>
+						            UIDropDownMenu_Initialize(self, LootCouncil_Browser.OptDropDown_OnLoad);
+					</OnLoad>
 				</Scripts>
 			</Frame>
 			<Button name="OptAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
@@ -138,12 +264,12 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-				<OnClick>
-    		        LootCouncil_Browser.acceptOptions()
-	         	 </OnClick>
-				 <OnLoad>
-				 	self:SetText(LootCouncilLocalization["ACCEPT"]);
-				</OnLoad>
+					<OnClick>
+						    		        LootCouncil_Browser.acceptOptions()
+					</OnClick>
+					<OnLoad>
+						 	self:SetText(LootCouncilLocalization["ACCEPT"]);
+					</OnLoad>
 				</Scripts>
 			</Button>
 			<Button name="OptCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
@@ -157,11 +283,11 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-            LootCouncil_Browser.cancelOptions()
-          </OnClick>
-		  	<OnLoad>
-				self:SetText(LootCouncilLocalization["CANCEL"]);
-			</OnLoad>
+						            LootCouncil_Browser.cancelOptions()
+					</OnClick>
+					<OnLoad>
+						self:SetText(LootCouncilLocalization["CANCEL"]);
+					</OnLoad>
 				</Scripts>
 			</Button>
 			<CheckButton name="PrivateVoteMode" inherits="UICheckButtonTemplate" text="CheckButton1">
@@ -265,141 +391,12 @@
 				</Anchors>
 			</CheckButton>
 		</Frames>
-		<Layers>
-			<Layer level="OVERLAY">
-				<FontString name="OptDropLabel" inherits="GameFontNormal" text="Minimum rank to participate in Loot Council: " justifyH="LEFT">
-					<Size>
-						<AbsDimension x="289" y="32" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-16" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="PrivateVotingLabel" inherits="GameFontNormal" text="Private Voting:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="135" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-65" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="SingleVotingLabel" inherits="GameFontNormal" text="Single Vote Mode:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="114" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-65" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="SelfVotingLabel" inherits="GameFontNormal" text="Council members can vote for self:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="122" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-105" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="DisplaySpecLabel" inherits="GameFontNormal" text="Display Main/Off Spec Information:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="122" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-105" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="WhisperLinkLabel" inherits="GameFontNormal" text="Allow links through whisper:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="122" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-145" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="OfficerLinkLabel" inherits="GameFontNormal" text="Allow links through officer chat:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="136" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-145" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="RaidLinkLabel" inherits="GameFontNormal" text="Allow links through raid chat:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="122" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-185" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="ConfirmEndingLabel" inherits="GameFontNormal" text="Confirm Ending Session:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="122" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-225" />
-						</Anchor>
-					</Anchors>
-					<Scripts>
-						<OnLoad>
-							self:SetText(LootCouncilLocalization["CONFIRM_END_SESSION"])
-						</OnLoad>
-					</Scripts>
-				</FontString>
-				<FontString name="GuildLinkLabel" inherits="GameFontNormal" text="Allow links through guild chat:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="136" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-185" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="ScaleLabel" inherits="GameFontNormal" text="Main Frame Scale:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="122" y="20" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-300" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString name="MasterLootLabel" inherits="GameFontNormal" text="Master Loot Integration:" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="122" y="25" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-225" />
-						</Anchor>
-					</Anchors>
-				</FontString>
-			</Layer>
-		</Layers>
 		<Scripts>
 			<OnLoad>
-        LCOptionsFrame:RegisterEvent("VARIABLES_LOADED");
-        LCOptionsFrame:SetScript("OnEvent", LCOptionsFrame_EventHandler);
-        LCOptionsFrame:Hide()
-      </OnLoad>
+				        LCOptionsFrame:RegisterEvent("VARIABLES_LOADED");
+				        LCOptionsFrame:SetScript("OnEvent", LCOptionsFrame_EventHandler);
+				        LCOptionsFrame:Hide()
+			</OnLoad>
 		</Scripts>
 	</Frame>
 </Ui>
