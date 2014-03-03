@@ -82,7 +82,7 @@ LootCouncil_LinkWhisper = 1;
 LootCouncil_LinkOfficer = 1;
 LootCouncil_LinkRaid = 0;
 LootCouncil_LinkGuild = 0;
---LootCouncil_Version="2.3"
+LootCouncil_Version="2.5"
 
 
 RegisterAddonMessagePrefix("L00TCOUNCIL");
@@ -92,6 +92,7 @@ do
 	---------------------------------------------
 	SLASH_LOOT_COUNCIL1 = "/ltc";
 	SLASH_LOOT_COUNCIL2 = "/lootcouncil";
+	SLASH_LOOT_COUNCIL3 = "/lc";
 	SlashCmdList["LOOT_COUNCIL"] = function(msg)
 		local cmd, arg = string.split(" ", msg,2); -- Separates the command from the rest
 		cmd = cmd:lower(); -- Lower case command
