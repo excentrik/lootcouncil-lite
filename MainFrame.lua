@@ -56,7 +56,7 @@ LootCouncil_Browser.MainDebug = 0; -- Note: This is a variable for ACTIVATING al
 -- 0 = debuf off (no print commands)
 
 -- 4.0 Change On
-LootCouncil_Lite = LibStub("AceAddon-3.0"):NewAddon("LootCouncil_Lite", "AceHook-3.0")
+local LootCouncil_Lite = LibStub("AceAddon-3.0"):NewAddon("LootCouncil_Lite", "AceHook-3.0")
 
 -------------- MainFrame_OnLoad --------------
 -- Loads the Addon Frame
@@ -861,7 +861,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 				-- VERSION 2.1
 					-- All of this has been kept for legacy reasons
 					-- New function completely reworks this logic.
-				local spec = "-";
+				spec = "-";
 				if isShowingSpec == 1 then
 					spec = LootCouncil_Browser.parseSpec(msg, actualItemString, actualItemString2) 
 				end
@@ -2478,10 +2478,9 @@ function GroupLootDropDownLCL_Initialize()
 	--LootCouncil_Browser.updateEnchantersList()
 	local candidate;
 	local info = UIDropDownMenu_CreateInfo();
-	
+
 	if ( UIDROPDOWNMENU_MENU_LEVEL == 2 ) then
-		local lastIndex = UIDROPDOWNMENU_MENU_VALUE * 5;
-		
+		local lastIndex = UIDROPDOWNMENU_MENU_VALUE * 5;		
 		if (lastIndex <=40) then			
 			for i=1, MAX_RAIDERS do				
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
@@ -2509,10 +2508,11 @@ function GroupLootDropDownLCL_Initialize()
 				end
 			end
 		elseif (lastIndex == 100) then
-			-- DISENCHANT GROUP			
+			-- DISENCHANT GROUP
+			local index;
 			for i=1, MAX_RAIDERS do			
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);				
-				if candidate then
+				if candidate and getn(LootCouncil_Browser.EnchantersList)>0 then
 					index=LootCouncil_Browser.inTable(LootCouncil_Browser.EnchantersList, Ambiguate(candidate,"none"))					
 					if index then
 						-- Add candidate button						
@@ -2662,7 +2662,7 @@ function GroupLootDropDownLCL_Initialize()
 				end
 			end
 		end
-		for i=1, #partyArray do
+		for i=1, getn(partyArray) do
 			if partyArray[i]==true then 
 				info.isTitle = nil;
 				info.text = PARTY.." ".. i;
@@ -2676,7 +2676,7 @@ function GroupLootDropDownLCL_Initialize()
 		end
 
 		-- Add disenchanters group
-		if LootCouncil_Browser.EnchantersList then
+		if getn(LootCouncil_Browser.EnchantersList)>0 then
 			info.isTitle = nil;
 			info.text = "Disenchanters";
 			info.fontObject = GameFontNormalLeft;
@@ -3072,7 +3072,9 @@ function LootCouncil_Browser.parseSpec(msg, actualItemString, actualItemString2)
 	--		_, afterNameRaw  = string.find(msg, "%]\124h", afterNameRaw+2);
 	--end
 	
-	spec = "M";
+	local spec = "M";
+	local fullSpec = "";
+	local keywords;
 --
 --							if spec == "M" then
 --								fullSpec = "MAIN";
@@ -3112,7 +3114,7 @@ function LootCouncil_Browser.parseSpec(msg, actualItemString, actualItemString2)
 --			end
 --
 --		end
-
+		
 		-- SEARCH FOR OFF SPEC RELATED KEYWORDS
 		keywords= { "offspec", "off","os"};
 		for i,v in ipairs(keywords) do
@@ -3172,9 +3174,9 @@ end
 ------------------------------------------------------
 
 function LootCouncil_Browser.getCharInfo(index)
-	name, rank, rankIndex, level, class, zone, note,officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile = GetGuildRosterInfo(index);
+	local name, rank, rankIndex, level, class, zone, note,officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile = GetGuildRosterInfo(index);
 	--NewName = Ambiguate(name,"none")
-	NewName = name;
+	local NewName = name;
 	--print(NewName)
 	return NewName, rank, rankIndex, level, class, zone, note,officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile
 end
@@ -3184,11 +3186,11 @@ end
 ------------------------------------------------------
 
 function LootCouncil_Browser.getUnitName(unit)
-	name, realm = UnitName(unit,TRUE);
+	local name, realm = UnitName(unit,TRUE);
 	if type(realm) == "nil" then
 		realm = GetRealmName():gsub("%s+", "");
 	end
-	FullName = name .. "-" .. realm;
+	local FullName = name .. "-" .. realm;
 	--return Ambiguate(FullName,"none");
 	return FullName
 end
@@ -3198,9 +3200,9 @@ end
 ------------------------------------------------------
 
 function LootCouncil_Browser.getRaidCharInfo(index)
-	name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML = GetRaidRosterInfo(index);
+	local name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML = GetRaidRosterInfo(index);
 	--NewName = Ambiguate(name,"none")
-	NewName = name;
+	local NewName = name;
 	--print(NewName)
 	return NewName, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML
 end
@@ -3249,12 +3251,11 @@ end
 
 function LootCouncil_Browser.searchCharName(candidate)
 	if candidate then
-		local name,index
+		local name
 		for i = 1, 40 do --GetNumRaidMembers() do
 			name = LootCouncil_Browser.getRaidCharInfo(i)
 			if (candidate == Ambiguate(name,"none")) then
-				index=i
-				return index
+				return i
 			end
 		end
 	end
