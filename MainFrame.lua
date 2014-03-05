@@ -2471,6 +2471,7 @@ end
 
 function GroupLootDropDown_GiveLoot(self, slot, candidate)
 	GiveMasterLoot(slot, candidate);
+	ToggleDropDownMenu(1, nil, GroupLootDropDownLCL, LootFrame.selectedLootButton, 0, 0);
 end
 
 function GroupLootDropDownLCL_Initialize()
@@ -2643,7 +2644,7 @@ function GroupLootDropDownLCL_Initialize()
 		info.notCheckable = 1;
 		UIDropDownMenu_AddButton(info);
 		
-		local partyArray = {0, 0, 0, 0, 0, 0, 0, 0}
+		local partyArray = {false, false, false, false, false, false, false, false}
 		local name, subgroup, index
 
 		if LootFrame.selectedSlot then
@@ -2676,15 +2677,17 @@ function GroupLootDropDownLCL_Initialize()
 		end
 
 		-- Add disenchanters group
-		if getn(LootCouncil_Browser.EnchantersList)>0 then
-			info.isTitle = nil;
-			info.text = "Disenchanters";
-			info.fontObject = GameFontNormalLeft;
-			info.hasArrow = 1;
-			info.notCheckable = 1;
-			info.value = 20;
-			info.func = nil;
-			UIDropDownMenu_AddButton(info);
+		if LootCouncil_Browser.EnchantersList then
+			if getn(LootCouncil_Browser.EnchantersList)>0 then
+				info.isTitle = nil;
+				info.text = "Disenchanters";
+				info.fontObject = GameFontNormalLeft;
+				info.hasArrow = 1;
+				info.notCheckable = 1;
+				info.value = 20;
+				info.func = nil;
+				UIDropDownMenu_AddButton(info);
+			end
 		end
 		
 	else
@@ -2756,7 +2759,7 @@ function LootCouncil_Browser.awardItem(owner, name, ...)
 			playerFound = true;
 			LootCouncil_Browser.candidateNum = i;
 			LootCouncil_Browser.slotNum = LootFrame.selectedSlot; 
-			StaticPopup_Show("LOOT_COUNCIL_CONFIRM_LOOT_DECISION", ITEM_QUALITY_COLORS[LootFrame.selectedQuality].hex..LootFrame.selectedItemName..FONT_COLOR_CODE_CLOSE, name)
+			StaticPopup_Show("LOOT_COUNCIL_CONFIRM_LOOT_DECISION", ITEM_QUALITY_COLORS[LootFrame.selectedQuality].hex..LootFrame.selectedItemName..FONT_COLOR_CODE_CLOSE, name)			
 			break;
 		end
 	end
@@ -2796,6 +2799,7 @@ function LootCouncil_Browser.giveItemAway()
 		SendChatMessage(""..GetMasterLootCandidate(LootCouncil_Browser.slotNum,LootCouncil_Browser.candidateNum).." awarded "..GetLootSlotLink(LootCouncil_Browser.slotNum), "OFFICER");
 		SendChatMessage(""..GetMasterLootCandidate(LootCouncil_Browser.slotNum,LootCouncil_Browser.candidateNum).." awarded "..GetLootSlotLink(LootCouncil_Browser.slotNum), "Raid");
 		GiveMasterLoot(LootCouncil_Browser.slotNum, LootCouncil_Browser.candidateNum);
+		ToggleDropDownMenu(1, nil, GroupLootDropDownLCL, LootFrame.selectedLootButton, 0, 0);
 		LootCouncil_Browser.slotNum = nil;
 		LootCouncil_Browser.candidateNum = nil;
 		LootCouncil_Browser.initiateAbort();
