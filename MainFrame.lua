@@ -2487,6 +2487,7 @@ function GroupLootDropDownLCL_Initialize()
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
 				if candidate then
 					index=LootCouncil_Browser.searchCharName(candidate);
+					if index then
 					local name, rank , partyNum = LootCouncil_Browser.getRaidCharInfo(index);
 					if partyNum==UIDROPDOWNMENU_MENU_VALUE then
 						-- Add candidate button
@@ -2505,6 +2506,7 @@ function GroupLootDropDownLCL_Initialize()
 						info.arg1 = LootFrame.selectedSlot;
 						info.arg2 = i;
 						UIDropDownMenu_AddButton(info,UIDROPDOWNMENU_MENU_LEVEL);
+					end
 					end
 				end
 			end
@@ -3258,8 +3260,10 @@ function LootCouncil_Browser.searchCharName(candidate)
 		local name
 		for i = 1, 40 do --GetNumRaidMembers() do
 			name = LootCouncil_Browser.getRaidCharInfo(i)
+			if name then
 			if (candidate == Ambiguate(name,"none")) then
 				return i
+			end
 			end
 		end
 	end
