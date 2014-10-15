@@ -3243,8 +3243,8 @@ function LootCouncil_Browser.updateEnchantersList()
 				end
 				if enchant0Id or  enchant1Id then
 					LootCouncil_Browser.printd("Adding " .. name .. " to the enchanters list")
-					EnchantersList = councilList..", "..name
-					EnchantersNum = councilNum + 1
+					EnchantersList = EnchantersList..", "..name
+					--EnchantersNum = councilNum + 1
 				end
 				enchant0Id=nil
 				enchant1Id=nil
@@ -3257,17 +3257,10 @@ end
 
 function LootCouncil_Browser.searchCharName(candidate)
 	if candidate then
-		local name
-		for i = 1, 40 do --GetNumRaidMembers() do
-			name = LootCouncil_Browser.getRaidCharInfo(i)
-			if name then
-			if (candidate == Ambiguate(name,"none")) then
-				return i
-			end
-			end
-		end
+		-- Needs better support for party/raid
+		local raidIndex = UnitInRaid(Ambiguate(candidate,"none"));
 	end
-	return nil
+	return raidIndex
 end
 
 ------------- Array Lookup -----------------------
