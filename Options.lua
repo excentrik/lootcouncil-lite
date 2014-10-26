@@ -9,6 +9,7 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		LootCouncil_Browser.single = LootCouncil_singleVote;
 		LootCouncil_Browser.spec = LootCouncil_displaySpec;
 		LootCouncil_Browser.self = LootCouncil_selfVoting;
+		LootCouncil_Browser.split = LootCouncil_SplitRaids;
 		LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
 		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters); -- make a List of out the string
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
@@ -27,6 +28,7 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		MainFrame:SetScale(LootCouncil_scale);
 		EnchantersTable:SetText(LootCouncil_Enchanters);
 		EnchantersTable:SetJustifyV("TOP")
+		SplitMode:SetChecked(LootCouncil_SplitRaids);
 
 		ConfirmEndingLabel:SetText(LootCouncilLocalization["CONFIRM_END_SESSION"]);
 		GuildLinkLabel:SetText(LootCouncilLocalization["LINK_GUILD"]);
@@ -40,7 +42,8 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		SelfVotingLabel:SetText(LootCouncilLocalization["SELF_VOTE"]);
 		SingleVotingLabel:SetText(LootCouncilLocalization["SINGLE_VOTE"]);
 		DisplaySpecLabel:SetText(LootCouncilLocalization["SPEC_INFO"]);
-		EnchantersTableLabel:SetText("Enchanters"); -- Needs localization
+		EnchantersTableLabel:SetText(LootCouncilLocalization["ENCHANTERS"]);
+		SplitLabel:SetText(LootCouncilLocalization["SPLIT_RAIDS"]);
 		
 		
 		if LootCouncil_minRank > 0 then
@@ -117,6 +120,11 @@ function LootCouncil_Browser.acceptOptions()
 			LootCouncil_masterLootIntegration = 0;
 		end
 		
+		if SplitMode:GetChecked() then
+			LootCouncil_SplitRaids = 1;
+		else
+			LootCouncil_SplitRaids = 0;
+		end
 		
 		LootCouncil_Enchanters = EnchantersTable:GetText();		
 
@@ -124,6 +132,7 @@ function LootCouncil_Browser.acceptOptions()
 		LootCouncil_Browser.single = LootCouncil_singleVote;
 		LootCouncil_Browser.spec = LootCouncil_displaySpec;
 		LootCouncil_Browser.self = LootCouncil_selfVoting;
+		LootCouncil_Browser.split = LootCouncil_SplitRaids;
 		LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
 		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
@@ -158,6 +167,7 @@ function LootCouncil_Browser.cancelOptions()
 	selectedRank = LootCouncil_minRank;
 	SingleVoteMode:SetChecked(LootCouncil_singleVote)
 	PrivateVoteMode:SetChecked(LootCouncil_privateVoting)
+	SplitMode:SetChecked(LootCouncil_SplitRaids)
 	WhisperLinkMode:SetChecked(LootCouncil_LinkWhisper);
 	OfficerLinkMode:SetChecked(LootCouncil_LinkOfficer);
 	RaidLinkMode:SetChecked(LootCouncil_LinkRaid);

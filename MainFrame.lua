@@ -10,6 +10,7 @@ local isPrivate = 0; -- 0 if this session is private, 1 otherwise
 local isSingle = 0; -- 0 if this has single vote mode enabled, 1 otherwise
 local isShowingSpec = 1; -- 1 if showing mainspec/offspec, 0 otherwise
 local isSelfVoting = 0; -- 0 if can vote for self, 1 otherwise
+local isSplitRaids = 0; -- 0 if every raid has is own council, 1 otherwise
 
 local itemRunning = nil; -- item link for the auction that's running
 local isInitiator = 0; -- 0 if we're NOT the initiator, 1 otherwise
@@ -37,7 +38,7 @@ local entryPings = {};
 local clientEntryWaiting = false;
 local clientEntryPings = {};
 
-local MAX_ENTRIES = 25;
+local MAX_ENTRIES = 30;
 local MAX_VOTERS = 20;
 local MAX_RAIDERS = 60;
 local MAX_ENTRIES = 12;
@@ -250,63 +251,68 @@ function MainFrame_EventHandler(self, event, ...)
 		if prefix == "L00TCOUNCIL" and sender ~= LootCouncil_Browser.getUnitName("player") then
 			
 			local cmd, other = strsplit(cmdDelim, msg, 2)
-			LootCouncil_Browser.printd("Our Command: " .. cmd);
-			if cmd == "start" then
-				if other == nil or other == "" then
-					print(LootCouncilLocalization["FAILED_START_NO_VALID_LINK"])
-				else
-					if (not itemRunning) or sender==theInitiator then
-						local name, link = GetItemInfo(other);
-						if name == nil then
-							LootCouncil_awaitingItem = true;
-							dataRequest = other;
-							sanityCheck = 0;
-							MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
-						end
-						LootCouncil_Browser.heardStart(sender, other);
+			local isSame= (LootCouncil_Browser.searchSameRaid(sender) or not(LootCouncil_SplitRaids) )
+			if isSame then
+				LootCouncil_Browser.printd("Our Command: " .. cmd);
+				if cmd == "start" then
+					if other == nil or other == "" then
+						print(LootCouncilLocalization["FAILED_START_NO_VALID_LINK"])
 					else
-						print("------------------------------------")
-						print(string.format(LootCouncilLocalization["START_WHILE_GOING1"], sender))
-						print(LootCouncilLocalization["START_WHILE_GOING2"])
-						print("------------------------------------")
+						-- Check if initiator is in the same raid as the player					
+						if ((not itemRunning) or sender==theInitiator) then
+							local name, link = GetItemInfo(other);
+							if name == nil then
+								LootCouncil_awaitingItem = true;
+								dataRequest = other;
+								sanityCheck = 0;
+								MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
+							end
+							LootCouncil_Browser.heardStart(sender, other);
+						else
+							print("------------------------------------")
+							print(string.format(LootCouncilLocalization["START_WHILE_GOING1"], sender))
+							print(LootCouncilLocalization["START_WHILE_GOING2"])
+							print("------------------------------------")
+						end
 					end
+				elseif cmd == "suggestAbort" then
+					if suggestedBy then
+						StaticPopup_Hide("LOOT_COUNCIL_SUGGEST_ABORT")
+						StaticPopup_Show("LOOT_COUNCIL_SUGGEST_ABORT", sender)
+					end
+				elseif cmd == "abort" and sender==theInitiator then
+					LootCouncil_Browser.closeLootCouncilSession()	
+				elseif cmd == "vote" then
+					local char, voter, vote, reason = strsplit(voteDelim, other, 4);
+					LootCouncil_Browser.updateVotes(voter, char, vote, reason);
+				elseif cmd == "end" then
+					LootCouncil_Browser.resetConsideration();
+				elseif cmd == "councilList" then
+					CurrentCouncilList:SetText(other)
+					CurrentCouncilList:Show()
+					CurrentCouncilLabel:Show()
+				elseif cmd == "echo" then
+					LootCouncil_Browser.processEcho(sender, other);
+				elseif cmd == "confirmed" then
+					local private, single, spec, selfVoting = strsplit(voteDelim, other, 4);
+					LootCouncil_Browser.processResponse(tonumber(private), tonumber(single), tonumber(spec), tonumber(selfVoting));
+				elseif cmd == "itemEntry" then
+					local name, item = strsplit(" ", other, 2);
+					LootCouncil_Browser.printd("PULSED ITEM");
+					LootCouncil_Browser.receiveItemEntry(name, item);
+				elseif cmd == "secondEntry" then
+					local name, item = strsplit(" ", other, 2);
+					LootCouncil_Browser.receiveSecondEntry(name, item);
+				elseif cmd == "data" then
+					LootCouncil_Browser.updatePlayerData(other);
+				elseif cmd == "remove" and sender==theInitiator then
+					LootCouncil_Browser.removePlayer(other)
+				elseif cmd == "spec" then
+					local char, spec = strsplit(" ", other, 2);
+					LootCouncil_Browser.updateSpec(char, spec)
 				end
-			elseif cmd == "suggestAbort" then
-				if suggestedBy then
-					StaticPopup_Hide("LOOT_COUNCIL_SUGGEST_ABORT")
-					StaticPopup_Show("LOOT_COUNCIL_SUGGEST_ABORT", sender)
-				end
-			elseif cmd == "abort" and sender==theInitiator then
-				LootCouncil_Browser.closeLootCouncilSession()	
-			elseif cmd == "vote" then
-				local char, voter, vote, reason = strsplit(voteDelim, other, 4);
-				LootCouncil_Browser.updateVotes(voter, char, vote, reason);
-			elseif cmd == "end" then
-				LootCouncil_Browser.resetConsideration();
-			elseif cmd == "councilList" then
-				CurrentCouncilList:SetText(other)
-				CurrentCouncilList:Show()
-				CurrentCouncilLabel:Show()
-			elseif cmd == "echo" then
-				LootCouncil_Browser.processEcho(sender, other);
-			elseif cmd == "confirmed" then
-				local private, single, spec, selfVoting = strsplit(voteDelim, other, 4);
-				LootCouncil_Browser.processResponse(tonumber(private), tonumber(single), tonumber(spec), tonumber(selfVoting));
-			elseif cmd == "itemEntry" then
-				local name, item = strsplit(" ", other, 2);
-				LootCouncil_Browser.printd("PULSED ITEM");
-				LootCouncil_Browser.recieveItemEntry(name, item);
-			elseif cmd == "secondEntry" then
-				local name, item = strsplit(" ", other, 2);
-				LootCouncil_Browser.recieveSecondEntry(name, item);
-			elseif cmd == "data" then
-				LootCouncil_Browser.updatePlayerData(other);
-			elseif cmd == "remove" and sender==theInitiator then
-				LootCouncil_Browser.removePlayer(other)
-			elseif cmd == "spec" then
-				local char, spec = strsplit(" ", other, 2);
-				LootCouncil_Browser.updateSpec(char, spec)
-			elseif cmd == "testCouncil" then -- ADDED IN VERSION 2.0. Test council ping.
+			end
+			if cmd == "testCouncil" then -- ADDED IN VERSION 2.0. Test council ping.
 				GuildRoster();
 				for ci = 1, GetNumGuildMembers() do -- otherwise, start looping through the guild list
 					--local theName, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(ci);
@@ -379,6 +385,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				isSingle = LootCouncil_Browser.single;
 				isShowingSpec = LootCouncil_Browser.spec;
 				isSelfVoting = LootCouncil_Browser.self;
+				isSplit= LootCouncil_Browser.split;
 				--SyncButton:Show();
 				LootCouncil_Browser.showMainFrame();
 				councilList = LootCouncil_Browser.getUnitName("player");
@@ -634,6 +641,7 @@ function LootCouncil_Browser.resetConsideration()
 	LootCouncil_Browser.Update();
 	oldEntry = 0;
 	LootCouncil_Browser.private = LootCouncil_privateVoting;
+	LootCouncil_Browser.split = LootCouncil_SplitRaids;
 	LootCouncil_Browser.single = LootCouncil_singleVote;
 	LootCouncil_Browser.spec = LootCouncil_displaySpec;
 	LootCouncil_Browser.self = LootCouncil_selfVoting;
@@ -1031,7 +1039,7 @@ end
 ------------------   -------------------
 -- Triggered by the host sending us a new item entry
 -------------------------------------------------------
-function LootCouncil_Browser.recieveItemEntry(name, itemString)
+function LootCouncil_Browser.receiveItemEntry(name, itemString)
 	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == 0 then -- Make sure we have an auction running and we're not the initiator
 		LootCouncil_Browser.printd("new entry coming in: " .. itemString);
 		local psName, psLink, piRarity, piLevel, piMinLevel, psType, psSubType, piStackCount, pthisItemEquipLoc = GetItemInfo(itemString); -- Get better info
@@ -1102,10 +1110,10 @@ function LootCouncil_Browser.recieveItemEntry(name, itemString)
 	end
 end
 
------------------- recieveSecondEntry -------------------
+------------------ receiveSecondEntry -------------------
 -- Triggered by the host sending us a new item entry that's flagged as a SECOND entry
 -------------------------------------------------------
-function LootCouncil_Browser.recieveSecondEntry(name, itemString)
+function LootCouncil_Browser.receiveSecondEntry(name, itemString)
 	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == 0 then -- Make sure we have an auction running
 		local psName, psLink, piRarity, piLevel, piMinLevel, psType, psSubType, piStackCount, pthisItemEquipLoc = GetItemInfo(itemString); -- Get better info
 		if psName then
@@ -3269,6 +3277,21 @@ end
 function LootCouncil_Browser.inTable(tbl, item)
 	for key, value in pairs(tbl) do	
 		if value == item then return key end
+	end
+	return false
+end
+
+------------- searchSameRaid -----------------------
+-- Search if a player is in the same raid as initiator
+----------------------------------------------------------
+
+function LootCouncil_Browser.searchSameRaid(candidate)
+	if candidate then
+		-- Needs better support for party/raid
+		local raidIndex = UnitInRaid(Ambiguate(candidate,"none"));
+		if raidIndex then
+			return true
+		end
 	end
 	return false
 end

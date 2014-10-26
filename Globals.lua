@@ -67,6 +67,7 @@ LootCouncil_scale = 1;
 LootCouncil_confirmEnding = 1;
 LootCouncil_masterLootIntegration = 1;
 LootCouncil_Enchanters = "";
+LootCouncil_SplitRaids = 0;
 
 LootCouncil_awaitingItem = false;
 
@@ -77,12 +78,13 @@ LootCouncil_Browser.self = LootCouncil_selfVoting;
 LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
 LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
 LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
+LootCouncil_Browser.SplitRaids=LootCouncil_SplitRaids;
 
 LootCouncil_LinkWhisper = 1;
 LootCouncil_LinkOfficer = 1;
 LootCouncil_LinkRaid = 0;
 LootCouncil_LinkGuild = 0;
-LootCouncil_Version="2.5"
+LootCouncil_Version="2.6"
 
 
 RegisterAddonMessagePrefix("L00TCOUNCIL");

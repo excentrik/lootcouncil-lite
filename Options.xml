@@ -2,7 +2,7 @@
 	<Script file="Options.lua" />
 	<Frame name="LCOptionsFrame" parent="UIParent" toplevel="true" movable="true">
 		<Size>
-			<AbsDimension x="443" y="366" />
+			<AbsDimension x="443" y="406" />
 		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT">
@@ -28,7 +28,7 @@
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-270" />
+							<Offset x="17" y="-310" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -61,6 +61,16 @@
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset x="220" y="-65" />
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="SplitLabel" inherits="GameFontNormal" text="Split raids mode:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="114" y="25" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="17" y="-265" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -145,7 +155,7 @@
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="17" y="-300" />
+							<Offset x="17" y="-340" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -168,7 +178,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="100" y="-269" />
+						<Offset x="100" y="-309" />
 					</Anchor>
 				</Anchors>
 				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
@@ -197,7 +207,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset x="-76" y="-300" />
+						<Offset x="-76" y="-340" />
 					</Anchor>
 				</Anchors>
 				<Backdrop bgFile="Interface\Buttons\UI-SliderBar-Background" edgeFile="Interface\Buttons\UI-SliderBar-Border" tile="true">
@@ -260,7 +270,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="17" y="-328" />
+						<Offset x="17" y="-368" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -278,7 +288,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPRIGHT">
-						<Offset x="-16" y="-328" />
+						<Offset x="-16" y="-368" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -307,6 +317,16 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="362" y="-59" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="SplitMode" inherits="UICheckButtonTemplate" text="CheckButton2">
+				<Size>
+					<AbsDimension x="36" y="36" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="145" y="-259" />
 					</Anchor>
 				</Anchors>
 			</CheckButton>
