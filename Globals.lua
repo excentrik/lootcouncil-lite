@@ -49,6 +49,19 @@ function LootCouncil_convertStringList(str)
 	end
 end
 
+function LootCouncil_SendChatMessage(msg ,chatType ,language ,channel)
+
+if chatType ~= "OFFICER" or chatType ~= "RAID" or chatType ~= "WHISPER" or chatType ~= "RAID_WARNING" or chatType ~= "GUILD" then
+	-- Send message
+	SendChatMessage(msg ,chatType ,nil ,channel);
+else
+	-- Find channel number
+	local index = GetChannelName(channel)
+	-- Send message
+	SendChatMessage(msg ,"CHANNEL" ,nil ,index);
+end
+
+end
 
 LootCouncil_TheCouncil = {};
 LootCouncil_Browser = {}
@@ -86,6 +99,7 @@ LootCouncil_LinkRaid = 0;
 LootCouncil_LinkGuild = 0;
 LootCouncil_Version="2.6"
 
+LootCouncil_Channel="OFFICER"
 
 RegisterAddonMessagePrefix("L00TCOUNCIL");
 
@@ -137,6 +151,8 @@ do
 			LCOptionsFrame:Hide()
 		elseif cmd == "reset" then
 			LootCouncil_Browser.resetMainFrame()
+		elseif cmd == "channel" then
+			LootCouncil_Browser.changeChannel(arg)
 		elseif cmd == "" then
 			print(LootCouncilLocalization["CMD_MAIN"]);
 			print(LootCouncilLocalization["CMD_PREFIX"]);
@@ -149,6 +165,7 @@ do
 			print(LootCouncilLocalization["CMD_CONFIG"]);
 			print(LootCouncilLocalization["CMD_TEST"]);
 			print(LootCouncilLocalization["CMD_RESET"]);
+			print(LootCouncilLocalization["CMD_CHANNEL"]);
 		else
 			print(string.format(LootCouncilLocalization["BAD_CMD"], msg));
 		end

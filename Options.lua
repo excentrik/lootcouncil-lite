@@ -13,6 +13,7 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
 		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters); -- make a List of out the string
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
+		LootCouncil_Browser.Channel = LootCouncil_Channel;
 		SingleVoteMode:SetChecked(LootCouncil_singleVote)
 		PrivateVoteMode:SetChecked(LootCouncil_privateVoting)
 		DisplaySpecMode:SetChecked(LootCouncil_displaySpec);
@@ -136,6 +137,7 @@ function LootCouncil_Browser.acceptOptions()
 		LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
 		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
+		LootCouncil_Browser.Channel = LootCouncil_Channel;
 		LCOptionsFrame:Hide()
 		if different then
 			ReloadUI();
