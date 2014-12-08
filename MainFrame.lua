@@ -211,9 +211,14 @@ end
 -- -- CHAT_MSG_GUILD
 ----------------------------------------------------
 function MainFrame_EventHandler(self, event, ...)
-	if (event == "CHAT_MSG_OFFICER" or event == "CHAT_MSG_CHANNEL") and LootCouncil_LinkOfficer == 1 then
+	if event == "CHAT_MSG_OFFICER" and LootCouncil_Channel=="OFFICER" and LootCouncil_LinkOfficer == 1 then
 		local msg, sender = ...
 		if isInitiator == 1 then
+			LootCouncil_Browser.newEntry(sender, msg);
+		end
+	elseif event == "CHAT_MSG_CHANNEL" and LootCouncil_Channel~="OFFICER" and LootCouncil_LinkOfficer == 1 then
+		local msg, sender, language, channelString, target, flags, unknown, channelNumber, channelName = ...
+		if isInitiator == 1 and channelName== LootCouncil_Channel then
 			LootCouncil_Browser.newEntry(sender, msg);
 		end
 	elseif event == "CHAT_MSG_WHISPER" and LootCouncil_LinkWhisper == 1 then
