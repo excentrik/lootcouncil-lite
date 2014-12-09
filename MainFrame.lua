@@ -5,17 +5,17 @@
 
 -- 4.0 Change On
 
-local auctionRunning = 0; -- 0 if session running, 1 otherwise
-local isPrivate = 0; -- 0 if this session is private, 1 otherwise
-local isSingle = 0; -- 0 if this has single vote mode enabled, 1 otherwise
-local isShowingSpec = 1; -- 1 if showing mainspec/offspec, 0 otherwise
-local isSelfVoting = 0; -- 0 if can vote for self, 1 otherwise
-local isSplitRaids = 0; -- 0 if every raid has is own council, 1 otherwise
+local auctionRunning = false; -- 0 if session running, 1 otherwise
+local isPrivate = false; -- 0 if this session is private, 1 otherwise
+local isSingle = false; -- 0 if this has single vote mode enabled, 1 otherwise
+local isShowingSpec = true; -- 1 if showing mainspec/offspec, 0 otherwise
+local isSelfVoting = false; -- 0 if can vote for self, 1 otherwise
+local isSplitRaids = false; -- 0 if every raid has is own council, 1 otherwise
 
 local itemRunning = nil; -- item link for the auction that's running
-local isInitiator = 0; -- 0 if we're NOT the initiator, 1 otherwise
+local isInitiator = false; -- 0 if we're NOT the initiator, 1 otherwise
 local theInitiator = ""; -- Name of the initiator
-local specialSlot = 0; -- 1 if trinket/ring/neck, 0 otherwise
+local specialSlot = false; -- 1 if trinket/ring/neck, 0 otherwise
 local theVote = ""; -- Helper variable for static popup (actual vote For/against/none)
 local voteFor = ""; -- Who we're voting for
 local suggestedBy = ""; -- Who suggested to end the session
@@ -23,11 +23,11 @@ local cmdDelim = " "; -- Helper variable in earlier iterations
 local voteDelim = " "; -- Helper variable in earlier iterations
 local selection = nil; -- Row we have selected
 local councilList = " "; -- List of council members
-local councilNum = 1; -- Number of council members
+local councilNum = true; -- Number of council members
 local requestedBefore = false;
 local itemRemember = nil;
 local awardShow = false;
-local sanityCheck = 0;
+local sanityCheck = false;
 
 local EnchantersList = {}; -- List of enchanters in the group
 --local EnchantersNum = table.getn(EnchantersList); -- Number of enchanters in the group
@@ -43,7 +43,7 @@ local MAX_VOTERS = 20;
 local MAX_RAIDERS = 60;
 local MAX_ENTRIES = 12;
 local MIN_SIZE = 96;
-local oldEntry = 0;
+local oldEntry = false;
 local dataRequest;
 local dataTotal = {};
 
@@ -52,7 +52,7 @@ local currSortIndex = 0
 
 local L = LootCouncilLocalization;
 
-LootCouncil_Browser.MainDebug = 0; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
+LootCouncil_Browser.MainDebug = false; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
 -- 1 = debug on (all print commands fired)
 -- 0 = debuf off (no print commands)
 
@@ -166,7 +166,7 @@ function MainFrame_OnLoad()
 	end
 	
 	councilList = LootCouncil_Browser.getUnitName("player");
-	councilNum = 1;
+	councilNum = true;
 end
 
 
@@ -270,7 +270,7 @@ function MainFrame_EventHandler(self, event, ...)
 							if name == nil then
 								LootCouncil_awaitingItem = true;
 								dataRequest = other;
-								sanityCheck = 0;
+								sanityCheck = false;
 								MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 							end
 							LootCouncil_Browser.heardStart(sender, other);
@@ -368,7 +368,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				entryLinkWaiting = false;
 				entryPings = {};
 				itemRunning = item; -- Set the current item that's running
-				isInitiator=1; -- We're the initiator, so set that
+				isInitiator=true; -- We're the initiator, so set that
 				theInitiator = LootCouncil_Browser.getUnitName("player");
 				--Send out the messages regarding the item
 				if LootCouncil_debugMode == 0 then
@@ -395,7 +395,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				--SyncButton:Show();
 				LootCouncil_Browser.showMainFrame();
 				councilList = LootCouncil_Browser.getUnitName("player");
-				councilNum = 1;
+				councilNum = true;
 				if UnitInRaid("player") and LootCouncil_debugMode == 0 then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning,theInitiator), "RAID_WARNING");
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning,theInitiator), "RAID");
@@ -430,7 +430,7 @@ function LootCouncil_Browser.validInitiator(sender)
 			end
 		else
 			if IsGuildLeader(LootCouncil_Browser.getUnitName("player")) == 1 then -- If they're the guild leader
-				return 1; --Then return 1
+				return true; --Then return 1
 			else
 				return 3; -- Else, return 3
 			end
@@ -443,9 +443,9 @@ function LootCouncil_Browser.validInitiator(sender)
 			--print(name)
 			if name == sender then
 				if (rankIndex+1) <= (LootCouncil_minRank + 0.1) then
-					return 1;
+					return true;
 				else
-					return 0;
+					return false;
 				end
 			end
 		end
@@ -457,7 +457,7 @@ end
 -- Prepares the main frame for such
 ---------------------------------------------------------
 function LootCouncil_Browser.prepareLootFrame()
-	auctionRunning=1; -- We're running an auction now, so set it to true;
+	auctionRunning=true; -- We're running an auction now, so set it to true;
 	local sName, sLink, iRarity, iLevel, iMinLevel, sType, sSubType, iStackCount, thisItemEquipLoc, thisItemTexture;
 	if itemRunning then
 		sName, sLink, iRarity, iLevel, iMinLevel, sType, sSubType, iStackCount, thisItemEquipLoc, thisItemTexture = GetItemInfo(itemRunning); -- Get the item info
@@ -493,9 +493,9 @@ function LootCouncil_Browser.prepareLootFrame()
 	local slotNum = LootCouncil_Browser.translateToSlot(thisItemEquipLoc);
 	LootCouncil_Browser.printd("SLOT NUMBER: " .. slotNum);
 	if slotNum == 13 or slotNum == 11 or slotNum == 16 then
-		specialSlot = 1;
+		specialSlot = true;
 	else
-		specialSlot = 0;
+		specialSlot = false;
 	end
 	CurrentItemHover:Show()
 	for ci = 1, MAX_ENTRIES do
@@ -550,11 +550,11 @@ end
 -----------------------------------------------
 function LootCouncil_Browser.heardStart(sender, item)
 	councilList = "";
-	councilNum = 0;
+	councilNum = false;
 	itemRemember = item;
 	if (LootCouncil_Browser.validInitiator(sender) == 1) then
 		theInitiator = sender;
-		isInitiator = 0; -- We're NOT the initiator
+		isInitiator = false; -- We're NOT the initiator
 		local rprsName, rprsLink = GetItemInfo(item); -- Get the item link (since we just got sent the item string)
 		itemRunning = rprsLink;
 		SendAddonMessage("L00TCOUNCIL", "echo "..LootCouncil_Version, "WHISPER", theInitiator);
@@ -624,7 +624,7 @@ function LootCouncil_Browser.resetConsideration()
 	EmptyTexture:Show();
 	CurrentItemTexture:Hide();
 	itemRunning = nil;
-	auctionRunning = 0;
+	auctionRunning = false;
 	LootCouncil_Browser.Elects = {}
 	LootCouncil_Browser.Update();
 	CurrentItemLevelLabel:Hide();
@@ -645,7 +645,7 @@ function LootCouncil_Browser.resetConsideration()
 	selection = nil;
 	awardShow = false;
 	LootCouncil_Browser.Update();
-	oldEntry = 0;
+	oldEntry = false;
 	LootCouncil_Browser.private = LootCouncil_privateVoting;
 	LootCouncil_Browser.split = LootCouncil_SplitRaids;
 	LootCouncil_Browser.single = LootCouncil_singleVote;
@@ -671,7 +671,7 @@ function LootCouncil_Browser.alreadyLinkedItem(name, item)
 			if entry and entry[1] and entry[1] == name then
 				entry[2] = item.." ("..piLevel..")";
 				entry[3] = piLevel
-				entry[12] = 1;
+				entry[12] = true;
 				entry[13] = psLink;
 				entry[14] = nil;
 				LootCouncil_Browser.Update()
@@ -681,7 +681,7 @@ function LootCouncil_Browser.alreadyLinkedItem(name, item)
 		end
 	else
 		LootCouncil_Browser.printd("Could NOT find item");
-		local ret = 0;
+		local ret = false;
 		for ci = 1, MAX_ENTRIES do
 			local entry = LootCouncil_Browser.Elects[ci];
 			if entry and entry[1] and entry[1] == name then
@@ -702,7 +702,7 @@ function LootCouncil_Browser.alreadyLinkedItem(name, item)
 								 "=",
 								 item
 								 });
-					sanityCheck = 0;
+					sanityCheck = false;
 					MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 				end
 				break;
@@ -894,7 +894,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 				if flagforwaiting then
 					entryLinkWaiting = true;
 					LootCouncil_Browser.printd("MESSAGE BOUND: " .. msg);
-					sanityCheck = 0;
+					sanityCheck = false;
 					MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 				end
 					
@@ -1105,7 +1105,7 @@ function LootCouncil_Browser.receiveItemEntry(name, itemString)
 							 1,
 							 itemString
 							 });
-				sanityCheck = 0;
+				sanityCheck = false;
 				MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 				
 			end
@@ -1169,7 +1169,7 @@ function LootCouncil_Browser.receiveSecondEntry(name, itemString)
 							 theEntry[13],
 							 itemString
 							 });
-						sanityCheck = 0;
+						sanityCheck = false;
 						MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);	
 						break;
 					end
@@ -1204,13 +1204,13 @@ end
 -- Looks more complicated than it is
 ----------------------------------------------------
 function LootCouncil_Browser.Update()
-	local totalEntry = 0;
+	local totalEntry = false;
 	for ci = 1, MAX_ENTRIES do -- Loop through each row
 		
 		local entry = LootCouncil_Browser.Elects[ci] -- Pull the entry row
 		local frame = _G["EntryFrameEntry"..ci] -- Get the physical row frame
 		if entry and frame then -- if we found both of those, GREAT!
-			totalEntry = totalEntry + 1;
+			totalEntry = totalEntry + true;
 			if entry[12] == 2 then -- if they have 2 items, we need 2 hover areas
 				_G[frame:GetName().."ItemFrame2"]:Show()
 			else -- Otherwise, we just need 1 hover area
@@ -1366,8 +1366,8 @@ function LootCouncil_Browser.updateVoteSelectionText()
 	if isPrivate == 0 then -- If we're not in private mode, then lets get to work!
 		local absoluteVotesFor = ""; -- Initialize the for string
 		local absoluteVotesAgainst = ""; -- Initialize the against string
-		local forIndex = 1;
-		local againstIndex = 1;
+		local forIndex = true;
+		local againstIndex = true;
 		local theVotes
 		if selection then -- If we have something selected
 			theVotes = selection[10]; -- the votes is this area of our selection
@@ -1528,7 +1528,7 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 							theEntry[9] = vote;
 						end
 						local theVotes = theEntry[10] -- Get the current votes
-						local found = 0; -- Initialize helper variable
+						local found = false; -- Initialize helper variable
 						for ki = 1, MAX_VOTERS do -- Loop through all the potential voters
 							if theVotes[ki] then -- If this voter exists
 								local singularVoter = theVotes[ki] -- get the individual voter
@@ -1564,15 +1564,15 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 						end
 						
 						-- Now we need to count how many people voted for/against so that we can update the table.
-						local numFor = 0; -- Count how many are FOR this voter
-						local numAgainst = 0; -- Count how many are AGAINST this voter
+						local numFor = false; -- Count how many are FOR this voter
+						local numAgainst = false; -- Count how many are AGAINST this voter
 						for ki = 1, MAX_VOTERS do -- Loop through all the potential voters
 							if theVotes[ki] then -- If this voter exists
 								local singularVoter = theVotes[ki] -- Get the individual voter
 								if singularVoter and singularVoter[2] == "For" then -- Add one if he's for
-									numFor = numFor +1;
+									numFor = numFor +true;
 								elseif singularVoter and singularVoter[2] == "Against" then -- Add one if he's against
-									numAgainst = numAgainst + 1;
+									numAgainst = numAgainst + true;
 								end
 							end
 						end
@@ -1622,17 +1622,17 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 						end
 							
 						
-						local numFor = 0; -- Count how many are FOR this voter
+						local numFor = false; -- Count how many are FOR this voter
 						for ki = 1, MAX_VOTERS do -- Loop through all the potential voters
 							if theVotes[ki] then -- If this voter exists
 								local singularVoter = theVotes[ki] -- Get the individual voter
 								if singularVoter and singularVoter[2] == "For" then -- Add one if he's for
-									numFor = numFor +1;
+									numFor = numFor +true;
 								end
 							end
 						end
 						theEntry[7] = numFor;
-						theEntry[8] = 0; -- Just to make sure :-D
+						theEntry[8] = false; -- Just to make sure :-D
 						if theEntry == selection then -- If this is our current selection
 							LootCouncil_Browser.updateVoteSelectionText() -- Then update the text on the table.
 						end
@@ -1652,8 +1652,8 @@ function LootCouncil_Browser.voteToolActivate(id)
 		local entry = LootCouncil_Browser.Elects[id]; -- get this row's data
 		local votesFor = {}; -- initialize the votes for
 		local votesAgainst = {} -- initialize the votes against
-		local forIndex = 1;
-		local againstIndex = 1;
+		local forIndex = true;
+		local againstIndex = true;
 		if entry then -- if this row has data in it
 			GameTooltip:SetOwner(MainFrame, "ANCHOR_CURSOR") -- Set the owner of the tooltip
 			local theVotes = entry[10];-- pull the votes
@@ -1818,7 +1818,7 @@ function LootCouncil_Browser.closeLootCouncilSession()
 						LootCouncil_SendChatMessage("("..quickIndex..") "..theEntry[1]..": "..(theEntry[7]-theEntry[8]).." vote"..LootCouncil_Browser.displayVotes(theEntry), LootCouncil_Channel);
 					end
 					if quickIndex < 4 then
-						quickIndex = quickIndex+1;
+						quickIndex = quickIndex+true;
 					end
 				end
 			end
@@ -1827,9 +1827,9 @@ function LootCouncil_Browser.closeLootCouncilSession()
 		LootCouncil_SendChatMessage(LootCouncilLocalization["END_FIRED"], LootCouncil_Channel);
 	end
 	LootCouncil_Browser.sendGlobalMessage("abort") -- AND TELL EVERYONE WE'RE DONE
-	auctionRunning = 0; -- we're not running a session anymore
+	auctionRunning = false; -- we're not running a session anymore
 	itemRunning = nil; -- and we have no item running
-	isInitiator = 0; -- you forefeight your initiator rights
+	isInitiator = false; -- you forefeight your initiator rights
 	theInitiator = ""; -- and there is no initiator
 	theVote = "";
 	voteFor = "";
@@ -1837,7 +1837,7 @@ function LootCouncil_Browser.closeLootCouncilSession()
 	selection = nil;
 	councilList = " ";
 	councilList = " ";
-	councilNum = 1;
+	councilNum = true;
 	LootCouncil_Browser.Data = {}
 	LootCouncil_Browser.Elects = {}
 	LootCouncil_Browser.Votes = {}
@@ -1854,8 +1854,8 @@ function LootCouncil_Browser.displayVotes(entry)
 		local votesFor = ""; -- initialize the votes for
 		local votesAgainst = ""; -- initialize the votes against
 		local printString = " - ";
-		local forIndex = 1;
-		local againstIndex = 1;
+		local forIndex = true;
+		local againstIndex = true;
 		for ci = 1, MAX_VOTERS do -- loop through all the votes
 			local singularVoter = theVotes[ci]
 			if singularVoter then -- if we find a vote, then update the counts
@@ -1922,9 +1922,9 @@ function LootCouncil_Browser.isValidVoter(name)
 			local theName, rank, rankIndex = LootCouncil_Browser.getCharInfo(ci);
 			if name == theName then -- if we find them
 				if (rankIndex+1) <= (LootCouncil_minRank + 0.1) then -- check if they're above the minimum rank
-					return 1; -- If they are, return 1
+					return true; -- If they are, return 1
 				else
-					return 0; -- If they aren't, return 0
+					return false; -- If they aren't, return 0
 				end
 			end
 		end
@@ -1968,12 +1968,12 @@ function LootCouncil_Browser.removePlayer(playerName)
 	if selection and selection[1] == playerName then -- If they're our selection, clear the selection
 		LootCouncil_Browser.ClearSelection()
 	end
-	local found = 0; -- initialize helper variable
+	local found = false; -- initialize helper variable
 	for ci = 1, (MAX_ENTRIES-1) do -- Loop through all people on the table EXCEPT the last row!
 		if found == 0 then
 			local theEntry = LootCouncil_Browser.Elects[ci]; -- Pull each row
 			if theEntry[1] == playerName then -- if we find them
-				found=1; -- update that we found them
+				found=true; -- update that we found them
 				LootCouncil_Browser.Elects[ci] = LootCouncil_Browser.Elects[ci+1]; -- AND START COPYING UP
 			end
 		else
@@ -2223,7 +2223,7 @@ function MainFrame_OnUpdate(self, elapsed)
 	if (LootCouncil_awaitingItem or entryLinkWaiting or clientEntryWaiting) and (sanityCheck < 100) then -- If we are waiting on an item and we aren't going insane, proceed
 		self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed; -- update the time for throttling
 		if (self.TimeSinceLastUpdate > .4) then -- if less than .4 seconds
-			sanityCheck = sanityCheck + 1; -- increase our insanity
+			sanityCheck = sanityCheck + true; -- increase our insanity
 			LootCouncil_Browser.printd("fired"); -- Debug that we're firing OnUpdate
 			if LootCouncil_awaitingItem then  -- If a council member is awaiting the MAIN item (the item being considered)
 				_G["LootCouncil_Scan"]:ClearLines() -- Clear invisible tooltip
@@ -2333,7 +2333,7 @@ function MainFrame_OnUpdate(self, elapsed)
 											if iLevel2 then
 												entry[12] = 2;
 											else
-												entry[12] = 1;
+												entry[12] = true;
 											end
 											entry[13] = sLink;
 											if iLevel2 then
@@ -2357,12 +2357,12 @@ function MainFrame_OnUpdate(self, elapsed)
 							
 
 							
-							backIndex = backIndex - 1; -- Keep looping backwards
+							backIndex = backIndex - true; -- Keep looping backwards
 						end
 					end
 				end
 				
-			self.TimeSinceLastUpdate = 0;
+			self.TimeSinceLastUpdate = false;
 		end
 	else
 		LootCouncil_Browser.printd("Removing OnUpdate");
@@ -2515,7 +2515,7 @@ function GroupLootDropDownLCL_Initialize()
 						info.text = extra .. candidate;
 						info.fontObject = GameFontNormalLeft;
 						info.value = i;
-						info.notCheckable = 1;
+						info.notCheckable = true;
 						info.func = GroupLootDropDown_GiveLoot;
 						info.arg1 = LootFrame.selectedSlot;
 						info.arg2 = i;
@@ -2543,7 +2543,7 @@ function GroupLootDropDownLCL_Initialize()
 							info.text = extra .. candidate;
 							info.fontObject = GameFontNormalLeft;
 							info.value = i;
-							info.notCheckable = 1;
+							info.notCheckable = true;
 							info.func = GroupLootDropDown_GiveLoot;
 							info.arg1 = LootFrame.selectedSlot;
 							info.arg2 = i;
@@ -2568,7 +2568,7 @@ function GroupLootDropDownLCL_Initialize()
 					info.text = extra .. entry[1] .." |cff3388ff("..(entry[7]-entry[8])..")"
 					info.fontObject = GameFontNormalLeft;
 					info.value = ci;
-					info.notCheckable = 1;
+					info.notCheckable = true;
 					info.func = LootCouncil_Browser.awardItem;
 					info.arg1 = entry[1];
 					UIDropDownMenu_AddButton(info,UIDROPDOWNMENU_MENU_LEVEL);
@@ -2585,10 +2585,10 @@ function GroupLootDropDownLCL_Initialize()
 	--if ( GetNumRaidMembers() > 0 ) then
 		-- In a raid
 		
-		info.isTitle = 1;
+		info.isTitle = true;
 		info.text = "Loot Council Lite";
 		info.fontObject = GameFontNormalLeft;
-		info.notCheckable = 1;
+		info.notCheckable = true;
 		UIDropDownMenu_AddButton(info);
 		if (not (itemRunning)) then
 			info.isTitle = nil;
@@ -2596,7 +2596,7 @@ function GroupLootDropDownLCL_Initialize()
 			info.fontObject = GameFontNormalLeft;
 			info.notCheckable = nil;
 			info.disabled = nil;
-			info.value = 1;
+			info.value = true;
 			info.func = LootCouncil_Browser.initiateFromLoot
 		else
 			info.isTitle = nil;
@@ -2604,16 +2604,16 @@ function GroupLootDropDownLCL_Initialize()
 			info.fontObject = GameFontNormalLeft;
 			info.notCheckable = nil;
 			info.disabled = nil;
-			info.value = 1;
+			info.value = true;
 			info.func = LootCouncil_Browser.abortFromLoot
 		end
 		UIDropDownMenu_AddButton(info);
 		
 		info.text = "";
 		info.hasArrow = nil;
-		info.notCheckable = 1;
+		info.notCheckable = true;
 		info.value = nil;
-		info.isTitle = 1;
+		info.isTitle = true;
 		UIDropDownMenu_AddButton(info);
 		
 		info.isTitle = nil;
@@ -2621,7 +2621,7 @@ function GroupLootDropDownLCL_Initialize()
 		info.fontObject = GameFontNormalLeft;
 		info.notCheckable = nil;
 		info.disabled = nil;
-		info.value = 1;
+		info.value = true;
 		info.func = LootCouncil_Browser.doMasterLootRoll
 		UIDropDownMenu_AddButton(info);
 	
@@ -2630,7 +2630,7 @@ function GroupLootDropDownLCL_Initialize()
 		info.fontObject = GameFontNormalLeft;
 		info.notCheckable = nil;
 		info.disabled = nil;
-		info.value = 1;
+		info.value = true;
 		info.func = LootCouncil_Browser.cancelMasterLootRoll
 		UIDropDownMenu_AddButton(info);
 		
@@ -2638,26 +2638,26 @@ function GroupLootDropDownLCL_Initialize()
 			info.isTitle = nil;
 			info.text = LootCouncilLocalization["AWARD"];
 			info.fontObject = GameFontNormalLeft;
-			info.hasArrow = 1;
-			info.notCheckable = 1;
+			info.hasArrow = true;
+			info.notCheckable = true;
 			info.value = 105;
 			info.func = nil;
-			info.disabled = 1;
+			info.disabled = true;
 			UIDropDownMenu_AddButton(info);
 		end
 		
 		
 		info.text = "";
 		info.hasArrow = nil;
-		info.notCheckable = 1;
+		info.notCheckable = true;
 		info.value = nil;
-		info.isTitle = 1;
+		info.isTitle = true;
 		UIDropDownMenu_AddButton(info);
 		
-		info.isTitle = 1;
+		info.isTitle = true;
 		info.text = GIVE_LOOT;
 		info.fontObject = GameFontNormalLeft;
-		info.notCheckable = 1;
+		info.notCheckable = true;
 		UIDropDownMenu_AddButton(info);
 		
 		local partyArray = {false, false, false, false, false, false, false, false}
@@ -2684,8 +2684,8 @@ function GroupLootDropDownLCL_Initialize()
 				info.isTitle = nil;
 				info.text = PARTY.." ".. i;
 				info.fontObject = GameFontNormalLeft;
-				info.hasArrow = 1;
-				info.notCheckable = 1;
+				info.hasArrow = true;
+				info.notCheckable = true;
 				info.value = i;
 				info.func = nil;
 				UIDropDownMenu_AddButton(info);
@@ -2698,8 +2698,8 @@ function GroupLootDropDownLCL_Initialize()
 				info.isTitle = nil;
 				info.text = "Disenchanters";
 				info.fontObject = GameFontNormalLeft;
-				info.hasArrow = 1;
-				info.notCheckable = 1;
+				info.hasArrow = true;
+				info.notCheckable = true;
 				info.value = 20;
 				info.func = nil;
 				UIDropDownMenu_AddButton(info);
@@ -2716,7 +2716,7 @@ function GroupLootDropDownLCL_Initialize()
 		--		info.text = candidate;
 		--		info.fontObject = GameFontNormalLeft;
 		--		info.value = i;
-		--		info.notCheckable = 1;
+		--		info.notCheckable = true;
 		--		info.value = i;
 		--		info.func = GroupLootDropDown_GiveLoot;
 		--		UIDropDownMenu_AddButton(info);
@@ -3019,7 +3019,7 @@ end
 --	local _, afterNameRaw  = string.find(msg, "%]\124h")
 --	if psName2 then
 --		if afterNameRaw == nil then
---			afterNameRaw = 0;
+--			afterNameRaw = false;
 --		end
 --			_, afterNameRaw  = string.find(msg, "%]\124h", afterNameRaw+2);
 --	end
@@ -3087,7 +3087,7 @@ function LootCouncil_Browser.parseSpec(msg, actualItemString, actualItemString2)
 	
 	--if psName2 then
 	--	if afterNameRaw == nil then
-	--		afterNameRaw = 0;
+	--		afterNameRaw = false;
 	--	end
 	--		_, afterNameRaw  = string.find(msg, "%]\124h", afterNameRaw+2);
 	--end
@@ -3239,7 +3239,7 @@ function LootCouncil_Browser.updateEnchantersList()
 	
 	LootCouncil_Browser.printd("Updating list of enchanters out of "..GetNumGroupMembers())
 	EnchantersList = " "; -- List of enchanters in the group
-	EnchantersNum = 0; -- Number of enchanters in the group
+	EnchantersNum = false; -- Number of enchanters in the group
 
 			for i=1, GetNumGroupMembers() do
 				local name, rank , partyNum = LootCouncil_Browser.getRaidCharInfo(i);

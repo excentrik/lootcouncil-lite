@@ -71,16 +71,16 @@ LootCouncil_Browser.Votes = {}
 LootCouncil_Browser.WhisperList = {}
 LootCouncil_PlayerData = {}
 LootCouncil_minRank = 0;
-LootCouncil_sawFirstMessage = 0;
-LootCouncil_privateVoting = 0;
-LootCouncil_singleVote = 0;
-LootCouncil_displaySpec = 1;
-LootCouncil_selfVoting = 1;
-LootCouncil_scale = 1;
-LootCouncil_confirmEnding = 1;
-LootCouncil_masterLootIntegration = 1;
+LootCouncil_sawFirstMessage = false;
+LootCouncil_privateVoting = false;
+LootCouncil_singleVote = false;
+LootCouncil_displaySpec = false;
+LootCouncil_selfVoting = false;
+LootCouncil_scale = true;
+LootCouncil_confirmEnding = false;
+LootCouncil_masterLootIntegration = true;
 LootCouncil_Enchanters = "";
-LootCouncil_SplitRaids = 0;
+LootCouncil_SplitRaids = false;
 
 LootCouncil_awaitingItem = false;
 
@@ -93,10 +93,10 @@ LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_E
 LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
 LootCouncil_Browser.SplitRaids=LootCouncil_SplitRaids;
 
-LootCouncil_LinkWhisper = 1;
-LootCouncil_LinkOfficer = 1;
-LootCouncil_LinkRaid = 0;
-LootCouncil_LinkGuild = 0;
+LootCouncil_LinkWhisper = true;
+LootCouncil_LinkOfficer = true;
+LootCouncil_LinkRaid = false;
+LootCouncil_LinkGuild = false;
 LootCouncil_Version="2.6"
 
 LootCouncil_Channel="OFFICER"
@@ -141,7 +141,7 @@ do
 			RankFrame:Show()
 			LCOptionsFrame:Hide()
 		elseif cmd == "config" then
-			LCOptionsFrame:Show()
+			LootCouncil_Browser.ShowOptions()
 			RankFrame:Hide()
 			LCTestFrame:Hide()
 		elseif cmd == "test" then

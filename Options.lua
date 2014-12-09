@@ -5,6 +5,7 @@ local optSelectedRank;
 
 function LCOptionsFrame_EventHandler(self, event, ...)
 	if event == "VARIABLES_LOADED" then
+
 		LootCouncil_Browser.private = LootCouncil_privateVoting;
 		LootCouncil_Browser.single = LootCouncil_singleVote;
 		LootCouncil_Browser.spec = LootCouncil_displaySpec;
@@ -14,6 +15,7 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters); -- make a List of out the string
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
 		LootCouncil_Browser.Channel = LootCouncil_Channel;
+		LootCouncil_Browser.SplitRaids=LootCouncil_SplitRaids;
 		SingleVoteMode:SetChecked(LootCouncil_singleVote)
 		PrivateVoteMode:SetChecked(LootCouncil_privateVoting)
 		DisplaySpecMode:SetChecked(LootCouncil_displaySpec);
@@ -50,60 +52,92 @@ function LCOptionsFrame_EventHandler(self, event, ...)
 		if LootCouncil_minRank > 0 then
 			optSelectedRank = LootCouncil_minRank;
 		else
-			optSelectedRank = 0;
+			optSelectedRank = false;
 		end
 	end
 end
 
+function LootCouncil_Browser.ShowOptions()
+--
+--	LootCouncil_Browser.private = LootCouncil_privateVoting;
+--	LootCouncil_Browser.single = LootCouncil_singleVote;
+--	LootCouncil_Browser.spec = LootCouncil_displaySpec;
+--	LootCouncil_Browser.self = LootCouncil_selfVoting;
+--	LootCouncil_Browser.split = LootCouncil_SplitRaids;
+--	LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
+--	LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters); -- make a List of out the string
+--	LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
+--	LootCouncil_Browser.Channel = LootCouncil_Channel;
+--	LootCouncil_Browser.SplitRaids=LootCouncil_SplitRaids;
+--	SingleVoteMode:SetChecked(LootCouncil_singleVote)
+--	PrivateVoteMode:SetChecked(LootCouncil_privateVoting)
+--	DisplaySpecMode:SetChecked(LootCouncil_displaySpec);
+--	SelfVoteMode:SetChecked(LootCouncil_selfVoting);
+--	WhisperLinkMode:SetChecked(LootCouncil_LinkWhisper);
+--	OfficerLinkMode:SetChecked(LootCouncil_LinkOfficer);
+--	RaidLinkMode:SetChecked(LootCouncil_LinkRaid);
+--	GuildLinkMode:SetChecked(LootCouncil_LinkGuild);
+--	ConfirmEnding:SetChecked(LootCouncil_confirmEnding);
+--	MasterLootIntegration:SetChecked(LootCouncil_masterLootIntegration);
+--	ScaleSlider:SetValue(LootCouncil_scale);
+--	ScaleSliderLabel:SetText(LootCouncil_scale);
+--	MainFrame:SetScale(LootCouncil_scale);
+--	EnchantersTable:SetText(LootCouncil_Enchanters);
+--	EnchantersTable:SetJustifyV("TOP")
+--	SplitMode:SetChecked(LootCouncil_SplitRaids);
+
+	LCOptionsFrame:Show()
+end
 
 function LootCouncil_Browser.acceptOptions()
+
 	if optSelectedRank > 0 then
 		LootCouncil_minRank = optSelectedRank
 		if 	SingleVoteMode:GetChecked() then
-			LootCouncil_singleVote = 1;
+			LootCouncil_singleVote = true;
 		else
-			LootCouncil_singleVote = 0;
+			LootCouncil_singleVote = false;
 		end
 		if PrivateVoteMode:GetChecked() then
-			LootCouncil_privateVoting = 1;
+			LootCouncil_privateVoting = true;
 		else
-			LootCouncil_privateVoting = 0;
+			LootCouncil_privateVoting = false;
 		end
 		if 	SelfVoteMode:GetChecked() then
-			LootCouncil_selfVoting = 1;
+			LootCouncil_selfVoting = true;
 		else
-			LootCouncil_selfVoting = 0;
+			LootCouncil_selfVoting = false;
 		end
 		if DisplaySpecMode:GetChecked() then
-			LootCouncil_displaySpec = 1;
+			LootCouncil_displaySpec = true;
 		else
-			LootCouncil_displaySpec = 0;
+			LootCouncil_displaySpec = false;
 		end
 		if WhisperLinkMode:GetChecked() then
-			LootCouncil_LinkWhisper = 1;
+			LootCouncil_LinkWhisper = true;
 		else
-			LootCouncil_LinkWhisper = 0;
+			LootCouncil_LinkWhisper = false;
 		end
 		if OfficerLinkMode:GetChecked() then
-			LootCouncil_LinkOfficer = 1;
+			LootCouncil_LinkOfficer = true;
 		else
-			LootCouncil_LinkOfficer = 0;
+			LootCouncil_LinkOfficer = false;
 		end
 		if RaidLinkMode:GetChecked() then
-			LootCouncil_LinkRaid = 1;
+			LootCouncil_LinkRaid = true;
 		else
-			LootCouncil_LinkRaid = 0;
+			LootCouncil_LinkRaid = false;
 		end
 		if GuildLinkMode:GetChecked() then
-			LootCouncil_LinkGuild = 1;
+			LootCouncil_LinkGuild = true;
 		else
-			LootCouncil_LinkGuild = 0;
+			LootCouncil_LinkGuild = false;
 		end
 		
 		if ConfirmEnding:GetChecked() then
-			LootCouncil_confirmEnding = 1;
+			LootCouncil_confirmEnding = true;
 		else
-			LootCouncil_confirmEnding = 0;
+			LootCouncil_confirmEnding = false;
 		end
 		
 		local different = false;
@@ -116,15 +150,15 @@ function LootCouncil_Browser.acceptOptions()
 		end
 		
 		if MasterLootIntegration:GetChecked() then
-			LootCouncil_masterLootIntegration = 1;
+			LootCouncil_masterLootIntegration = true;
 		else
-			LootCouncil_masterLootIntegration = 0;
+			LootCouncil_masterLootIntegration = false;
 		end
 		
 		if SplitMode:GetChecked() then
-			LootCouncil_SplitRaids = 1;
+			LootCouncil_SplitRaids = true;
 		else
-			LootCouncil_SplitRaids = 0;
+			LootCouncil_SplitRaids = false;
 		end
 		
 		LootCouncil_Enchanters = EnchantersTable:GetText();		
@@ -133,11 +167,10 @@ function LootCouncil_Browser.acceptOptions()
 		LootCouncil_Browser.single = LootCouncil_singleVote;
 		LootCouncil_Browser.spec = LootCouncil_displaySpec;
 		LootCouncil_Browser.self = LootCouncil_selfVoting;
-		LootCouncil_Browser.split = LootCouncil_SplitRaids;
 		LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
 		LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
 		LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
-		LootCouncil_Browser.Channel = LootCouncil_Channel;
+		LootCouncil_Browser.SplitRaids=LootCouncil_SplitRaids;
 		LCOptionsFrame:Hide()
 		if different then
 			ReloadUI();
