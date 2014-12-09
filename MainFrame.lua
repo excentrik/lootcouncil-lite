@@ -211,29 +211,29 @@ end
 -- -- CHAT_MSG_GUILD
 ----------------------------------------------------
 function MainFrame_EventHandler(self, event, ...)
-	if event == "CHAT_MSG_OFFICER" and LootCouncil_Channel=="OFFICER" and LootCouncil_LinkOfficer == 1 then
+	if event == "CHAT_MSG_OFFICER" and LootCouncil_Channel=="OFFICER" and LootCouncil_LinkOfficer == true then
 		local msg, sender = ...
-		if isInitiator == 1 then
+		if isInitiator == true then
 			LootCouncil_Browser.newEntry(sender, msg);
 		end
-	elseif event == "CHAT_MSG_CHANNEL" and LootCouncil_Channel~="OFFICER" and LootCouncil_LinkOfficer == 1 then
+	elseif event == "CHAT_MSG_CHANNEL" and LootCouncil_Channel~="OFFICER" and LootCouncil_LinkOfficer == true then
 		local msg, sender, language, channelString, target, flags, unknown, channelNumber, channelName = ...
-		if isInitiator == 1 and channelName== LootCouncil_Channel then
+		if isInitiator == true and channelName== LootCouncil_Channel then
 			LootCouncil_Browser.newEntry(sender, msg);
 		end
-	elseif event == "CHAT_MSG_WHISPER" and LootCouncil_LinkWhisper == 1 then
+	elseif event == "CHAT_MSG_WHISPER" and LootCouncil_LinkWhisper == true then
 		local msg, sender = ...;
-		if isInitiator == 1 and LootCouncil_Browser.getUnitName("player")~= sender then
+		if isInitiator == true and LootCouncil_Browser.getUnitName("player")~= sender then
 			LootCouncil_Browser.newEntry(sender, msg);
 		end
-	elseif ((event == "CHAT_MSG_RAID" or event== "CHAT_MSG_RAID_LEADER") and LootCouncil_LinkRaid == 1) then
+	elseif ((event == "CHAT_MSG_RAID" or event== "CHAT_MSG_RAID_LEADER") and LootCouncil_LinkRaid == true) then
 		local msg, sender = ...;
-		if isInitiator == 1 then
+		if isInitiator == true then
 			LootCouncil_Browser.newEntry(sender, msg);
 		end
-	elseif event == "CHAT_MSG_GUILD" and LootCouncil_LinkGuild == 1 then
+	elseif event == "CHAT_MSG_GUILD" and LootCouncil_LinkGuild == true then
 		local msg, sender = ...;
-		if isInitiator == 1 then
+		if isInitiator == true then
 			LootCouncil_Browser.newEntry(sender, msg);
 		end
 	elseif event == "OPEN_MASTER_LOOT_LIST" then
@@ -357,10 +357,10 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 			if isValid == 0 then -- Fires when player is IN a raid but NOT a raid officer
 				print(LootCouncilLocalization["NOSTART_1"]);
 				print(LootCouncilLocalization["NOSTART_NOT_RAIDASSIST"]);
-			elseif isValid == 3 and LootCouncil_Browser.MainDebug==0 then -- Fires when player is NOT in a raid and is NOT the guild leader
+			elseif isValid == 3 and LootCouncil_Browser.MainDebug==false then -- Fires when player is NOT in a raid and is NOT the guild leader
 				print(LootCouncilLocalization["NOSTART_1"]);
 				print(LootCouncilLocalization["NOSTART_NOT_GM"]);
-			elseif isValid == 1 or (isValid ==3 and LootCouncil_Browser.MainDebug==1) then -- Fires when player is either a raid officer or guild leader
+			elseif isValid == 1 or (isValid ==3 and LootCouncil_Browser.MainDebug==true) then -- Fires when player is either a raid officer or guild leader
 				GuildRoster();
 				--LootCouncil_Browser.updateEnchantersList()
 				LootCouncil_Browser.WhisperList = {}
@@ -371,7 +371,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				isInitiator=true; -- We're the initiator, so set that
 				theInitiator = LootCouncil_Browser.getUnitName("player");
 				--Send out the messages regarding the item
-				if LootCouncil_debugMode == 0 then
+				if LootCouncil_debugMode == false then
 					LootCouncil_SendChatMessage(LootCouncilLocalization["START_FIRED"], LootCouncil_Channel); 
 					LootCouncil_SendChatMessage("item: "..itemRunning, LootCouncil_Channel);
 				end
@@ -396,11 +396,11 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				LootCouncil_Browser.showMainFrame();
 				councilList = LootCouncil_Browser.getUnitName("player");
 				councilNum = true;
-				if UnitInRaid("player") and LootCouncil_debugMode == 0 then
+				if UnitInRaid("player") and LootCouncil_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning,theInitiator), "RAID_WARNING");
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning,theInitiator), "RAID");
 				else
-					if LootCouncil_debugMode == 0 then
+					if LootCouncil_debugMode == false then
 						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning), "GUILD");
 						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning), "GUILD");
 					end
@@ -429,8 +429,8 @@ function LootCouncil_Browser.validInitiator(sender)
 				return 0
 			end
 		else
-			if IsGuildLeader(LootCouncil_Browser.getUnitName("player")) == 1 then -- If they're the guild leader
-				return true; --Then return 1
+			if IsGuildLeader(LootCouncil_Browser.getUnitName("player")) == true then -- If they're the guild leader
+				return 1; --Then return 1
 			else
 				return 3; -- Else, return 3
 			end
@@ -492,26 +492,26 @@ function LootCouncil_Browser.prepareLootFrame()
 	LootCouncil_Browser.printd(thisItemEquipLoc);
 	local slotNum = LootCouncil_Browser.translateToSlot(thisItemEquipLoc);
 	LootCouncil_Browser.printd("SLOT NUMBER: " .. slotNum);
-	if slotNum == 13 or slotNum == 11 or slotNum == 16 then
+	if slotNum == true3 or slotNum == true1 or slotNum == true6 then
 		specialSlot = true;
 	else
 		specialSlot = false;
 	end
 	CurrentItemHover:Show()
 	for ci = 1, MAX_ENTRIES do
-		if isSingle == 1 then
+		if isSingle == true then
 			_G["EntryFrameEntry"..ci.."AgainstButton"]:Hide()
 		else
 			_G["EntryFrameEntry"..ci.."AgainstButton"]:Show()
 		end
 		
-		if isPrviate == 1 then
+		if isPrviate == true then
 			_G["EntryFrameEntry"..ci.."VoteHover1"]:Hide()
 		else
 			_G["EntryFrameEntry"..ci.."VoteHover1"]:Show()
 		end	
 		
-		if isShowingSpec == 0 then
+		if isShowingSpec == false then
 			_G["EntryFrameEntry"..ci.."Spec"]:Hide()
 			local frame = _G["EntryFrameEntry"..ci.."Itemlvl"]
 			--_G["EntryFrameEntry"..ci]:SetWidth(647)
@@ -523,13 +523,13 @@ function LootCouncil_Browser.prepareLootFrame()
 			_G["EntryFrameEntry"..ci.."VotesTotal"]:SetPoint("LEFT", frame, "RIGHT");
 		end
 	end
-	if isSingle == 1 then
+	if isSingle == true then
 		_G["EntryFrameHeaderVotesTotal"]:SetText("Total Votes")
 	else
 		_G["EntryFrameHeaderVotesTotal"]:SetText("Total Votes (+/-)")
 	end
 	
-	if isShowingSpec == 0 then
+	if isShowingSpec == false then
 		_G["EntryFrameHeaderSpec"]:Hide()
 		--MainFrame:SetWidth(687)
 		--EntryFrame:SetWidth(655)
@@ -552,7 +552,7 @@ function LootCouncil_Browser.heardStart(sender, item)
 	councilList = "";
 	councilNum = false;
 	itemRemember = item;
-	if (LootCouncil_Browser.validInitiator(sender) == 1) then
+	if (LootCouncil_Browser.validInitiator(sender) == true) then
 		theInitiator = sender;
 		isInitiator = false; -- We're NOT the initiator
 		local rprsName, rprsLink = GetItemInfo(item); -- Get the item link (since we just got sent the item string)
@@ -568,7 +568,7 @@ end
 -- Process an echo to add to the loot list
 -----------------------------------------------
 function LootCouncil_Browser.processEcho(sender, ver)
-	if isInitiator == 1 then
+	if isInitiator == true then
 		for ci = 1, GetNumGuildMembers() do
 			--local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(ci);
 			local name, rank, rankIndex = LootCouncil_Browser.getCharInfo(ci);
@@ -587,7 +587,7 @@ function LootCouncil_Browser.processEcho(sender, ver)
 		
 		if (not ver) or (not (LootCouncil_Version == ver)) then
 			if (not ver) or tonumber(LootCouncil_Version) > tonumber(ver) then
-				if LootCouncil_debugMode == 0 then
+				if LootCouncil_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["OUTDATED"], LootCouncil_Version), "WHISPER", nil, sender)
 				end
 			else
@@ -768,7 +768,7 @@ function LootCouncil_Browser.CastVote(id, vote, click)
 			voteFor = entry[1];
 			if click == "LeftButton" then
 				LootCouncil_Browser.updateVotes(LootCouncil_Browser.getUnitName("player"), voteFor, theVote, "No Reason")
-			elseif click == "RightButton" and isPrivate == 0 then
+			elseif click == "RightButton" and isPrivate == false then
 				StaticPopup_Show("LOOT_COUNCIL_VOTE_REASON", ""..string.upper(theVote).." "..voteFor)
 			end
 		end
@@ -789,7 +789,7 @@ end
 
 -----------------------------------------------
 function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot table
-	if auctionRunning==1 and itemRunning and name and msg ~= nil and isInitiator == 1 then -- Make sure we have an auction running
+	if auctionRunning==1 and itemRunning and name and msg ~= nil and isInitiator == true then -- Make sure we have an auction running
 		
 		-- Check if they've linked an item
 		-- Check if they've linked TWO items
@@ -806,7 +806,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 			local actualItemString = string.match(msg, "|%x+|Hitem:.-|h.-|h|r");
 			LootCouncil_Browser.printd(actualItemString);
 		--	LootCouncil_Browser.printd("item... " .. itemString2);
-			if (specialSlot == 1) then -- If this was a trinket/weapon/rings
+			if (specialSlot == true) then -- If this was a trinket/weapon/rings
 				LootCouncil_Browser.printd("Checking for 2 items starting at index " .. endLoc);
 				theItem = string.find(msg, "Hitem:", endLoc) --See if they linked a second item
 				if theItem and theItem >= 0 then -- If they did
@@ -840,7 +840,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 					-- We just need to toss in the variables!
 					flagforwaiting = true;
 				end
-				if actualItemString2 and (specialSlot == 1) then -- If they linked a second item and it was appropriate
+				if actualItemString2 and (specialSlot == true) then -- If they linked a second item and it was appropriate
 					
 					if psName2 == nil then
 			--			print("ERROR!!! "..name.." linked an item that we couldn't pull the data for. Report the item to Blacksen on Curse or Wowinterface.")
@@ -876,7 +876,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 					-- All of this has been kept for legacy reasons
 					-- New function completely reworks this logic.
 				spec = "-";
-				if isShowingSpec == 1 then
+				if isShowingSpec == true then
 					spec = LootCouncil_Browser.parseSpec(msg, actualItemString, actualItemString2) 
 				end
 				
@@ -923,7 +923,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							theEntry[3] = piLevel.." - "..piLevel2 -- Get the itemlevels set
 							theEntry[12] = 2; -- switch the flag for two items
 							theEntry[14] = psLink2; -- hold the second link
-							if LootCouncil_debugMode == 0 then -- If we're displaying messages
+							if LootCouncil_debugMode == false then -- If we're displaying messages
 								-- Send the player a message saying we got the update
 								if spec == "-" then
 									LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -937,7 +937,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2)
 							LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 						else -- Else they only have 1 item, so we don't need to do as much
-							if LootCouncil_debugMode == 0 then -- If we're displaying messages
+							if LootCouncil_debugMode == false then -- If we're displaying messages
 								-- Send the player a message saying we got the update
 								if spec == "-" then
 									LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -956,7 +956,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							LootCouncil_Browser.SelectEntry(indexOfPlayer)
 						end
 					else -- They haven't already linked an item, so we need to put them in the table.
-						if LootCouncil_debugMode == 0 then -- If we're sending messages
+						if LootCouncil_debugMode == false then -- If we're sending messages
 							-- then let them know we got the message
 							if spec == "-" then 
 								LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["NEW_ENTRY"], itemRunning), "WHISPER", nil, name); -- Whisper them about their consideration
@@ -981,8 +981,8 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 						end
 						--Update the clients that we have a new item entry.
 						LootCouncil_Browser.sendGlobalMessage("itemEntry "..name.." "..actualItemString) -- Send out a global 
-						if psLink2 and (specialSlot == 1) then -- If this is a 2-item slot and they linked 2 items
-							if LootCouncil_debugMode == 0 then -- Send them a message about the items we got
+						if psLink2 and (specialSlot == true) then -- If this is a 2-item slot and they linked 2 items
+							if LootCouncil_debugMode == false then -- Send them a message about the items we got
 								LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK2"]..psLink.." - "..psLink2, "WHISPER", nil, name); -- Send them about BOTH items
 							end
 							LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2) -- Alert other councilmen about the second item that we got
@@ -1005,7 +1005,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							})
 							LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 						else -- Else they only linked 1 item or this isn't a special slot
-							if LootCouncil_debugMode == 0 then -- send them a message saying we got the item
+							if LootCouncil_debugMode == false then -- send them a message saying we got the item
 								LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK1"]..psLink, "WHISPER", nil, name);
 							end
 							table.insert(LootCouncil_Browser.Elects, {
@@ -1032,7 +1032,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 						LootCouncil_Browser.Update(); -- AND WE'RE DONE! UPDATE THE FRAME!
 					end
 				else -- They didn't send items that fit the slots we were considering
-					if LootCouncil_debugMode == 0 then
+					if LootCouncil_debugMode == false then
 						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["BAD_SLOT"], itemRunning), "WHISPER", nil, name);
 					end
 				end
@@ -1046,14 +1046,14 @@ end
 -- Triggered by the host sending us a new item entry
 -------------------------------------------------------
 function LootCouncil_Browser.receiveItemEntry(name, itemString)
-	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == 0 then -- Make sure we have an auction running and we're not the initiator
+	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == false then -- Make sure we have an auction running and we're not the initiator
 		LootCouncil_Browser.printd("new entry coming in: " .. itemString);
 		local psName, psLink, piRarity, piLevel, piMinLevel, psType, psSubType, piStackCount, pthisItemEquipLoc = GetItemInfo(itemString); -- Get better info
 		local indexOfPlayer = LootCouncil_Browser.alreadyLinkedItem(name, itemString) -- see if they've already linked an item
 		if indexOfPlayer > 0 and LootCouncil_Browser.IsSelected(indexOfPlayer) then -- If they're selected, we have to reselect them (which also means they're already in the table)
 			LootCouncil_Browser.SelectEntry(indexOfPlayer)
 		end
-		if  indexOfPlayer == 0 then -- If we didn't find them in the table
+		if  indexOfPlayer == false then -- If we didn't find them in the table
 			LootCouncil_Browser.printd("trying to insert");
 			if piLevel then
 				table.insert(LootCouncil_Browser.Elects, {
@@ -1120,7 +1120,7 @@ end
 -- Triggered by the host sending us a new item entry that's flagged as a SECOND entry
 -------------------------------------------------------
 function LootCouncil_Browser.receiveSecondEntry(name, itemString)
-	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == 0 then -- Make sure we have an auction running
+	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == false then -- Make sure we have an auction running
 		local psName, psLink, piRarity, piLevel, piMinLevel, psType, psSubType, piStackCount, pthisItemEquipLoc = GetItemInfo(itemString); -- Get better info
 		if psName then
 			for ci=1, MAX_ENTRIES do -- It's the second item, so they SHOULD be in the table. Start looping
@@ -1187,7 +1187,7 @@ end
 function LootCouncil_Browser.updatePlayerData(other)
 	local name, attendance, density, lastItem = strsplit(" ", other, 4)
 	theRest = more;
-	if LootCouncil_Browser.playerInData(name, attendance, density, lastItem) == 0 then
+	if LootCouncil_Browser.playerInData(name, attendance, density, lastItem) == false then
 		table.insert(LootCouncil_Browser.Data, {
 			name,
 			"-",
@@ -1204,20 +1204,20 @@ end
 -- Looks more complicated than it is
 ----------------------------------------------------
 function LootCouncil_Browser.Update()
-	local totalEntry = false;
+	local totalEntry = 0;
 	for ci = 1, MAX_ENTRIES do -- Loop through each row
 		
 		local entry = LootCouncil_Browser.Elects[ci] -- Pull the entry row
 		local frame = _G["EntryFrameEntry"..ci] -- Get the physical row frame
 		if entry and frame then -- if we found both of those, GREAT!
-			totalEntry = totalEntry + true;
+			totalEntry = totalEntry + 1;
 			if entry[12] == 2 then -- if they have 2 items, we need 2 hover areas
 				_G[frame:GetName().."ItemFrame2"]:Show()
 			else -- Otherwise, we just need 1 hover area
 				_G[frame:GetName().."ItemFrame2"]:Hide()
 			end
 			
-			if isSelfVoting == 0 and entry[1] == LootCouncil_Browser.getUnitName("player") then -- If you CANT vote for yourself, then prohibit it
+			if isSelfVoting == false and entry[1] == LootCouncil_Browser.getUnitName("player") then -- If you CANT vote for yourself, then prohibit it
 				_G[frame:GetName().."AgainstButton"]:Hide() -- Also prohibited at voting level just to make sure no cheating
 				_G[frame:GetName().."CancelButton"]:Hide() -- See update votes for that though
 				_G[frame:GetName().."ForButton"]:Hide()
@@ -1225,7 +1225,7 @@ function LootCouncil_Browser.Update()
 				_G[frame:GetName().."CancelButton"]:Show()
 				_G[frame:GetName().."ForButton"]:Show()
 				
-				if isSingle == 0 then -- HOLD IT HERE THOUGH! Against button is hidden if we're on single vote mode, so check for that
+				if isSingle == false then -- HOLD IT HERE THOUGH! Against button is hidden if we're on single vote mode, so check for that
 					_G[frame:GetName().."AgainstButton"]:Show()
 				else
 					_G[frame:GetName().."AgainstButton"]:Hide()
@@ -1243,7 +1243,7 @@ function LootCouncil_Browser.Update()
 			_G[frame:GetName().."Item"]:SetText(entry[2])
 			_G[frame:GetName().."Itemlvl"]:SetText(entry[11])
 			_G[frame:GetName().."Spec"]:SetText(entry[15])
-			if (isSingle == 0) then -- If it's not single, we can simplify the +/- thing that's normally there
+			if (isSingle == false) then -- If it's not single, we can simplify the +/- thing that's normally there
 				_G[frame:GetName().."VotesTotal"]:SetText("     "..entry[7].." / "..entry[8].."     ( "..(entry[7]-entry[8]).." ) ")
 			else
 				_G[frame:GetName().."VotesTotal"]:SetText(""..entry[7])
@@ -1269,7 +1269,7 @@ function LootCouncil_Browser.Update()
 		end
 	end -- End loop through entries
 	
-	if awardShow and LootCouncil_Browser.MLI == 1 and selection and selection.isSelected then
+	if awardShow and LootCouncil_Browser.MLI == true and selection and selection.isSelected then
 		AwardButton:Show()
 	else
 		AwardButton:Hide()
@@ -1303,7 +1303,7 @@ function LootCouncil_Browser.SelectEntry(id)
 			sName2, sLink2, iRarity2, iLevel2, iMinLevel2, sType2, sSubType2, iStackCount2, thisItemEquipLoc2, thisItemTexture2 = GetItemInfo(selection[14]);
 		end
 		
-		if isInitiator == 1 then -- If we're the initiator, we have the power to remove, so show the button
+		if isInitiator == true then -- If we're the initiator, we have the power to remove, so show the button
 			RemoveButton:Show()
 		else
 			RemoveButton:Hide()
@@ -1311,7 +1311,7 @@ function LootCouncil_Browser.SelectEntry(id)
 		CurrentSelectionLabel:Show() -- Show the label
 		CurrentSelectionName:SetText(selection[1]) -- show who we're selecting
 		CurrentSelectionName:Show() -- show the name
-		if selection[12] == 1 then -- if they have ONE item
+		if selection[12] == true then -- if they have ONE item
 
 			CurrentSelectionLink:SetText(selection[2])
 			CurrentSelectionLink:Show()
@@ -1345,7 +1345,7 @@ function LootCouncil_Browser.SelectEntry(id)
 			CurrentSelectionTexture:Hide()
 		end
 			ClearSelectionButton:Show()
-		if isPrivate == 0 then -- If it's NOT private, then we can show the labels
+		if isPrivate == false then -- If it's NOT private, then we can show the labels
 			VotesForLabel:Show()
 			VotesFor:Show()
 			VotesAgainstLabel:Show()
@@ -1363,7 +1363,7 @@ end
 -- If you have someone selected, this updates the text at the bottom
 -----------------------------------------------------------------
 function LootCouncil_Browser.updateVoteSelectionText()
-	if isPrivate == 0 then -- If we're not in private mode, then lets get to work!
+	if isPrivate == false then -- If we're not in private mode, then lets get to work!
 		local absoluteVotesFor = ""; -- Initialize the for string
 		local absoluteVotesAgainst = ""; -- Initialize the against string
 		local forIndex = true;
@@ -1500,8 +1500,8 @@ end
 -- Basically completely manages votes
 -----------------------------------------------------------------
 function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
-	if isSelfVoting == 1 or sender ~= char then -- Make sure NO ONE is voting for themselves when it's not allowed
-		if isInitiator == 0 then -- If we are NOT the initiator
+	if isSelfVoting == true or sender ~= char then -- Make sure NO ONE is voting for themselves when it's not allowed
+		if isInitiator == false then -- If we are NOT the initiator
 			if sender == LootCouncil_Browser.getUnitName("player") then -- Check if we're casting the vote
 				-- If we are, send it to the initiator
 				SendAddonMessage("L00TCOUNCIL", "vote"..cmdDelim..char..voteDelim..LootCouncil_Browser.getUnitName("player")..voteDelim..vote..voteDelim..reason, "WHISPER", theInitiator);
@@ -1516,7 +1516,7 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 			-- The first records MULTIPLE votes
 			-- The second forces you to keep ONE vote
 			
-			if isSingle == 0 then
+			if isSingle == false then
 			
 				-- THIS SECTION MANAGES MULTIPLE VOTES
 				-- So every officer can cast as many votes as they want
@@ -1547,7 +1547,7 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 								end
 							end
 						end
-						if found == 0 then -- if we didn't find anyone, then they're probably not in the table yet (they haven't voted for this person yet)
+						if found == false then -- if we didn't find anyone, then they're probably not in the table yet (they haven't voted for this person yet)
 							table.insert(theEntry[10], { -- So add them
 								sender,
 								vote,
@@ -1648,7 +1648,7 @@ end
 -- Shows the mouseover tooltip for votes.
 -----------------------------------------------------------------
 function LootCouncil_Browser.voteToolActivate(id)
-	if isPrivate == 0 then -- Make sure we're not in private voting mode
+	if isPrivate == false then -- Make sure we're not in private voting mode
 		local entry = LootCouncil_Browser.Elects[id]; -- get this row's data
 		local votesFor = {}; -- initialize the votes for
 		local votesAgainst = {} -- initialize the votes against
@@ -1768,7 +1768,7 @@ end
 -- Attempt to abort the session
 ---------------------------------------------------------------
 function LootCouncil_Browser.initiateAbort()
-	if isInitiator == 1 then -- if we're the initiator, show a popup message
+	if isInitiator == true then -- if we're the initiator, show a popup message
 		LootCouncil_Browser.confirmAbort()
 	else
 		print("Suggesting to "..theInitiator.." that we abort this loot council session")
@@ -1780,7 +1780,7 @@ end
 -- Triggers confirmation popup
 ---------------------------------------------------------------
 function LootCouncil_Browser.confirmAbort()
-	if LootCouncil_Browser.confirmEnd == 1 and (not (LootCouncil_Browser.itemAwarded)) then
+	if LootCouncil_Browser.confirmEnd == true and (not (LootCouncil_Browser.itemAwarded)) then
 		StaticPopup_Show("LOOT_COUNCIL_CONFIRM_ABORT")
 	else
 		LootCouncil_Browser.itemAwarded = false;
@@ -1792,7 +1792,7 @@ end
 -- Clears the house cus this loot session is done!
 ---------------------------------------------------------------
 function LootCouncil_Browser.closeLootCouncilSession()
-	if isInitiator == 1 and LootCouncil_debugMode == 0 then -- if we're the initiator, let people know we're done with this session
+	if isInitiator == true and LootCouncil_debugMode == false then -- if we're the initiator, let people know we're done with this session
 		LootCouncil_SendChatMessage("item: "..itemRunning, LootCouncil_Channel);
 		currSortIndex = -1
 		LootCouncil_Browser.sortTable(6)
@@ -1878,7 +1878,7 @@ function LootCouncil_Browser.displayVotes(entry)
 			printString = printString..LootCouncilLocalization["VOTES_FOR"].." "..votesFor
 		end
 		
-		if againstIndex > 1 and isSingle == 0 then -- if they have against votes
+		if againstIndex > 1 and isSingle == false then -- if they have against votes
 			if forIndex > 1 then
 				printString = printString.." - ".. LootCouncilLocalization["VOTES_AGAINST"].." "..votesAgainst
 			else
@@ -1937,13 +1937,13 @@ end
 -- Manually adds a player through the /lc add command
 --------------------------------------------------
 function LootCouncil_Browser.manualAdd(thePlayer, theItem) 
-	if isInitiator == 1 and itemRunning then
+	if isInitiator == true and itemRunning then
 		LootCouncil_Browser.newEntry(thePlayer, theItem)
 	end
 	
 	if not itemRunning then
 		print("There currently is no loot council in session. Start one before adding.");
-	elseif isInitiator == 0 then
+	elseif isInitiator == false then
 		print("You must be the initiator in order to manually add someone");
 	end
 end
@@ -1953,7 +1953,7 @@ end
 -- Removes them from the consideration
 --------------------------------------------------
 function LootCouncil_Browser.RemoveSelection()
-	if isInitiator == 1 then
+	if isInitiator == true then
 		LootCouncil_Browser.sendGlobalMessage("remove "..selection[1]);
 		LootCouncil_Browser.removePlayer(selection[1]);
 		LootCouncil_Browser.ClearSelection()
@@ -1970,7 +1970,7 @@ function LootCouncil_Browser.removePlayer(playerName)
 	end
 	local found = false; -- initialize helper variable
 	for ci = 1, (MAX_ENTRIES-1) do -- Loop through all people on the table EXCEPT the last row!
-		if found == 0 then
+		if found == false then
 			local theEntry = LootCouncil_Browser.Elects[ci]; -- Pull each row
 			if theEntry[1] == playerName then -- if we find them
 				found=true; -- update that we found them
@@ -1981,7 +1981,7 @@ function LootCouncil_Browser.removePlayer(playerName)
 		end
 	end
 	
-	if (found == 1) then -- Assuming we've found them by now
+	if (found == true) then -- Assuming we've found them by now
 		LootCouncil_Browser.Elects[MAX_ENTRIES] = nil; -- clear the last entry (it got pulled down in the for loop)
 	else
 		local theEntry = LootCouncil_Browser.Elects[MAX_ENTRIES]; -- otherwise, I'm worried we didn't find them
@@ -2032,7 +2032,7 @@ end
 --------------------------------------------------
 function LootCouncil_Browser.getLowestItemLevel(entry)
 	if entry then
-		if entry[12] == 1 then
+		if entry[12] == true then
 			local itemName, itemLink, itemRarity, itemLevel = GetItemInfo(entry[13])
 			return itemLevel
 		elseif entry[12] == 2 then
@@ -2068,7 +2068,7 @@ function LootCouncil_Browser.sortTable(id)
 		sortMethod = "asc" -- and the order we're sorting in
 	end
 	
-	if (id == 1) then -- Char Name sorting (alphabetically)
+	if (id == true) then -- Char Name sorting (alphabetically)
 		table.sort(LootCouncil_Browser.Elects, function(v1, v2)
 			if sortMethod == "desc" then
 				return v1 and v1[1] > v2[1]
@@ -2138,7 +2138,7 @@ function LootCouncil_Browser.sortTable(id)
 				return ((v1 ~= nil) and (v2 == nil or ((LootCouncil_Browser.getLowestItemLevel(v1) ~= -131) and (LootCouncil_Browser.getLowestItemLevel(v1) < LootCouncil_Browser.getLowestItemLevel(v2)))))
 			end
 		end)
-	elseif (id == 11) then -- Spec sorting (S > M > O > -)
+	elseif (id == true1) then -- Spec sorting (S > M > O > -)
 		table.sort(LootCouncil_Browser.Elects, function(v1, v2)
 			if sortMethod == "desc" then
 				if v1 == nil then
@@ -2257,7 +2257,7 @@ function MainFrame_OnUpdate(self, elapsed)
 			
 			if entryLinkWaiting then -- If the initiator is waiting on the entry
 			--	LootCouncil_Browser.printd("entrylinkwaiting");
-				if #entryPings == 0 then -- If the size of our queue is 0, then we're done!
+				if #entryPings == false then -- If the size of our queue is 0, then we're done!
 					entryLinkWaiting = false;
 				else -- Otherwise, stuff is still in our queue
 					for ci = 1, #entryPings do -- Start looping
@@ -2295,7 +2295,7 @@ function MainFrame_OnUpdate(self, elapsed)
 			
 			if clientEntryWaiting then -- If the council members are waiting entry information
 					LootCouncil_Browser.printd("checking client entries");
-					if #clientEntryPings == 0 then -- Check our queue. If it's empty, we're done!
+					if #clientEntryPings == false then -- Check our queue. If it's empty, we're done!
 						clientEntryWaiting = false;
 					else
 						local backIndex = #clientEntryPings; -- Start looping BACKWARDS!
@@ -2372,7 +2372,7 @@ end
 
 
 function LootCouncil_Lite:OnEnable()
-	if LootCouncil_Browser.MLI == 1 then
+	if LootCouncil_Browser.MLI == true then
 		MainFrame:RegisterEvent("LOOT_OPENED");
 		MainFrame:RegisterEvent("LOOT_CLOSED");
 		if XLootMaster then
@@ -2405,14 +2405,14 @@ function LootCouncil_Lite:OnDisable()
 			Butsu:UnregisterEvent("UPDATE_MASTER_LOOT_LIST");
 		end
 	end
-	if LootCouncil_Browser.MLI == 1 then
+	if LootCouncil_Browser.MLI == true then
 		MainFrame:UnregisterEvent("LOOT_OPENED");
 		MainFrame:UnregisterEvent("LOOT_CLOSED");
 	end
 end
 
 function LootCouncil_Lite:InjectCustom(owner, level, value)
-	if level == 1 then
+	if level == true then
 		XLootMaster.dewdrop:AddSeparator();
 		XLootMaster.dewdrop:AddLine(
 			'text', "Loot Council",
@@ -2524,7 +2524,7 @@ function GroupLootDropDownLCL_Initialize()
 					end
 				end
 			end
-		elseif (lastIndex == 100) then
+		elseif (lastIndex == true00) then
 			-- DISENCHANT GROUP
 			local index;
 			for i=1, MAX_RAIDERS do			
@@ -2580,7 +2580,7 @@ function GroupLootDropDownLCL_Initialize()
 	info.arg1 = nil;
 	
 	--local inInstance, instanceType = IsInInstance()
-	--if (  instanceType == "raid" and inInstance == 1 ) then
+	--if (  instanceType == "raid" and inInstance == true ) then
 	if (  IsInRaid() ) then
 	--if ( GetNumRaidMembers() > 0 ) then
 		-- In a raid
@@ -2825,7 +2825,7 @@ function LootCouncil_Browser.giveItemAway()
 end
 
 function LootCouncil_Browser.printd(msg)
-	if (LootCouncil_Browser.MainDebug == 1) then
+	if (LootCouncil_Browser.MainDebug == true) then
 		print(msg)
 	end
 end
@@ -2890,7 +2890,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						theEntry[3] = piLevel.." - "..piLevel2 -- Get the itemlevels set
 						theEntry[12] = 2; -- switch the flag for two items
 						theEntry[14] = psLink2; -- hold the second link
-						if LootCouncil_debugMode == 0 then -- If we're displaying messages
+						if LootCouncil_debugMode == false then -- If we're displaying messages
 							-- Send the player a message saying we got the update
 							if spec == "-" then
 								LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -2904,7 +2904,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2)
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 					else -- Else they only have 1 item, so we don't need to do as much
-						if LootCouncil_debugMode == 0 then -- If we're displaying messages
+						if LootCouncil_debugMode == false then -- If we're displaying messages
 							-- Send the player a message saying we got the update
 							if spec == "-" then
 								LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -2923,7 +2923,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						LootCouncil_Browser.SelectEntry(indexOfPlayer)
 					end
 				else -- They haven't already linked an item, so we need to put them in the table.
-					if LootCouncil_debugMode == 0 then -- If we're sending messages
+					if LootCouncil_debugMode == false then -- If we're sending messages
 						-- then let them know we got the message
 						if spec == "-" then 
 							LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["NEW_ENTRY"], itemRunning), "WHISPER", nil, name); -- Whisper them about their consideration
@@ -2948,8 +2948,8 @@ function LootCouncil_Browser.addNewEntry2(index)
 					end
 					--Update the clients that we have a new item entry.
 					LootCouncil_Browser.sendGlobalMessage("itemEntry "..name.." "..actualItemString) -- Send out a global 
-					if psLink2 and (specialSlot == 1) then -- If this is a 2-item slot and they linked 2 items
-						if LootCouncil_debugMode == 0 then -- Send them a message about the items we got
+					if psLink2 and (specialSlot == true) then -- If this is a 2-item slot and they linked 2 items
+						if LootCouncil_debugMode == false then -- Send them a message about the items we got
 							LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK2"]..psLink.." - "..psLink2, "WHISPER", nil, name); -- Send them about BOTH items
 						end
 						LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2) -- Alert other councilmen about the second item that we got
@@ -2972,7 +2972,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						})
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 					else -- Else they only linked 1 item or this isn't a special slot
-						if LootCouncil_debugMode == 0 then -- send them a message saying we got the item
+						if LootCouncil_debugMode == false then -- send them a message saying we got the item
 							LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK1"]..psLink, "WHISPER", nil, name);
 						end
 						table.insert(LootCouncil_Browser.Elects, {
@@ -2999,7 +2999,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 					LootCouncil_Browser.Update(); -- AND WE'RE DONE! UPDATE THE FRAME!
 				end
 			else -- They didn't send items that fit the slots we were considering
-				if LootCouncil_debugMode == 0 then
+				if LootCouncil_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["BAD_SLOT"], itemRunning), "WHISPER", nil, name);
 				end
 			end
