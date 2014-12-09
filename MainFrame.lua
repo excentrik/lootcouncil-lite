@@ -43,7 +43,7 @@ local MAX_VOTERS = 20;
 local MAX_RAIDERS = 60;
 local MAX_ENTRIES = 12;
 local MIN_SIZE = 96;
-local oldEntry = false;
+local oldEntry = 0;
 local dataRequest;
 local dataTotal = {};
 
@@ -645,7 +645,7 @@ function LootCouncil_Browser.resetConsideration()
 	selection = nil;
 	awardShow = false;
 	LootCouncil_Browser.Update();
-	oldEntry = false;
+	oldEntry = 0;
 	LootCouncil_Browser.private = LootCouncil_privateVoting;
 	LootCouncil_Browser.split = LootCouncil_SplitRaids;
 	LootCouncil_Browser.single = LootCouncil_singleVote;
