@@ -1055,7 +1055,7 @@ function LootCouncil_Browser.receiveItemEntry(name, itemString)
 		if indexOfPlayer > 0 and LootCouncil_Browser.IsSelected(indexOfPlayer) then -- If they're selected, we have to reselect them (which also means they're already in the table)
 			LootCouncil_Browser.SelectEntry(indexOfPlayer)
 		end
-		if  indexOfPlayer == false then -- If we didn't find them in the table
+		if  indexOfPlayer == 0 then -- If we didn't find them in the table
 			LootCouncil_Browser.printd("trying to insert");
 			if piLevel then
 				table.insert(LootCouncil_Browser.Elects, {
