@@ -12,6 +12,13 @@ function LootCouncil_isBlank(x)
   return not not tostring(x):find("^%s*$")
 end
 
+------------- logical2string ---------------------------------
+-- Converts a logical to a number string 
+-------------------------------------------------------
+function LootCouncil_logical2string(x)
+  return string.format("%d", tostring(x))
+end
+
 ------------- convertStringList -----------------------
 -- Converts a string to a list
 -------------------------------------------------------

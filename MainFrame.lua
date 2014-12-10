@@ -23,7 +23,7 @@ local cmdDelim = " "; -- Helper variable in earlier iterations
 local voteDelim = " "; -- Helper variable in earlier iterations
 local selection = nil; -- Row we have selected
 local councilList = " "; -- List of council members
-local councilNum = true; -- Number of council members
+local councilNum = 1; -- Number of council members
 local requestedBefore = false;
 local itemRemember = nil;
 local awardShow = false;
@@ -32,10 +32,10 @@ local sanityCheck = false;
 local EnchantersList = {}; -- List of enchanters in the group
 --local EnchantersNum = table.getn(EnchantersList); -- Number of enchanters in the group
 
-local entryLinkWaiting = false;
+local entryLinkWaiting = 0;
 local entryPings = {};
 
-local clientEntryWaiting = false;
+local clientEntryWaiting = 0;
 local clientEntryPings = {};
 
 local MAX_ENTRIES = 30;
@@ -166,7 +166,7 @@ function MainFrame_OnLoad()
 	end
 	
 	councilList = LootCouncil_Browser.getUnitName("player");
-	councilNum = true;
+	councilNum = 1;
 end
 
 
@@ -345,7 +345,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 	if item == nil then
 		print(LootCouncilLocalization["FAILED_START_NO_LINK"])
 	else
-		if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) then --If we have a consideration running, tell the user we can't start a new one
+		if auctionRunning==true and (itemRunning or LootCouncil_awaitingItem) then --If we have a consideration running, tell the user we can't start a new one
 			print(LootCouncilLocalization["START_WHILE_SESSION1"]);
 			if itemRunning then
 				print(string.format(LootCouncilLocalization["START_WHILE_SESSION2"], itemRunning));
@@ -395,7 +395,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				--SyncButton:Show();
 				LootCouncil_Browser.showMainFrame();
 				councilList = LootCouncil_Browser.getUnitName("player");
-				councilNum = true;
+				councilNum = 1;
 				if UnitInRaid("player") and LootCouncil_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning,theInitiator), "RAID_WARNING");
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning,theInitiator), "RAID");
@@ -550,7 +550,7 @@ end
 -----------------------------------------------
 function LootCouncil_Browser.heardStart(sender, item)
 	councilList = "";
-	councilNum = false;
+	councilNum = 0;
 	itemRemember = item;
 	if (LootCouncil_Browser.validInitiator(sender) == true) then
 		theInitiator = sender;
@@ -579,7 +579,7 @@ function LootCouncil_Browser.processEcho(sender, ver)
 					councilNum = councilNum + 1
 					CurrentCouncilList:SetText(councilList)
 					LootCouncil_Browser.sendGlobalMessage("councilList "..councilList)
-					SendAddonMessage("L00TCOUNCIL", "confirmed "..LootCouncil_privateVoting.." "..LootCouncil_singleVote.." "..LootCouncil_displaySpec.." "..LootCouncil_selfVoting, "WHISPER", sender);
+					SendAddonMessage("L00TCOUNCIL", "confirmed "..LootCouncil_logical2string(LootCouncil_privateVoting).." "..LootCouncil_logical2string(LootCouncil_singleVote).." "..LootCouncil_logical2string(LootCouncil_displaySpec).." "..LootCouncil_logical2string(LootCouncil_selfVoting), "WHISPER", sender);
 				end
 				break;
 			end
@@ -789,14 +789,16 @@ end
 
 -----------------------------------------------
 function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot table
-	if auctionRunning==1 and itemRunning and name and msg ~= nil and isInitiator == true then -- Make sure we have an auction running
+	if auctionRunning==true and itemRunning and name and msg ~= nil and isInitiator == true then -- Make sure we have an auction running
 		
 		-- Check if they've linked an item
 		-- Check if they've linked TWO items
 		-- Pull the item info and check if it's valid!
+		print("1")
 		local theItem = msg:find("|Hitem:"); -- See if they linked an item
 		LootCouncil_Browser.printd(theItem);
 		if theItem and theItem >= 0 then -- If they entered a valid item
+				print("2")
 			local flagforwaiting = false;
 			local actualItemString2; -- Initialize for possibility of 2 item links
 			local startLoc = string.find(msg, "Hitem:") -- Make sure they linked an item
@@ -1046,7 +1048,7 @@ end
 -- Triggered by the host sending us a new item entry
 -------------------------------------------------------
 function LootCouncil_Browser.receiveItemEntry(name, itemString)
-	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == false then -- Make sure we have an auction running and we're not the initiator
+	if auctionRunning==true and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == false then -- Make sure we have an auction running and we're not the initiator
 		LootCouncil_Browser.printd("new entry coming in: " .. itemString);
 		local psName, psLink, piRarity, piLevel, piMinLevel, psType, psSubType, piStackCount, pthisItemEquipLoc = GetItemInfo(itemString); -- Get better info
 		local indexOfPlayer = LootCouncil_Browser.alreadyLinkedItem(name, itemString) -- see if they've already linked an item
@@ -1120,7 +1122,7 @@ end
 -- Triggered by the host sending us a new item entry that's flagged as a SECOND entry
 -------------------------------------------------------
 function LootCouncil_Browser.receiveSecondEntry(name, itemString)
-	if auctionRunning==1 and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == false then -- Make sure we have an auction running
+	if auctionRunning==true and (itemRunning or LootCouncil_awaitingItem) and name and itemString and isInitiator == false then -- Make sure we have an auction running
 		local psName, psLink, piRarity, piLevel, piMinLevel, psType, psSubType, piStackCount, pthisItemEquipLoc = GetItemInfo(itemString); -- Get better info
 		if psName then
 			for ci=1, MAX_ENTRIES do -- It's the second item, so they SHOULD be in the table. Start looping
@@ -1506,11 +1508,11 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 				-- If we are, send it to the initiator
 				SendAddonMessage("L00TCOUNCIL", "vote"..cmdDelim..char..voteDelim..LootCouncil_Browser.getUnitName("player")..voteDelim..vote..voteDelim..reason, "WHISPER", theInitiator);
 			end
-		elseif LootCouncil_Browser.isValidVoter(sender) == 1 then -- If we ARE the initiator, make sure this person is ALLOWED to vote
+		elseif LootCouncil_Browser.isValidVoter(sender) == true then -- If we ARE the initiator, make sure this person is ALLOWED to vote
 			-- if they are allowed to vote, send it to everyone else
 			LootCouncil_Browser.sendGlobalMessage("vote"..cmdDelim..char..voteDelim..sender..voteDelim..vote..voteDelim..reason, sender);
 		end
-		if LootCouncil_Browser.isValidVoter(sender) == 1 then -- make sure they're a valid voter
+		if LootCouncil_Browser.isValidVoter(sender) == true then -- make sure they're a valid voter
 		
 			-- There are TWO completley different logic structures here
 			-- The first records MULTIPLE votes
@@ -1837,7 +1839,7 @@ function LootCouncil_Browser.closeLootCouncilSession()
 	selection = nil;
 	councilList = " ";
 	councilList = " ";
-	councilNum = true;
+	councilNum = 1;
 	LootCouncil_Browser.Data = {}
 	LootCouncil_Browser.Elects = {}
 	LootCouncil_Browser.Votes = {}
@@ -1909,11 +1911,11 @@ end
 --------------------------------------------------
 function LootCouncil_Browser.isValidVoter(name)
 	if name == "player" or name == LootCouncil_Browser.getUnitName("player") or name == theInitiator then -- ourselves are always a valid voter. The initiator is too
-		return 1
+		return true
 	else
 		for ci = 1, MAX_VOTERS do -- else loop through the whisper list
 			if LootCouncil_Browser.WhisperList[ci] and LootCouncil_Browser.WhisperList[ci] == name then -- if they're there
-				return 1 -- then return
+				return true -- then return
 			end
 		end
 		GuildRoster();
