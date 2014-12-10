@@ -681,7 +681,7 @@ function LootCouncil_Browser.alreadyLinkedItem(name, item)
 		end
 	else
 		LootCouncil_Browser.printd("Could NOT find item");
-		local ret = false;
+		local ret = 0;
 		for ci = 1, MAX_ENTRIES do
 			local entry = LootCouncil_Browser.Elects[ci];
 			if entry and entry[1] and entry[1] == name then
@@ -2297,7 +2297,7 @@ function MainFrame_OnUpdate(self, elapsed)
 			
 			if clientEntryWaiting then -- If the council members are waiting entry information
 					LootCouncil_Browser.printd("checking client entries");
-					if #clientEntryPings == false then -- Check our queue. If it's empty, we're done!
+					if #clientEntryPings == 0 then -- Check our queue. If it's empty, we're done!
 						clientEntryWaiting = false;
 					else
 						local backIndex = #clientEntryPings; -- Start looping BACKWARDS!
@@ -2335,7 +2335,7 @@ function MainFrame_OnUpdate(self, elapsed)
 											if iLevel2 then
 												entry[12] = 2;
 											else
-												entry[12] = true;
+												entry[12] = 1;
 											end
 											entry[13] = sLink;
 											if iLevel2 then
@@ -2359,12 +2359,12 @@ function MainFrame_OnUpdate(self, elapsed)
 							
 
 							
-							backIndex = backIndex - true; -- Keep looping backwards
+							backIndex = backIndex - 0; -- Keep looping backwards
 						end
 					end
 				end
 				
-			self.TimeSinceLastUpdate = false;
+			self.TimeSinceLastUpdate = 0;
 		end
 	else
 		LootCouncil_Browser.printd("Removing OnUpdate");
@@ -2931,9 +2931,9 @@ function LootCouncil_Browser.addNewEntry2(index)
 							LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["NEW_ENTRY"], itemRunning), "WHISPER", nil, name); -- Whisper them about their consideration
 						else
 							if spec == "M" then
-								fullSpec = "MAIN";
+								fullSpec = "MAIN SPEC";
 							elseif spec == "OFF" then
-								fullSpec = "OFFSPEC";
+								fullSpec = "OFF SPEC";
 							elseif spec == "2SET" then
 								fullSpec = "BONUS SET (2 parts)";
 							elseif spec == "4SET" then
@@ -2945,7 +2945,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 							else
 								fullSpec = "UNKNOWN";
 							end
-							LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["NEW_ENTRY_SPEC"], fullSpec, itemRunning), "WHISPER", nil, name);
+							LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["NEW_ENTRY_SPEC"], itemRunning, fullSpec), "WHISPER", nil, name);
 						end
 					end
 					--Update the clients that we have a new item entry.
