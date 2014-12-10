@@ -27,7 +27,7 @@ local councilNum = 1; -- Number of council members
 local requestedBefore = false;
 local itemRemember = nil;
 local awardShow = false;
-local sanityCheck = false;
+local sanityCheck = 0;
 
 local EnchantersList = {}; -- List of enchanters in the group
 --local EnchantersNum = table.getn(EnchantersList); -- Number of enchanters in the group
@@ -270,7 +270,7 @@ function MainFrame_EventHandler(self, event, ...)
 							if name == nil then
 								LootCouncil_awaitingItem = true;
 								dataRequest = other;
-								sanityCheck = false;
+								sanityCheck = 0;
 								MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 							end
 							LootCouncil_Browser.heardStart(sender, other);
@@ -702,7 +702,7 @@ function LootCouncil_Browser.alreadyLinkedItem(name, item)
 								 "=",
 								 item
 								 });
-					sanityCheck = false;
+					sanityCheck = 0;
 					MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 				end
 				break;
@@ -896,7 +896,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 				if flagforwaiting then
 					entryLinkWaiting = true;
 					LootCouncil_Browser.printd("MESSAGE BOUND: " .. msg);
-					sanityCheck = false;
+					sanityCheck = 0;
 					MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 				end
 					
@@ -1107,7 +1107,7 @@ function LootCouncil_Browser.receiveItemEntry(name, itemString)
 							 1,
 							 itemString
 							 });
-				sanityCheck = false;
+				sanityCheck = 0;
 				MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);
 				
 			end
@@ -1171,7 +1171,7 @@ function LootCouncil_Browser.receiveSecondEntry(name, itemString)
 							 theEntry[13],
 							 itemString
 							 });
-						sanityCheck = false;
+						sanityCheck = 0;
 						MainFrame:SetScript("OnUpdate", MainFrame_OnUpdate);	
 						break;
 					end
@@ -2225,7 +2225,7 @@ function MainFrame_OnUpdate(self, elapsed)
 	if (LootCouncil_awaitingItem or entryLinkWaiting or clientEntryWaiting) and (sanityCheck < 100) then -- If we are waiting on an item and we aren't going insane, proceed
 		self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed; -- update the time for throttling
 		if (self.TimeSinceLastUpdate > .4) then -- if less than .4 seconds
-			sanityCheck = sanityCheck + true; -- increase our insanity
+			sanityCheck = sanityCheck + 1; -- increase our insanity
 			LootCouncil_Browser.printd("fired"); -- Debug that we're firing OnUpdate
 			if LootCouncil_awaitingItem then  -- If a council member is awaiting the MAIN item (the item being considered)
 				_G["LootCouncil_Scan"]:ClearLines() -- Clear invisible tooltip
