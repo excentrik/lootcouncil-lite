@@ -1566,15 +1566,15 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 						end
 						
 						-- Now we need to count how many people voted for/against so that we can update the table.
-						local numFor = false; -- Count how many are FOR this voter
-						local numAgainst = false; -- Count how many are AGAINST this voter
+						local numFor = 0; -- Count how many are FOR this voter
+						local numAgainst = 0; -- Count how many are AGAINST this voter
 						for ki = 1, MAX_VOTERS do -- Loop through all the potential voters
 							if theVotes[ki] then -- If this voter exists
 								local singularVoter = theVotes[ki] -- Get the individual voter
 								if singularVoter and singularVoter[2] == "For" then -- Add one if he's for
-									numFor = numFor +true;
+									numFor = numFor + 1;
 								elseif singularVoter and singularVoter[2] == "Against" then -- Add one if he's against
-									numAgainst = numAgainst + true;
+									numAgainst = numAgainst + 1;
 								end
 							end
 						end
@@ -1624,17 +1624,17 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 						end
 							
 						
-						local numFor = false; -- Count how many are FOR this voter
+						local numFor = 0; -- Count how many are FOR this voter
 						for ki = 1, MAX_VOTERS do -- Loop through all the potential voters
 							if theVotes[ki] then -- If this voter exists
 								local singularVoter = theVotes[ki] -- Get the individual voter
 								if singularVoter and singularVoter[2] == "For" then -- Add one if he's for
-									numFor = numFor +true;
+									numFor = numFor +1;
 								end
 							end
 						end
 						theEntry[7] = numFor;
-						theEntry[8] = false; -- Just to make sure :-D
+						theEntry[8] = 0; -- Just to make sure :-D
 						if theEntry == selection then -- If this is our current selection
 							LootCouncil_Browser.updateVoteSelectionText() -- Then update the text on the table.
 						end
