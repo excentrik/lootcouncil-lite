@@ -261,6 +261,7 @@ function MainFrame_EventHandler(self, event, ...)
 			if isSame then
 				LootCouncil_Browser.printd("Our Command: " .. cmd);
 				if cmd == "start" then
+					
 					if other == nil or other == "" then
 						print(LootCouncilLocalization["FAILED_START_NO_VALID_LINK"])
 					else
@@ -371,6 +372,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				isInitiator=true; -- We're the initiator, so set that
 				theInitiator = LootCouncil_Browser.getUnitName("player");
 				--Send out the messages regarding the item
+				print(LootCouncil_debugMode)
 				if LootCouncil_debugMode == false then
 					LootCouncil_SendChatMessage(LootCouncilLocalization["START_FIRED"], LootCouncil_Channel); 
 					LootCouncil_SendChatMessage("item: "..itemRunning, LootCouncil_Channel);
