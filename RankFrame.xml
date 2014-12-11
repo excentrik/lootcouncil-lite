@@ -1,4 +1,5 @@
-﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Script file="RankFrame.lua" />
 	<Frame name="RankFrame" parent="UIParent">
 		<Size>
@@ -28,9 +29,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>
-            UIDropDownMenu_Initialize(self, LootCouncil_Browser.DropDown_OnLoad);
-          </OnLoad>
+					<OnLoad>UIDropDownMenu_Initialize(self, LootCouncil_Browser.DropDown_OnLoad);</OnLoad>
 				</Scripts>
 			</Frame>
 			<Button name="RankAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
@@ -43,12 +42,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-            LootCouncil_Browser.acceptRank()
-          </OnClick>
-				  <OnLoad>
-				 	self:SetText(LootCouncilLocalization["ACCEPT"]);
-				</OnLoad>
+					<OnClick>LootCouncil_Browser.acceptRank()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["ACCEPT"]);</OnLoad>
 				</Scripts>
 			</Button>
 			<Button name="RankCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
@@ -61,12 +56,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-            LootCouncil_Browser.cancelRank()
-          </OnClick>
-		  <OnLoad>
-		  	self:SetText(LootCouncilLocalization["CANCEL"])
-			</OnLoad>
+					<OnClick>LootCouncil_Browser.cancelRank()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["CANCEL"])</OnLoad>
 				</Scripts>
 			</Button>
 		</Frames>
@@ -85,11 +76,9 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad>
-        RankFrame:RegisterEvent("VARIABLES_LOADED");
+			<OnLoad>RankFrame:RegisterEvent("VARIABLES_LOADED");
         RankFrame:SetScript("OnEvent", RankFrame_EventHandler);
-        RankFrame:Hide()
-      </OnLoad>
+        RankFrame:Hide()</OnLoad>
 		</Scripts>
 	</Frame>
 </Ui>

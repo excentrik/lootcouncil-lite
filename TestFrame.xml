@@ -1,4 +1,5 @@
-<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Script file="TestFrame.lua" />
 	<Frame name="LCTestFrame" parent="UIParent" toplevel="true" movable="true">
 		<Size>
@@ -31,12 +32,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-		        	    LootCouncil_Browser.RunTests()
-        		  </OnClick>
-				  <OnLoad>
-				 	self:SetText(LootCouncilLocalization["RUN_TEST"]);
-				</OnLoad>
+					<OnClick>LootCouncil_Browser.RunTests()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["RUN_TEST"]);</OnLoad>
 				</Scripts>
 			</Button>
 			<Button name="TestCancelButton" inherits="UIPanelButtonTemplate" text="Close">
@@ -49,12 +46,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-		        	    LCTestFrame:Hide()
-        		  </OnClick>
-				  <OnLoad>
-				  	self:SetText(LootCouncilLocalization["CLOSE"])
-					</OnLoad>
+					<OnClick>LCTestFrame:Hide()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["CLOSE"])</OnLoad>
 				</Scripts>
 			</Button>
 		</Frames>
@@ -113,12 +106,10 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad>
-		        LCTestFrame:RegisterEvent("CHAT_MSG_ADDON");
+			<OnLoad>LCTestFrame:RegisterEvent("CHAT_MSG_ADDON");
 				LCTestFrame:RegisterEvent("VARIABLES_LOADED");
         		LCTestFrame:SetScript("OnEvent", TestFrame_EventHandler);
-    	    	LCTestFrame:Hide()
-	      </OnLoad>
+    	    	LCTestFrame:Hide()</OnLoad>
 		</Scripts>
 	</Frame>
 </Ui>

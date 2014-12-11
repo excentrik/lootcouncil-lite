@@ -14,6 +14,7 @@ Private Vote Mode: All votes cast are private and cannot be seen by other counci
 Single Vote Mode: All council members are restricted to one vote per person.
 Spec Detection Mode: Whenever someone links an item, you can detect the key phrases "main", "off", "bis", "4set", "2set" or "xmog". If someone says "MAINSPEC," it'll see the phrase "MAIN" and flag it as main spec.
 Restrict Self Voting: Prevent council members from voting on themselves.
+One LC per raid: Allows different loot councils in the same guild for different raids.
 
 Commands:
 
@@ -26,6 +27,8 @@ Commands:
 - /ltc add (name) (itemlink) - Manually add player with (name) and item (itemlink) to the consideration
 - /ltc config - Shows the options panel
 - /ltc test - Open the test frame
+- /ltc channel channel_name - Changes the default communication channel (use default to revert to OFFICER channel)
+
 
 Usage:
 1) All officers make sure to set the correct minimum rank by typing /ltc rank and using the window.
@@ -42,4 +45,5 @@ TODO:
 - Support for a note after the spec specification when whispering an item
 - Attendance tracking, visualization and editing
 - Better (more consistent) handling of character names to avoid problems with "name-realm" format
+- Information about characters ilvl
 - More?

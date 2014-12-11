@@ -374,6 +374,9 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				if LootCouncil_debugMode == false then
 					LootCouncil_SendChatMessage(LootCouncilLocalization["START_FIRED"], LootCouncil_Channel); 
 					LootCouncil_SendChatMessage("item: "..itemRunning, LootCouncil_Channel);
+				else
+					LootCouncil_Browser.printd(LootCouncilLocalization["START_FIRED"]); 
+					LootCouncil_Browser.printd("item: "..itemRunning);
 				end
 				local found, _, itemString = string.find(itemRunning, "^|c%x+|H(.+)|h%[.*%]");
 				LootCouncil_Browser.printd("prep for addon message");
@@ -1528,7 +1531,7 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 							theEntry[9] = vote;
 						end
 						local theVotes = theEntry[10] -- Get the current votes
-						local found = false; -- Initialize helper variable
+						local found = 0; -- Initialize helper variable
 						for ki = 1, MAX_VOTERS do -- Loop through all the potential voters
 							if theVotes[ki] then -- If this voter exists
 								local singularVoter = theVotes[ki] -- get the individual voter
@@ -1547,7 +1550,7 @@ function LootCouncil_Browser.updateVotes(sender, char, vote, reason)
 								end
 							end
 						end
-						if found == false then -- if we didn't find anyone, then they're probably not in the table yet (they haven't voted for this person yet)
+						if found == 0 then -- if we didn't find anyone, then they're probably not in the table yet (they haven't voted for this person yet)
 							table.insert(theEntry[10], { -- So add them
 								sender,
 								vote,
@@ -1770,8 +1773,10 @@ end
 function LootCouncil_Browser.initiateAbort()
 	if isInitiator == true then -- if we're the initiator, show a popup message
 		LootCouncil_Browser.confirmAbort()
+	elseif theInitiator == "" then
+		print("No session started. Ignoring command.")
 	else
-		print("Suggesting to "..theInitiator.." that we abort this loot council session")
+		print("Suggesting to "..theInitiator.." that we abort this loot council session.")
 		SendAddonMessage("L00TCOUNCIL", "suggestAbort", "WHISPER", theInitiator)
 	end
 end

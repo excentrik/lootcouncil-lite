@@ -1,4 +1,5 @@
-﻿<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Script file="Options.lua" />
 	<Frame name="LCOptionsFrame" parent="UIParent" toplevel="true" movable="true">
 		<Size>
@@ -126,9 +127,7 @@
 				</FontString>
 				<FontString name="ConfirmEndingLabel" inherits="GameFontNormal" text="Confirm Ending Session:" justifyH="LEFT">
 					<Scripts>
-						<OnLoad>
-							self:SetText(LootCouncilLocalization["CONFIRM_END_SESSION"])
-						</OnLoad>
+						<OnLoad>self:SetText(LootCouncilLocalization["CONFIRM_END_SESSION"])</OnLoad>
 					</Scripts>
 					<Size>
 						<AbsDimension x="122" y="25" />
@@ -191,13 +190,9 @@
 					<EdgeSize val="8" />
 				</Backdrop>
 				<Scripts>
-					<OnUpdate>
-
-					</OnUpdate>
-					<OnLoad>
-						-- read Enchanters
-						self:SetText(LootCouncil_Enchanters);
-					</OnLoad>
+					<OnUpdate />
+					<OnLoad>-- read Enchanters
+						self:SetText(LootCouncil_Enchanters);</OnLoad>
 				</Scripts>
 				<FontString inherits="GameFontNormal" />
 			</EditBox>
@@ -235,16 +230,12 @@
 					</Layer>
 				</Layers>
 				<Scripts>
-					<OnUpdate>
-						            LootCouncil_scale = self:GetValue();
+					<OnUpdate>LootCouncil_scale = self:GetValue();
 
 						            MainFrame:SetScale(LootCouncil_scale);
 						            MainFrame:Show();
-						            ScaleSliderLabel:SetText(floor(self:GetValue()*100)/100);
-					</OnUpdate>
-					<OnLoad>
-
-					</OnLoad>
+						            ScaleSliderLabel:SetText(floor(self:GetValue()*100)/100);</OnUpdate>
+					<OnLoad />
 				</Scripts>
 				<ThumbTexture name="$parentThumb" file="Interface\Buttons\UI-SliderBar-Button-Horizontal">
 					<Size>
@@ -259,9 +250,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>
-						            UIDropDownMenu_Initialize(self, LootCouncil_Browser.OptDropDown_OnLoad);
-					</OnLoad>
+					<OnLoad>UIDropDownMenu_Initialize(self, LootCouncil_Browser.OptDropDown_OnLoad);</OnLoad>
 				</Scripts>
 			</Frame>
 			<Button name="OptAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
@@ -274,12 +263,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-						    		        LootCouncil_Browser.acceptOptions()
-					</OnClick>
-					<OnLoad>
-						 	self:SetText(LootCouncilLocalization["ACCEPT"]);
-					</OnLoad>
+					<OnClick>LootCouncil_Browser.acceptOptions()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["ACCEPT"]);</OnLoad>
 				</Scripts>
 			</Button>
 			<Button name="OptCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
@@ -292,12 +277,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-						            LootCouncil_Browser.cancelOptions()
-					</OnClick>
-					<OnLoad>
-						self:SetText(LootCouncilLocalization["CANCEL"]);
-					</OnLoad>
+					<OnClick>LootCouncil_Browser.cancelOptions()</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["CANCEL"]);</OnLoad>
 				</Scripts>
 			</Button>
 			<CheckButton name="PrivateVoteMode" inherits="UICheckButtonTemplate" text="CheckButton1">
@@ -412,11 +393,9 @@
 			</CheckButton>
 		</Frames>
 		<Scripts>
-			<OnLoad>
-				        LCOptionsFrame:RegisterEvent("VARIABLES_LOADED");
+			<OnLoad>LCOptionsFrame:RegisterEvent("VARIABLES_LOADED");
 				        LCOptionsFrame:SetScript("OnEvent", LCOptionsFrame_EventHandler);
-				        LCOptionsFrame:Hide()
-			</OnLoad>
+				        LCOptionsFrame:Hide()</OnLoad>
 		</Scripts>
 	</Frame>
 </Ui>

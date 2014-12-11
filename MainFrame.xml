@@ -1,19 +1,12 @@
-<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Script file="MainFrame.lua" />
 	<Button name="LootCouncil_Header" virtual="true">
 		<Scripts>
-			<OnClick>
-        LootCouncil_Browser.sortTable(self:GetID())
-      </OnClick>
-			<OnEnter>
-        _G[self:GetName().."BG"]:SetVertexColor(1, 1, 1, 1)
-      </OnEnter>
-			<OnLeave>
-        _G[self:GetName().."BG"]:SetVertexColor(0.7, 0.7, 0.7, 0.7)
-      </OnLeave>
-			<OnLoad>
-        self:GetScript("OnLeave")(self)
-      </OnLoad>
+			<OnClick>LootCouncil_Browser.sortTable(self:GetID())</OnClick>
+			<OnEnter>_G[self:GetName().."BG"]:SetVertexColor(1, 1, 1, 1)</OnEnter>
+			<OnLeave>_G[self:GetName().."BG"]:SetVertexColor(0.7, 0.7, 0.7, 0.7)</OnLeave>
+			<OnLoad>self:GetScript("OnLeave")(self)</OnLoad>
 		</Scripts>
 		<NormalTexture name="$parentBG">
 			<Color r="0.4" g="0.4" b="0.04" a="0.4" />
@@ -33,14 +26,14 @@
 	<Button name="LootCouncil_Entry" virtual="true" hidden="true">
 		<Size>
 			<!--<AbsDimension x="687" y="24" />-->
-			<RelDimension x="0.7" y="0.018"/>
+			<RelDimension x="0.7" y="0.018" />
 		</Size>
 		<Layers>
 			<Layer>
 				<FontString name="$parentCharName" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="69" y="24" />-->
-						<RelDimension x="0.07" y="0.018"/>
+						<RelDimension x="0.07" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT">
@@ -53,7 +46,7 @@
 				<FontString name="$parentItem" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="338" y="24" />-->
-						<RelDimension x="0.28" y="0.018"/>
+						<RelDimension x="0.28" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentCharName" relativePoint="RIGHT">
@@ -64,7 +57,7 @@
 				<FontString name="$parentItemlvl" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="74" y="24" />-->
-						<RelDimension x="0.07" y="0.018"/>
+						<RelDimension x="0.07" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentItem" relativePoint="RIGHT" />
@@ -73,7 +66,7 @@
 				<FontString name="$parentSpec" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="70" y="24" />-->
-						<RelDimension x="0.05" y="0.018"/>
+						<RelDimension x="0.05" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentItemlvl" relativePoint="RIGHT" />
@@ -82,7 +75,7 @@
 				<FontString name="$parentVotesTotal" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="110" y="24" />-->
-						<RelDimension x="0.1" y="0.018"/>
+						<RelDimension x="0.1" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentSpec" relativePoint="RIGHT" />
@@ -91,7 +84,7 @@
 				<FontString name="$parentBlank" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="86" y="24" />-->
-						<RelDimension x="0.05" y="0.018"/>
+						<RelDimension x="0.05" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentVotesTotal" relativePoint="RIGHT" />
@@ -100,7 +93,7 @@
 				<FontString name="$parentYourVote" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="70" y="24" />-->
-						<RelDimension x="0.07" y="0.018"/>
+						<RelDimension x="0.07" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentBlank" relativePoint="RIGHT" />
@@ -112,33 +105,27 @@
 			<Button name="$parentItemFrame">
 				<Size>
 					<!--<AbsDimension x="338" y="24" />-->
-					<RelDimension x="0.28" y="0.018"/>
+					<RelDimension x="0.28" y="0.018" />
 				</Size>
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="$parentCharName" relativePoint="RIGHT" />
 				</Anchors>
 				<Scripts>
-					<OnEnter>
-            LootCouncil_Browser.toolMouseOver((self:GetParent()):GetID())
-            _G[(self:GetParent()):GetName().."BG"]:Show()
-          </OnEnter>
-					<OnLeave>
-            LootCouncil_Browser.toolMouseLeave()
+					<OnEnter>LootCouncil_Browser.toolMouseOver((self:GetParent()):GetID())
+            _G[(self:GetParent()):GetName().."BG"]:Show()</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave()
             if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
             _G[(self:GetParent()):GetName().."BG"]:Hide()
-            end
-          </OnLeave>
-					<OnClick>
-            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            end</OnLeave>
+					<OnClick>if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
             LootCouncil_Browser.SelectEntry(self:GetParent():GetID())
-            end
-          </OnClick>
+            end</OnClick>
 				</Scripts>
 			</Button>
 			<Button name="$parentItemFrame2" hidden="true" frameStrata="HIGH">
 				<Size>
 					<!--<AbsDimension x="338" y="12" />-->
-					<RelDimension x="0.28" y="0.01"/>
+					<RelDimension x="0.28" y="0.01" />
 				</Size>
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="$parentCharName" relativePoint="RIGHT">
@@ -146,27 +133,21 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>
-            LootCouncil_Browser.toolMouseOverDual((self:GetParent()):GetID())
-           _G[(self:GetParent()):GetName().."BG"]:Show()
-          </OnEnter>
-					<OnLeave>
-            LootCouncil_Browser.toolMouseLeave()
+					<OnEnter>LootCouncil_Browser.toolMouseOverDual((self:GetParent()):GetID())
+           _G[(self:GetParent()):GetName().."BG"]:Show()</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave()
             if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
             _G[(self:GetParent()):GetName().."BG"]:Hide()
-            end
-          </OnLeave>
-					<OnClick>
-            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            end</OnLeave>
+					<OnClick>if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
             LootCouncil_Browser.SelectEntry(self:GetParent():GetID())
-            end
-          </OnClick>
+            end</OnClick>
 				</Scripts>
 			</Button>
 			<Button name="$parentVoteHover1" frameStrata="HIGH">
 				<Size>
 					<!--<AbsDimension x="89" y="24" />-->
-					<RelDimension x="0.07" y="0.02"/>
+					<RelDimension x="0.07" y="0.02" />
 				</Size>
 				<Anchors>
 					<Anchor point="LEFT">
@@ -176,21 +157,15 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>
-            LootCouncil_Browser.voteToolActivate(self:GetParent():GetID())
-            _G[(self:GetParent()):GetName().."BG"]:Show()
-          </OnEnter>
-					<OnLeave>
-            LootCouncil_Browser.toolMouseLeave()
+					<OnEnter>LootCouncil_Browser.voteToolActivate(self:GetParent():GetID())
+            _G[(self:GetParent()):GetName().."BG"]:Show()</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave()
             if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
             _G[(self:GetParent()):GetName().."BG"]:Hide()
-            end
-          </OnLeave>
-					<OnClick>
-            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
+            end</OnLeave>
+					<OnClick>if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
             LootCouncil_Browser.SelectEntry(self:GetParent():GetID())
-            end
-          </OnClick>
+            end</OnClick>
 				</Scripts>
 			</Button>
 			<Button name="$parentForButton" inherits="UIPanelButtonTemplate" text="">
@@ -198,7 +173,7 @@
 					<AbsDimension x="21" y="21" />
 				</Size>
 				<Anchors>
-				<Anchor point="LEFT" relativeTo="$parentVotesTotal" relativePoint="RIGHT">
+					<Anchor point="LEFT" relativeTo="$parentVotesTotal" relativePoint="RIGHT">
 						<Offset x="5" y="0" />
 					</Anchor>
 					<!--<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" />-->
@@ -216,22 +191,14 @@
 					<TexCoords left="0.17" right="0.8" top="0.17" bottom="0.8" />
 				</HighlightTexture>
 				<Scripts>
-					<OnLoad>
-						self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
-        			</OnLoad>
-					<OnEnter>
-			            LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["FOR"])
-            			_G[(self:GetParent()):GetName().."BG"]:Show()
-			          </OnEnter>
-			          <OnLeave>
-			            LootCouncil_Browser.toolMouseLeave()
+					<OnLoad>self:RegisterForClicks("LeftButtonUp", "RightButtonUp");</OnLoad>
+					<OnEnter>LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["FOR"])
+            			_G[(self:GetParent()):GetName().."BG"]:Show()</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave()
             			if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
 				            _G[(self:GetParent()):GetName().."BG"]:Hide()
-			            end
-			          </OnLeave>
-					<OnClick>
-            			LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "For", "LeftButton");
-			          </OnClick>
+			            end</OnLeave>
+					<OnClick>LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "For", "LeftButton");</OnClick>
 				</Scripts>
 			</Button>
 			<Button name="$parentAgainstButton" inherits="UIPanelButtonTemplate" text="">
@@ -244,22 +211,14 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>
-				self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
-				</OnLoad>
-					<OnEnter>
-				LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["AGAINST"])
-				_G[(self:GetParent()):GetName().."BG"]:Show()
-				</OnEnter>
-				<OnLeave>
-				LootCouncil_Browser.toolMouseLeave()
+					<OnLoad>self:RegisterForClicks("LeftButtonUp", "RightButtonUp");</OnLoad>
+					<OnEnter>LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["AGAINST"])
+				_G[(self:GetParent()):GetName().."BG"]:Show()</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave()
 	            if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
 		        _G[(self:GetParent()):GetName().."BG"]:Hide()
-			    end
-				</OnLeave>
-				<OnClick>
-				LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "Against", "LeftButton");
-	            </OnClick>
+			    end</OnLeave>
+					<OnClick>LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "Against", "LeftButton");</OnClick>
 				</Scripts>
 				<NormalTexture inherits="UIPanelButtonUpTexture" file="Interface\BUTTONS\UI-Panel-MinimizeButton-Up">
 					<TexCoords left="0.19" right="0.81" top="0.19" bottom="0.81" />
@@ -284,22 +243,14 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-						<OnLoad>
-					self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
-				  </OnLoad>
-							<OnEnter>
-					LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["CANCEL"])
-				   _G[(self:GetParent()):GetName().."BG"]:Show()
-				  </OnEnter>
-							<OnLeave>
-					LootCouncil_Browser.toolMouseLeave()
+					<OnLoad>self:RegisterForClicks("LeftButtonUp", "RightButtonUp");</OnLoad>
+					<OnEnter>LootCouncil_Browser.voteDescTooltip(LootCouncilLocalization["CANCEL"])
+				   _G[(self:GetParent()):GetName().."BG"]:Show()</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave()
 					if not LootCouncil_Browser.IsSelected(self:GetParent():GetID()) then
 					_G[(self:GetParent()):GetName().."BG"]:Hide()
-					end
-				  </OnLeave>
-							<OnClick>
-					LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "None", "LeftButton");
-					 </OnClick>
+					end</OnLeave>
+					<OnClick>LootCouncil_Browser.CastVote((self:GetParent()):GetID(), "None", "LeftButton");</OnClick>
 				</Scripts>
 				<NormalTexture inherits="UIPanelButtonUpTexture" file="Interface\BUTTONS\UI-GroupLoot-Pass-Up">
 					<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95" />
@@ -316,22 +267,14 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
-        _G[self:GetName().."BG"]:Hide()
-      </OnLoad>
-			<OnClick>
-        if not LootCouncil_Browser.IsSelected(self:GetID()) then
+			<OnLoad>_G[self:GetName().."BG"]:Hide()</OnLoad>
+			<OnClick>if not LootCouncil_Browser.IsSelected(self:GetID()) then
         LootCouncil_Browser.SelectEntry(self:GetID())
-        end
-      </OnClick>
-			<OnEnter>
-        _G[self:GetName().."BG"]:Show()
-      </OnEnter>
-			<OnLeave>
-        if not LootCouncil_Browser.IsSelected(self:GetID()) then
+        end</OnClick>
+			<OnEnter>_G[self:GetName().."BG"]:Show()</OnEnter>
+			<OnLeave>if not LootCouncil_Browser.IsSelected(self:GetID()) then
         _G[self:GetName().."BG"]:Hide()
-        end
-      </OnLeave>
+        end</OnLeave>
 		</Scripts>
 		<NormalTexture name="$parentBG">
 			<Color r="0" g="0" b="0.6" a="0.35" />
@@ -339,8 +282,8 @@
 	</Button>
 	<Frame name="MainFrame" parent="UIParent" toplevel="true" movable="true">
 		<Size>
-<!--		 <AbsDimension x="900" y="339" /> -->
-			<RelDimension x="0.75" y="0.31"/>
+			<!--		 <AbsDimension x="900" y="339" /> -->
+			<RelDimension x="0.75" y="0.31" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER">
@@ -376,7 +319,7 @@
 			<Frame name="EntryFrame">
 				<Size>
 					<!--					<AbsDimension x="800" y="96" />-->
-					<RelDimension x="0.7" y="0.10"/>
+					<RelDimension x="0.7" y="0.10" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOP">
@@ -395,7 +338,7 @@
 					<Button name="$parentHeaderCharName" inherits="LootCouncil_Header" id="1" text="Raider">
 						<Size>
 							<!--<AbsDimension x="89" y="24" />-->
-							<RelDimension x="0.07" y="0.02"/>
+							<RelDimension x="0.07" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="TOPLEFT">
@@ -403,31 +346,27 @@
 							</Anchor>
 						</Anchors>
 						<Scripts>
-							<OnLoad>
-								self:SetText(LootCouncilLocalization["RAIDER"]);
-								self:GetScript("OnLeave")(self)
-							</OnLoad>
+							<OnLoad>self:SetText(LootCouncilLocalization["RAIDER"]);
+								self:GetScript("OnLeave")(self)</OnLoad>
 						</Scripts>
 					</Button>
 					<Button name="$parentHeaderItem" inherits="LootCouncil_Header" id="2" text="Upgraded Item">
 						<Size>
 							<!--<AbsDimension x="338" y="24" />-->
-							<RelDimension x="0.28" y="0.02"/>
+							<RelDimension x="0.28" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderCharName" relativePoint="RIGHT" />
 						</Anchors>
 						<Scripts>
-							<OnLoad>
-								self:SetText(LootCouncilLocalization["UPGRADED_ITEM"]);
-								self:GetScript("OnLeave")(self)
-							</OnLoad>
+							<OnLoad>self:SetText(LootCouncilLocalization["UPGRADED_ITEM"]);
+								self:GetScript("OnLeave")(self)</OnLoad>
 						</Scripts>
 					</Button>
 					<Button name="$parentHeaderItemlvl" inherits="LootCouncil_Header" id="3" text="Guild Rank">
 						<Size>
 							<!-- <AbsDimension x="74" y="24" />-->
-							<RelDimension x="0.07" y="0.02"/>
+							<RelDimension x="0.07" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderItem" relativePoint="RIGHT">
@@ -435,16 +374,14 @@
 							</Anchor>
 						</Anchors>
 						<Scripts>
-							<OnLoad>
-								self:SetText(LootCouncilLocalization["GUILD_RANK"])
-								self:GetScript("OnLeave")(self)
-							</OnLoad>
+							<OnLoad>self:SetText(LootCouncilLocalization["GUILD_RANK"])
+								self:GetScript("OnLeave")(self)</OnLoad>
 						</Scripts>
 					</Button>
 					<Button name="$parentHeaderSpec" inherits="LootCouncil_Header" id="11" text="   Spec">
 						<Size>
 							<!--<AbsDimension x="60" y="24" />-->
-							<RelDimension x="0.05" y="0.02"/>
+							<RelDimension x="0.05" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderItemlvl" relativePoint="RIGHT">
@@ -452,16 +389,14 @@
 							</Anchor>
 						</Anchors>
 						<Scripts>
-							<OnLoad>
-								self:SetText(LootCouncilLocalization["SPEC"]);
-								self:GetScript("OnLeave")(self)
-							</OnLoad>
+							<OnLoad>self:SetText(LootCouncilLocalization["SPEC"]);
+								self:GetScript("OnLeave")(self)</OnLoad>
 						</Scripts>
 					</Button>
 					<Button name="$parentHeaderVotesTotal" inherits="LootCouncil_Header" id="6" text="Total Votes (+/-)">
 						<Size>
 							<!--<AbsDimension x="110" y="24" />-->
-							<RelDimension x="0.1" y="0.02"/>
+							<RelDimension x="0.1" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderSpec" relativePoint="RIGHT">
@@ -469,16 +404,14 @@
 							</Anchor>
 						</Anchors>
 						<Scripts>
-							<OnLoad>
-								self:SetText(LootCouncilLocalization["TOTAL_VOTES"]);
-								self:GetScript("OnLeave")(self)
-							</OnLoad>
+							<OnLoad>self:SetText(LootCouncilLocalization["TOTAL_VOTES"]);
+								self:GetScript("OnLeave")(self)</OnLoad>
 						</Scripts>
 					</Button>
 					<Button name="$parentHeaderBlank" inherits="LootCouncil_Header" id="7" text="">
 						<Size>
 							<!--<AbsDimension x="86" y="24" />-->
-							<RelDimension x="0.05" y="0.02"/>
+							<RelDimension x="0.05" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderVotesTotal" relativePoint="RIGHT">
@@ -489,7 +422,7 @@
 					<Button name="$parentHeaderVoteSelection" inherits="LootCouncil_Header" id="8" text="Your Vote">
 						<Size>
 							<!--<AbsDimension x="70" y="24" />-->
-							<RelDimension x="0.07" y="0.02"/>
+							<RelDimension x="0.07" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderBlank" relativePoint="RIGHT">
@@ -497,10 +430,8 @@
 							</Anchor>
 						</Anchors>
 						<Scripts>
-							<OnLoad>
-								self:SetText(LootCouncilLocalization["YOUR_VOTE"]);
-								self:GetScript("OnLeave")(self)
-							</OnLoad>
+							<OnLoad>self:SetText(LootCouncilLocalization["YOUR_VOTE"]);
+								self:GetScript("OnLeave")(self)</OnLoad>
 						</Scripts>
 					</Button>
 				</Frames>
@@ -508,7 +439,7 @@
 			<Frame name="CurrentItemHover" frameStrata="HIGH">
 				<Size>
 					<!--<AbsDimension x="195" y="48" />-->
-					<RelDimension x="0.14" y="0.04"/>
+					<RelDimension x="0.14" y="0.04" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -516,15 +447,9 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>
-            self:Hide()
-          </OnLoad>
-					<OnEnter>
-            LootCouncil_Browser.ShowCurrentItemTooltip();
-          </OnEnter>
-					<OnLeave>
-            LootCouncil_Browser.toolMouseLeave();
-          </OnLeave>
+					<OnLoad>self:Hide()</OnLoad>
+					<OnEnter>LootCouncil_Browser.ShowCurrentItemTooltip();</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave();</OnLeave>
 				</Scripts>
 			</Frame>
 			<Frame name="CurrentSelectionHover" hidden="true" frameStrata="MEDIUM">
@@ -537,18 +462,14 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>
-            LootCouncil_Browser.ShowCurrentSelectionTooltip();
-          </OnEnter>
-					<OnLeave>
-            LootCouncil_Browser.toolMouseLeave();
-          </OnLeave>
+					<OnEnter>LootCouncil_Browser.ShowCurrentSelectionTooltip();</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave();</OnLeave>
 				</Scripts>
 			</Frame>
 			<Button name="AbortButton" inherits="UIPanelButtonTemplate" hidden="true" text="End Session">
 				<Size>
 					<!--<AbsDimension x="172" y="26" />-->
-					<RelDimension x="0.14" y="0.021"/>
+					<RelDimension x="0.14" y="0.021" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -556,12 +477,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-            LootCouncil_Browser.initiateAbort();
-          </OnClick>
-		  	<OnLoad>
-				self:SetText(LootCouncilLocalization["END_SESSION"]);
-			</OnLoad>
+					<OnClick>LootCouncil_Browser.initiateAbort();</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["END_SESSION"]);</OnLoad>
 				</Scripts>
 			</Button>
 			<Button name="SyncButton" inherits="UIPanelButtonTemplate" hidden="true" text="Resync">
@@ -574,18 +491,14 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-					LootCouncil_Browser.resync_start();
-				  </OnClick>
-					<OnLoad>
-						self:SetText(LootCouncilLocalization["RESYNC"]);
-					</OnLoad>
+					<OnClick>LootCouncil_Browser.resync_start();</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["RESYNC"]);</OnLoad>
 				</Scripts>
 			</Button>
 			<Button name="ClearSelectionButton" inherits="UIPanelButtonTemplate" hidden="true" text="Clear Selection">
 				<Size>
 					<!--<AbsDimension x="200" y="26" />-->
-					<RelDimension x="0.15" y="0.021"/>
+					<RelDimension x="0.15" y="0.021" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -600,7 +513,7 @@
 			<Button name="RemoveButton" inherits="UIPanelButtonTemplate" hidden="true" text="Remove From Consideration">
 				<Size>
 					<!--<AbsDimension x="200" y="26" />-->
-					<RelDimension x="0.15" y="0.021"/>
+					<RelDimension x="0.15" y="0.021" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -615,7 +528,7 @@
 			<Frame name="CurrentSelectionHover2" hidden="true" frameStrata="HIGH">
 				<Size>
 					<!--<AbsDimension x="195" y="30" />-->
-					<RelDimension x="0.14" y="0.025"/>
+					<RelDimension x="0.14" y="0.025" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -623,18 +536,14 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>
-            LootCouncil_Browser.ShowCurrentSelectionDualTooltip();
-          </OnEnter>
-					<OnLeave>
-            LootCouncil_Browser.toolMouseLeave();
-          </OnLeave>
+					<OnEnter>LootCouncil_Browser.ShowCurrentSelectionDualTooltip();</OnEnter>
+					<OnLeave>LootCouncil_Browser.toolMouseLeave();</OnLeave>
 				</Scripts>
 			</Frame>
 			<Button name="DisenchantButton" inherits="UIPanelButtonTemplate" text="Disenchant Item" hidden="true">
 				<Size>
 					<!--<AbsDimension x="172" y="26" />-->
-					<RelDimension x="0.14" y="0.021"/>
+					<RelDimension x="0.14" y="0.021" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -642,31 +551,25 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>
-						self:SetText(LootCouncilLocalization["DISENCHANT"]);
-					</OnLoad>
+					<OnLoad>self:SetText(LootCouncilLocalization["DISENCHANT"]);</OnLoad>
 				</Scripts>
-      </Button>
-      <Button name="AwardButton" inherits="UIPanelButtonTemplate" hidden="true" text="Award Item">
-        <Size>
-          <!--<AbsDimension x="172" y="26" />-->
-		  <RelDimension x="0.14" y="0.021"/>
-        </Size>
-        <Anchors>
-          <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
-            <Offset x="55" y="73" />
-          </Anchor>
-        </Anchors>
-        <Scripts>
-          <OnClick>
-            LootCouncil_Browser.awardItemButtonClick();
-          </OnClick>
-		  <OnLoad>
-			  self:SetText(LootCouncilLocalization["AWARD"]);
-			</OnLoad>
-        </Scripts>
-      </Button>
-    </Frames>
+			</Button>
+			<Button name="AwardButton" inherits="UIPanelButtonTemplate" hidden="true" text="Award Item">
+				<Size>
+					<!--<AbsDimension x="172" y="26" />-->
+					<RelDimension x="0.14" y="0.021" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="55" y="73" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>LootCouncil_Browser.awardItemButtonClick();</OnClick>
+					<OnLoad>self:SetText(LootCouncilLocalization["AWARD"]);</OnLoad>
+				</Scripts>
+			</Button>
+		</Frames>
 		<Layers>
 			<Layer>
 				<Texture name="CurrentItemTexture" hidden="true" file="Interface\Icons\Ability_Creature_Disease_05">
@@ -906,33 +809,23 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad>
-        self.TimeSinceLastUpdate = 0;
-        self:RegisterForDrag("LeftButton")
-        MainFrame_OnLoad();
-      </OnLoad>
-			<OnDragStart>
-        self:StartMoving()
-      </OnDragStart>
-			<OnDragStop>
-        self:StopMovingOrSizing()
-      </OnDragStop>
+			<OnLoad>self.TimeSinceLastUpdate = 0;self:RegisterForDrag("LeftButton");MainFrame_OnLoad();</OnLoad>
+			<OnDragStart>self:StartMoving()</OnDragStart>
+			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
 			<OnUpdate />
 		</Scripts>
 	</Frame>
 	<GameTooltip name="LootCouncil_Scan" inherits="GameTooltipTemplate">
 		<Scripts>
-			<OnLoad>
-        self:SetOwner(WorldFrame, "ANCHOR_NONE");
-      </OnLoad>
+			<OnLoad>self:SetOwner(WorldFrame, "ANCHOR_NONE");</OnLoad>
 		</Scripts>
 	</GameTooltip>
 	<Frame name="GroupLootDropDownLCL" inherits="UIDropDownMenuTemplate" id="1" hidden="true">
 		<Anchors>
-		  <Anchor point="TOPLEFT"/>
+			<Anchor point="TOPLEFT" />
 		</Anchors>
 		<Scripts>
-		  <OnLoad function="GroupLootDropDownLCL_OnLoad"/>
+			<OnLoad function="GroupLootDropDownLCL_OnLoad" />
 		</Scripts>
 	</Frame>
 </Ui>

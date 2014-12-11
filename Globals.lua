@@ -16,7 +16,11 @@ end
 -- Converts a logical to a number string 
 -------------------------------------------------------
 function LootCouncil_logical2string(x)
-  return string.format("%d", tostring(x))
+	if x then
+		return "1"
+	else
+		return "0"
+	end
 end
 
 ------------- convertStringList -----------------------
@@ -25,7 +29,7 @@ end
 function LootCouncil_convertStringList(str)
 	-- STILL NEEDS ERROR PROTECTION
 	if not LootCouncil_isBlank(str) then
-		if (LootCouncil_debugMode==1) then
+		if (LootCouncil_debugMode==true) then
 			print("Converting string to list:"..str)
 		end
 		local div='[^%a%såÅäÄöÖÖáàãâæçéèêëüÜíìîïñóòõôøœßúùû]' -- NEED TO CHECK BETTER UTF-8 SUPPORT
@@ -35,7 +39,7 @@ function LootCouncil_convertStringList(str)
 		for st,sp in function() return string.find(str,div,pos,false) end do
 			tmp_str=strtrim(string.sub(str,pos,st-1))
 			if not LootCouncil_isBlank(tmp_str) then
-				if (LootCouncil_debugMode==1) then
+				if (LootCouncil_debugMode==true) then
 					print("Adding string ("..tmp_str..") to list")
 				end
 				table.insert(arr,tmp_str)
@@ -46,7 +50,7 @@ function LootCouncil_convertStringList(str)
 		if not LootCouncil_isBlank(tmp_str) then
 			table.insert(arr,tmp_str)
 		end
-		if (LootCouncil_debugMode==1) then
+		if (LootCouncil_debugMode==true) then
 			print("Adding string ("..tmp_str..") to list")
 		end
 
@@ -58,14 +62,25 @@ end
 
 function LootCouncil_SendChatMessage(msg ,chatType ,language ,channel)
 
-if chatType ~= "OFFICER" or chatType ~= "RAID" or chatType ~= "WHISPER" or chatType ~= "RAID_WARNING" or chatType ~= "GUILD" then
+if chatType == "OFFICER" or chatType == "RAID" or chatType == "WHISPER" or chatType == "RAID_WARNING" or chatType == "GUILD" then
 	-- Send message
 	SendChatMessage(msg ,chatType ,nil ,channel);
 else
 	-- Find channel number
-	local index = GetChannelName(channel)
+	local index
+	if channel then
+		index = GetChannelName(channel)
+	else
+		index,channel = GetChannelName(chatType)
+	end
+
 	-- Send message
-	SendChatMessage(msg ,"CHANNEL" ,nil ,index);
+	if index >0 then
+		SendChatMessage(msg ,"CHANNEL" ,nil ,index);
+	else
+		print("You have not joined channel ".. LootCouncil_Channel ..". Using officer channel for communication.")
+		SendChatMessage(msg ,"OFFICER");
+	end
 end
 
 end
