@@ -1,7 +1,7 @@
 ﻿-- Author      : Matthew Enthoven (Alias: Blacksen)
 -- Create Date : 1/04/2010 12:24:31 PM
 
-LootCouncil_debugMode = false; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
+LootCouncil_debugMode = 0; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
 -- 1 = debug on (no messages sent)
 -- 0 = debug off (messages sent as normal)
 
