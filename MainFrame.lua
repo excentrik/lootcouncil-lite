@@ -767,10 +767,9 @@ function LootCouncil_Browser.CastVote(id, vote, click)
 		if vote == "None" then
 			LootCouncil_Browser.updateVotes(LootCouncil_Browser.getUnitName("player"), entry[1], vote, "");
 		else
-			theVote = vote;
-			voteFor = entry[1];
+			local voteFor = entry[1];
 			if click == "LeftButton" then
-				LootCouncil_Browser.updateVotes(LootCouncil_Browser.getUnitName("player"), voteFor, theVote, "No Reason")
+				LootCouncil_Browser.updateVotes(LootCouncil_Browser.getUnitName("player"), voteFor, vote, "No Reason")
 			elseif click == "RightButton" and isPrivate == false then
 				StaticPopup_Show("LOOT_COUNCIL_VOTE_REASON", ""..string.upper(theVote).." "..voteFor)
 			end
