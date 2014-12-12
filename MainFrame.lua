@@ -380,6 +380,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				end
 				local found, _, itemString = string.find(itemRunning, "^|c%x+|H(.+)|h%[.*%]");
 				LootCouncil_Browser.printd("prep for addon message");
+				print("start"..cmdDelim..itemString);
 				SendAddonMessage("L00TCOUNCIL", "start"..cmdDelim..itemString, "GUILD");
 				LootCouncil_Browser.printd("post addon message");
 				CurrentCouncilList:SetText(councilList)
@@ -501,7 +502,7 @@ function LootCouncil_Browser.prepareLootFrame()
 		specialSlot = false;
 	end
 	CurrentItemHover:Show()
-	for ci = 1, MAX_ENTRIES do
+	for ci = 1, MAX_ENTRIES do		
 		if isSingle == true then
 			_G["EntryFrameEntry"..ci.."AgainstButton"]:Hide()
 		else
@@ -607,10 +608,11 @@ end
 -----------------------------------------------
 function LootCouncil_Browser.processResponse(prv, sing, spec, selfVoting)
 	--SyncButton:Hide();
-	isPrivate = prv;
-	isSingle = sing;
-	isShowingSpec = spec;
-	isSelfVoting = selfVoting;
+	isPrivate = (prv==1);
+
+	isSingle = (sing==1);
+	isShowingSpec = (spec==1);
+	isSelfVoting = (selfVoting==1);
 	LootCouncil_Browser.prepareLootFrame()
 	MainFrame:Show()
 end
