@@ -46,4 +46,5 @@ TODO:
 - Attendance tracking, visualization and editing
 - Better (more consistent) handling of character names to avoid problems with "name-realm" format
 - Information about characters ilvl
+- Adding council member by hand
 - More?
