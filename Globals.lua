@@ -62,7 +62,7 @@ end
 
 function LootCouncil_SendChatMessage(msg ,chatType ,language ,channel)
 
-if chatType == "OFFICER" or chatType == "RAID" or chatType == "WHISPER" or chatType == "RAID_WARNING" or chatType == "GUILD" then
+if string.lower(chatType) == "officer" or string.lower(chatType) == "raid" or string.lower(chatType) == "whisper" or string.lower(chatType) == "raid_warning" or string.lower(chatType) == "guild" then
 	-- Send message
 	SendChatMessage(msg ,chatType ,nil ,channel);
 else
@@ -79,6 +79,7 @@ else
 		SendChatMessage(msg ,"CHANNEL" ,nil ,index);
 	else
 		print("You have not joined channel ".. LootCouncil_Channel ..". Using officer channel for communication.")
+		print(chatType)
 		SendChatMessage(msg ,"OFFICER");
 	end
 end
