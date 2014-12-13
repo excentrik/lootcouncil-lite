@@ -379,8 +379,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 					LootCouncil_Browser.printd("item: "..itemRunning);
 				end
 				local found, _, itemString = string.find(itemRunning, "^|c%x+|H(.+)|h%[.*%]");
-				LootCouncil_Browser.printd("prep for addon message");
-				print("start"..cmdDelim..itemString);
+				LootCouncil_Browser.printd("prep for addon message");				
 				SendAddonMessage("L00TCOUNCIL", "start"..cmdDelim..itemString, "GUILD");
 				LootCouncil_Browser.printd("post addon message");
 				CurrentCouncilList:SetText(councilList)
@@ -2502,7 +2501,7 @@ function GroupLootDropDownLCL_Initialize()
 
 	if ( UIDROPDOWNMENU_MENU_LEVEL == 2 ) then
 		local lastIndex = UIDROPDOWNMENU_MENU_VALUE * 5;		
-		if (lastIndex <=40) then			
+		if (lastIndex <=40) then
 			for i=1, MAX_RAIDERS do				
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
 				if candidate then
@@ -2676,6 +2675,7 @@ function GroupLootDropDownLCL_Initialize()
 					index= LootCouncil_Browser.searchCharName(candidate)
 					if index then
 						name, _, subgroup, _, _, _, _, _, isDead =LootCouncil_Browser.getRaidCharInfo(index)
+
 						if partyArray[subgroup]== false then
 							partyArray[subgroup]=true;
 						end
@@ -2697,7 +2697,6 @@ function GroupLootDropDownLCL_Initialize()
 				UIDropDownMenu_AddButton(info);
 			end
 		end
-
 		-- Add disenchanters group
 		if LootCouncil_Browser.EnchantersList then
 			if getn(LootCouncil_Browser.EnchantersList)>0 then
@@ -3276,9 +3275,10 @@ end
 ----------------------------------------------------------
 
 function LootCouncil_Browser.searchCharName(candidate)
+	local raidIndex= nil
 	if candidate then
 		-- Needs better support for party/raid
-		local raidIndex = UnitInRaid(Ambiguate(candidate,"none"));
+		 raidIndex = UnitInRaid(Ambiguate(candidate,"none"));		
 	end
 	return raidIndex
 end
