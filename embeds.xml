@@ -14,4 +14,5 @@
  <Include file="Libs\AceSerializer-3.0\AceSerializer-3.0.xml"/>
  <Include file="Libs\AceTimer-3.0\AceTimer-3.0.xml"/>
  <Include file="Libs\ChatThrottleLib\ChatThrottleLib.xml"/>
+ <Include file="Libs\DewdropLib\ChatThrottleLib.xml"/>
 </Ui>
