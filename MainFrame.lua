@@ -409,9 +409,9 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 					end
 				end
 				
-				if XLootMaster then
-					XLootMaster.dewdrop:Refresh(1)
-				end
+--				if XLootMaster then
+--					XLootMaster.dewdrop:Refresh(1)
+--				end
 				
 				LootCouncil_Browser.prepareLootFrame();
 			end
@@ -1074,7 +1074,8 @@ function LootCouncil_Browser.receiveItemEntry(name, itemString)
 					1,
 					psLink,
 					nil,
-					"-"
+					"-",
+					"-" -- Player iLvL
 				})
 			else
 				table.insert(LootCouncil_Browser.Elects, {
@@ -1092,7 +1093,8 @@ function LootCouncil_Browser.receiveItemEntry(name, itemString)
 					1,
 					nil, -- should be psLink (item link)
 					nil,
-					"-"
+					"-",
+					"-" -- Player iLvL
 				})
 				
 				-- DO SOMETHING to update
@@ -1262,6 +1264,14 @@ function LootCouncil_Browser.Update()
 			else
 				_G[frame:GetName().."YourVote"]:SetText(LootCouncilLocalization["NONE"])
 			end
+
+
+			if entry[16] then
+				_G[frame:GetName().."iLvL"]:SetText(entry[16])
+			else
+				_G[frame:GetName().."iLvL"]:SetText("NA")
+			end
+
 			if entry.isSelected then
 				_G[frame:GetName().."BG"]:Show()
 			else
@@ -2376,46 +2386,6 @@ function MainFrame_OnUpdate(self, elapsed)
 end
 
 
-function LootCouncil_Lite:OnEnable()
-	if LootCouncil_Browser.MLI == true then
-		MainFrame:RegisterEvent("LOOT_OPENED");
-		MainFrame:RegisterEvent("LOOT_CLOSED");
-		if XLootMaster then
-			self:Hook(XLootMaster,"InjectCustom");
-		else
-			LootFrame:UnregisterEvent("OPEN_MASTER_LOOT_LIST");
-			LootFrame:UnregisterEvent("UPDATE_MASTER_LOOT_LIST");
-			if Butsu then
-				Butsu:UnregisterEvent("OPEN_MASTER_LOOT_LIST");
-				Butsu:UnregisterEvent("UPDATE_MASTER_LOOT_LIST");
-			end
-			MainFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
-			MainFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
-			
-		end
-	else
-		LootFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
-		LootFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
-	end
-end
-
-function LootCouncil_Lite:OnDisable()
-	if (not (XLootMaster)) then
-		LootFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
-		LootFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
-		MainFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
-		MainFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
-		if Butsu then
-			Butsu:UnregisterEvent("OPEN_MASTER_LOOT_LIST");
-			Butsu:UnregisterEvent("UPDATE_MASTER_LOOT_LIST");
-		end
-	end
-	if LootCouncil_Browser.MLI == true then
-		MainFrame:UnregisterEvent("LOOT_OPENED");
-		MainFrame:UnregisterEvent("LOOT_CLOSED");
-	end
-end
-
 function LootCouncil_Lite:InjectCustom(owner, level, value)
 	if level == true then
 		XLootMaster.dewdrop:AddSeparator();
@@ -2474,6 +2444,48 @@ function LootCouncil_Lite:InjectCustom(owner, level, value)
 	end
 		
 end
+
+function LootCouncil_Lite:OnEnable()
+	if LootCouncil_Browser.MLI == true then
+		MainFrame:RegisterEvent("LOOT_OPENED");
+		MainFrame:RegisterEvent("LOOT_CLOSED");
+--		if XLootMaster then
+--			self:Hook(XLootMaster,"InjectCustom");
+--		else
+			LootFrame:UnregisterEvent("OPEN_MASTER_LOOT_LIST");
+			LootFrame:UnregisterEvent("UPDATE_MASTER_LOOT_LIST");
+			if Butsu then
+				Butsu:UnregisterEvent("OPEN_MASTER_LOOT_LIST");
+				Butsu:UnregisterEvent("UPDATE_MASTER_LOOT_LIST");
+			end
+			MainFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
+			MainFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
+			
+--		end
+	else
+		LootFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
+		LootFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
+	end
+end
+
+function LootCouncil_Lite:OnDisable()
+--	if (not (XLootMaster)) then
+		LootFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
+		LootFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
+		MainFrame:RegisterEvent("OPEN_MASTER_LOOT_LIST");
+		MainFrame:RegisterEvent("UPDATE_MASTER_LOOT_LIST");
+		if Butsu then
+			Butsu:UnregisterEvent("OPEN_MASTER_LOOT_LIST");
+			Butsu:UnregisterEvent("UPDATE_MASTER_LOOT_LIST");
+		end
+--	end
+	if LootCouncil_Browser.MLI == true then
+		MainFrame:UnregisterEvent("LOOT_OPENED");
+		MainFrame:UnregisterEvent("LOOT_CLOSED");
+	end
+end
+
+
 
 function LootCouncil_Browser.openMasterLootList()
 	UIDropDownMenu_Refresh(GroupLootDropDownLCL);
@@ -2848,6 +2860,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 		local readyToAdd = true;
 		local name = theInfo[1];
 		local spec = theInfo[2];
+		local ilvl = LootCouncil_GetPlayerIlvl(LootCouncil_Browser.searchCharName(name));
 		local fullSpec = "special";
 		if spec == "M" then
 			fullSpec = "MAIN";
@@ -2890,6 +2903,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 				if indexOfPlayer > 0 then -- If they have
 					theEntry = LootCouncil_Browser.Elects[indexOfPlayer]; -- then get their row
 					theEntry[15] = spec; -- and update their spec
+					theEntry[16] = ilvl; -- and update their spec
 					if pthisItemEquipLoc2 then -- If they have already linked an item, we already updated the first item, so we need to update the second
 						theEntry[2] = theEntry[2].."\n"..psLink2.." ("..piLevel2..")"; -- append the second item link onto the string
 						theEntry[3] = piLevel.." - "..piLevel2 -- Get the itemlevels set
@@ -2973,7 +2987,8 @@ function LootCouncil_Browser.addNewEntry2(index)
 							2, -- They linked 2 items
 							psLink, -- first item link
 							psLink2, -- second item link
-							spec -- and their spec
+							spec, -- and their spec
+							ilvl -- player ilvl
 						})
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 					else -- Else they only linked 1 item or this isn't a special slot
@@ -2995,7 +3010,8 @@ function LootCouncil_Browser.addNewEntry2(index)
 							1, -- they linked 1 item
 							psLink, -- first item
 							nil, -- no second item, so hold nil
-							spec -- and their spec
+							spec, -- and their spec
+							ilvl -- player ilvl
 						})
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 					end

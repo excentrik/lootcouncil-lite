@@ -5,6 +5,9 @@ LootCouncil_debugMode = false; --NOTE: This is a variable for DEACTIVATING all m
 -- 1 = debug on (no messages sent)
 -- 0 = debug off (messages sent as normal)
 
+--local LibStub:GetLibrary("LibInspect"):AddHook('LootCouncil_Lite', 'items', function(...) LootCouncil_GetPlayerIlvl(...); end);
+local LootCouncil_Lite_inspect = LibStub:GetLibrary("LibInspect");
+
 ------------- isBlank ---------------------------------
 -- Checks if a string is blank
 -------------------------------------------------------
@@ -13,7 +16,7 @@ function LootCouncil_isBlank(x)
 end
 
 ------------- logical2string ---------------------------------
--- Converts a logical to a number string 
+-- Converts a logical to a number string
 -------------------------------------------------------
 function LootCouncil_logical2string(x)
 	if x then
@@ -33,7 +36,7 @@ function LootCouncil_convertStringList(str)
 			print("Converting string to list:"..str)
 		end
 		local div='[^%a%såÅäÄöÖÖáàãâæçéèêëüÜíìîïñóòõôøœßúùû]' -- NEED TO CHECK BETTER UTF-8 SUPPORT
-		--local div='[^[%z%s\65-\90\97-\122\194-\244][\128-\191]*]' 
+		--local div='[^[%z%s\65-\90\97-\122\194-\244][\128-\191]*]'
 		local pos,arr = 0,{}
 		local tmp_str
 		for st,sp in function() return string.find(str,div,pos,false) end do
@@ -59,6 +62,103 @@ function LootCouncil_convertStringList(str)
 		return nil
 	end
 end
+
+function LootCouncil_GearSum(items,level)
+    if items and type(items) == 'table' then
+        local totalItems = 0;
+        local totalScore = 0;
+
+        for i,itemLink in pairs(items) do
+            if itemLink and not ( i == INVSLOT_BODY or i == INVSLOT_RANGED or i == INVSLOT_TABARD ) then
+                local name, link, itemRarity , itemLevel = GetItemInfo(itemLink);
+               -- local itemLevel = self.itemUpgrade:GetUpgradedItemLevel(itemLink); -- TO BE IMPLEMENTED
+
+                --- print(i, itemLevel, itemLink);
+
+                if itemLevel then
+
+                    -- Fix for heirlooms
+--                    if itemRarity == 7 then
+--                        itemLevel = self:Heirloom(level, itemLink);
+--                   end
+
+                    totalItems = totalItems + 1;
+                    totalScore = totalScore + itemLevel;
+                end
+            end
+        end
+
+        return totalScore, totalItems;
+    else
+        return nil;
+    end
+end
+
+function LootCouncil_ProcessInspect(guid, data, age)
+    if guid and type(data) == 'table' and type(data.items) == 'table' then
+
+--        local totalScore, totalItems = LootCouncil_GearSum(data.items);
+
+--        if totalItems and 0 < totalItems then
+--
+--            -- Update the DB
+--            local score = totalScore / totalItems;
+--            self:SetScore(guid, score, totalItems, age)
+--
+--
+--            -- Run Hooks
+--            self:RunHooks('inspect', guid, score, totalItems, age, data.items);
+--
+--            -- Run any callbacks for this event
+--            if self.action[guid] then
+--                self.action[guid](guid, score, totalItems, age, data.items, self:Cache(guid, 'target'));
+--                self.action[guid] = false;
+--            end
+--
+--
+--            return true;
+--        end
+    end
+end
+
+----------- LootCouncil_GetPlayerIlvl -----------------------
+-- Retrieve the latest information about the ilvl of a player
+------------------------------------------------------------
+function LootCouncil_GetPlayerIlvl(playerIndex)
+
+    if not playerIndex then return nil; end
+
+	local target="raid" .. tostring(playerIndex)
+	local canInspect,cached,refresh=LootCouncil_Lite_inspect:RequestItems(target)
+	local items = LootCouncil_Lite_inspect:GetItems(target);
+
+    if not canInspect and not items then
+        return nil;
+    end
+
+    -- Get stuff in order
+    --local guid = self:AddPlayer(target)
+    --self.inspect:AddCharacter(target);
+    --NotifyInspect(target);
+
+    -- Get items and sum
+    local totalScore, totalItems = LootCouncil_GearSum(items, UnitLevel(target));
+
+    if totalItems and totalItems > 0 then
+--        local score = round(totalScore / totalItems,0);
+        local score = totalScore / totalItems;
+        -- self:Debug('SIL:RoughScore', UnitName(target), score, totalItems);
+
+        -- Set a score even tho its crap
+    --        if guid and self:Cache(guid) and (not self:Cache(guid, 'score') or self:Cache(guid, 'items') < totalItems) then
+    --            self:SetScore(guid, score, 1, self:GetAge() + 1);
+    --        end
+        return score;
+    else
+        return nil;
+    end
+end
+
 
 function LootCouncil_SendChatMessage(msg ,chatType ,language ,channel)
 
@@ -120,14 +220,17 @@ LootCouncil_LinkWhisper = true;
 LootCouncil_LinkOfficer = true;
 LootCouncil_LinkRaid = false;
 LootCouncil_LinkGuild = false;
-LootCouncil_Version="2.6"
+LootCouncil_Version="2.7"
 
 LootCouncil_Channel="OFFICER"
 
+LootCouncil_Lite_inspect:AddHook('LootCouncil_Lite', 'items', function(...) LootCouncil_ProcessInspect(...); end);
+
 RegisterAddonMessagePrefix("L00TCOUNCIL");
 
+
 do
-	----------- Slash Command Manager -----------            
+	----------- Slash Command Manager -----------
 	---------------------------------------------
 	SLASH_LOOT_COUNCIL1 = "/ltc";
 	SLASH_LOOT_COUNCIL2 = "/lootcouncil";

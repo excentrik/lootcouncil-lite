@@ -118,3 +118,4 @@ LootCouncilLocalization["INFO_NOTSHOWN2"] = "If someone does not appear on eithe
 LootCouncilLocalization["ENCHANTERS"] = "Enchanters";
 LootCouncilLocalization["CHANNEL_NOT_JOINED"] = "Default channel not changed - Only allows channels that you have joined";
 LootCouncilLocalization["MAIN_CHANNEL"] = "Current default communication channel";
+LootCouncilLocalization["AVGILVL"] = "Avg. iLvL";

@@ -33,7 +33,7 @@
 				<FontString name="$parentCharName" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="69" y="24" />-->
-						<RelDimension x="0.07" y="0.018" />
+						<RelDimension x="0.12" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT">
@@ -46,7 +46,7 @@
 				<FontString name="$parentItem" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="338" y="24" />-->
-						<RelDimension x="0.28" y="0.018" />
+						<RelDimension x="0.305" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentCharName" relativePoint="RIGHT">
@@ -84,7 +84,7 @@
 				<FontString name="$parentBlank" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size>
 						<!--<AbsDimension x="86" y="24" />-->
-						<RelDimension x="0.05" y="0.018" />
+						<RelDimension x="0.06" y="0.018" />
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentVotesTotal" relativePoint="RIGHT" />
@@ -97,6 +97,15 @@
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT" relativeTo="$parentBlank" relativePoint="RIGHT" />
+					</Anchors>
+				</FontString>
+				<FontString name="$parentiLvL" inherits="GameFontNormalSmall" justifyH="LEFT">
+					<Size>
+						<!--<AbsDimension x="70" y="24" />-->
+						<RelDimension x="0.07" y="0.018" />
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentYourVote" relativePoint="RIGHT" />
 					</Anchors>
 				</FontString>
 			</Layer>
@@ -174,7 +183,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="$parentVotesTotal" relativePoint="RIGHT">
-						<Offset x="5" y="0" />
+						<Offset x="0" y="0" />
 					</Anchor>
 					<!--<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" />-->
 				</Anchors>
@@ -283,7 +292,7 @@
 	<Frame name="MainFrame" parent="UIParent" toplevel="true" movable="true">
 		<Size>
 			<!--		 <AbsDimension x="900" y="339" /> -->
-			<RelDimension x="0.75" y="0.31" />
+			<RelDimension x="0.95" y="0.31" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER">
@@ -319,7 +328,7 @@
 			<Frame name="EntryFrame">
 				<Size>
 					<!--					<AbsDimension x="800" y="96" />-->
-					<RelDimension x="0.7" y="0.10" />
+					<RelDimension x="0.85" y="0.10" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOP">
@@ -338,7 +347,7 @@
 					<Button name="$parentHeaderCharName" inherits="LootCouncil_Header" id="1" text="Raider">
 						<Size>
 							<!--<AbsDimension x="89" y="24" />-->
-							<RelDimension x="0.07" y="0.02" />
+							<RelDimension x="0.12" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="TOPLEFT">
@@ -353,7 +362,7 @@
 					<Button name="$parentHeaderItem" inherits="LootCouncil_Header" id="2" text="Upgraded Item">
 						<Size>
 							<!--<AbsDimension x="338" y="24" />-->
-							<RelDimension x="0.28" y="0.02" />
+							<RelDimension x="0.305" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderCharName" relativePoint="RIGHT" />
@@ -411,7 +420,7 @@
 					<Button name="$parentHeaderBlank" inherits="LootCouncil_Header" id="7" text="">
 						<Size>
 							<!--<AbsDimension x="86" y="24" />-->
-							<RelDimension x="0.05" y="0.02" />
+							<RelDimension x="0.06" y="0.02" />
 						</Size>
 						<Anchors>
 							<Anchor point="LEFT" relativeTo="$parentHeaderVotesTotal" relativePoint="RIGHT">
@@ -431,6 +440,21 @@
 						</Anchors>
 						<Scripts>
 							<OnLoad>self:SetText(LootCouncilLocalization["YOUR_VOTE"]);
+								self:GetScript("OnLeave")(self)</OnLoad>
+						</Scripts>
+					</Button>
+					<Button name="$parentHeaderiLvL" inherits="LootCouncil_Header" id="9" text="Avg. iLvl">
+						<Size>
+							<!--<AbsDimension x="70" y="24" />-->
+							<RelDimension x="0.07" y="0.02" />
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentHeaderVoteSelection" relativePoint="RIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>self:SetText(LootCouncilLocalization["AVGILVL"]);
 								self:GetScript("OnLeave")(self)</OnLoad>
 						</Scripts>
 					</Button>

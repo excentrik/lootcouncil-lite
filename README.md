@@ -46,5 +46,7 @@ TODO:
 - Attendance tracking, visualization and editing
 - Better (more consistent) handling of character names to avoid problems with "name-realm" format
 - Information about characters ilvl
+- Control over whisper messages during loot council
 - Adding council member by hand
+- "Read-only" support for members below voting rank
 - More?
