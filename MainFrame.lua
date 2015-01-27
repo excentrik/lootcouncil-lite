@@ -52,7 +52,7 @@ local currSortIndex = 0
 
 local L = LootCouncilLocalization;
 
-LootCouncil_Browser.MainDebug = false; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
+LootCouncil_Browser.MainDebug = true; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
 -- 1 = debug on (all print commands fired)
 -- 0 = debuf off (no print commands)
 
@@ -316,6 +316,10 @@ function MainFrame_EventHandler(self, event, ...)
 				elseif cmd == "spec" then
 					local char, spec = strsplit(" ", other, 2);
 					LootCouncil_Browser.updateSpec(char, spec)
+				elseif cmd == "ilvl" then
+					local char, ilvl = strsplit(" ", other, 2);
+					LootCouncil_Browser.updateIlvl(char, ilvl)
+
 				end
 			end
 			if cmd == "testCouncil" then -- ADDED IN VERSION 2.0. Test council ping.
@@ -2217,6 +2221,20 @@ function LootCouncil_Browser.updateSpec(player, spec)
 	end
 end
 
+------------- updateIlvl --------------------------
+-- updates a player's ilvl when the initiator tells us too
+--------------------------------------------------
+function LootCouncil_Browser.updateIlvl(player, ilvl)
+	for ci=1, MAX_ENTRIES do --Loop through the entires
+		local theEntry = LootCouncil_Browser.Elects[ci]; --Pull the row
+		if theEntry and theEntry[1] == player then -- If this entry is the player we care about
+			theEntry[16] = ilvl; -- Then add their spec
+			LootCouncil_Browser.Update()
+			break;
+		end
+	end
+end
+
 ------------- controlLootFrameSize ---------------
 -- Controls the size of the loot frame
 --------------------------------------------------
@@ -2903,7 +2921,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 				if indexOfPlayer > 0 then -- If they have
 					theEntry = LootCouncil_Browser.Elects[indexOfPlayer]; -- then get their row
 					theEntry[15] = spec; -- and update their spec
-					theEntry[16] = ilvl; -- and update their spec
+					theEntry[16] = ilvl; -- and update their ilvl
 					if pthisItemEquipLoc2 then -- If they have already linked an item, we already updated the first item, so we need to update the second
 						theEntry[2] = theEntry[2].."\n"..psLink2.." ("..piLevel2..")"; -- append the second item link onto the string
 						theEntry[3] = piLevel.." - "..piLevel2 -- Get the itemlevels set
@@ -2922,6 +2940,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						LootCouncil_Browser.sendGlobalMessage("itemEntry "..name.." "..actualItemString) -- Send out info to other council
 						LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2)
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
+						LootCouncil_Browser.sendGlobalMessage("ilvl "..name.." "..ilvl)
 					else -- Else they only have 1 item, so we don't need to do as much
 						if LootCouncil_debugMode == false then -- If we're displaying messages
 							-- Send the player a message saying we got the update
@@ -2936,6 +2955,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						-- and Update the clients!
 						LootCouncil_Browser.sendGlobalMessage("itemEntry "..name.." "..actualItemString)
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
+						LootCouncil_Browser.sendGlobalMessage("ilvl "..name.." "..ilvl)
 					end
 					LootCouncil_Browser.Update(); -- Update the main graphs
 					if indexOfPlayer > 0 and LootCouncil_Browser.IsSelected(indexOfPlayer) then -- if they had them selected, update that too
@@ -2991,6 +3011,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 							ilvl -- player ilvl
 						})
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
+						LootCouncil_Browser.sendGlobalMessage("ilvl "..name.." "..ilvl)
 					else -- Else they only linked 1 item or this isn't a special slot
 						if LootCouncil_debugMode == false then -- send them a message saying we got the item
 							LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK1"]..psLink, "WHISPER", nil, name);
@@ -3014,6 +3035,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 							ilvl -- player ilvl
 						})
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
+						LootCouncil_Browser.sendGlobalMessage("ilvl "..name.." "..ilvl)
 					end
 	
 	

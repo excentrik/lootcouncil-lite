@@ -1,7 +1,7 @@
 ﻿-- Author      : Matthew Enthoven (Alias: Blacksen)
 -- Create Date : 1/04/2010 12:24:31 PM
 
-LootCouncil_debugMode = false; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
+LootCouncil_debugMode = true; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
 -- 1 = debug on (no messages sent)
 -- 0 = debug off (messages sent as normal)
 
@@ -132,6 +132,10 @@ function LootCouncil_GetPlayerIlvl(playerIndex)
 	local canInspect,cached,refresh=LootCouncil_Lite_inspect:RequestItems(target)
 	local items = LootCouncil_Lite_inspect:GetItems(target);
 
+	if (LootCouncil_debugMode==true) then
+		print("Player: "..target.."; CanInspect: ".. tostring(canInspect) .. "; Empty items: ".. tostring(items==nil)) 
+	end
+
     if not canInspect and not items then
         return nil;
     end
@@ -144,6 +148,10 @@ function LootCouncil_GetPlayerIlvl(playerIndex)
     -- Get items and sum
     local totalScore, totalItems = LootCouncil_GearSum(items, UnitLevel(target));
 
+	if (LootCouncil_debugMode==true) then
+		print("Player: "..target.."; Score: "..totalScore) 
+	end
+
     if totalItems and totalItems > 0 then
 --        local score = round(totalScore / totalItems,0);
         local score = totalScore / totalItems;
@@ -153,7 +161,7 @@ function LootCouncil_GetPlayerIlvl(playerIndex)
     --        if guid and self:Cache(guid) and (not self:Cache(guid, 'score') or self:Cache(guid, 'items') < totalItems) then
     --            self:SetScore(guid, score, 1, self:GetAge() + 1);
     --        end
-        return score;
+        return tostring(round(score));
     else
         return nil;
     end
