@@ -1,12 +1,12 @@
 ﻿-- Author      : Matthew Enthoven (Alias: Blacksen)
 -- Create Date : 1/04/2010 12:24:31 PM
 
-LootCouncil_debugMode = true; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
+LootCouncil_debugMode = false; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
 -- 1 = debug on (no messages sent)
 -- 0 = debug off (messages sent as normal)
 
 --local LibStub:GetLibrary("LibInspect"):AddHook('LootCouncil_Lite', 'items', function(...) LootCouncil_GetPlayerIlvl(...); end);
-local LootCouncil_Lite_inspect = LibStub:GetLibrary("LibInspect");
+local LootCouncil_Lite_inspect = LibStub:GetLibrary("LibInspect"); 
 
 ------------- isBlank ---------------------------------
 -- Checks if a string is blank
@@ -73,8 +73,6 @@ function LootCouncil_GearSum(items,level)
                 local name, link, itemRarity , itemLevel = GetItemInfo(itemLink);
                -- local itemLevel = self.itemUpgrade:GetUpgradedItemLevel(itemLink); -- TO BE IMPLEMENTED
 
-                --- print(i, itemLevel, itemLink);
-
                 if itemLevel then
 
                     -- Fix for heirlooms
@@ -94,77 +92,38 @@ function LootCouncil_GearSum(items,level)
     end
 end
 
-function LootCouncil_ProcessInspect(guid, data, age)
-    if guid and type(data) == 'table' and type(data.items) == 'table' then
-
---        local totalScore, totalItems = LootCouncil_GearSum(data.items);
-
---        if totalItems and 0 < totalItems then
---
---            -- Update the DB
---            local score = totalScore / totalItems;
---            self:SetScore(guid, score, totalItems, age)
---
---
---            -- Run Hooks
---            self:RunHooks('inspect', guid, score, totalItems, age, data.items);
---
---            -- Run any callbacks for this event
---            if self.action[guid] then
---                self.action[guid](guid, score, totalItems, age, data.items, self:Cache(guid, 'target'));
---                self.action[guid] = false;
---            end
---
---
---            return true;
---        end
-    end
-end
 
 ----------- LootCouncil_GetPlayerIlvl -----------------------
 -- Retrieve the latest information about the ilvl of a player
 ------------------------------------------------------------
 function LootCouncil_GetPlayerIlvl(playerIndex)
 
-    if not playerIndex then return nil; end
+	if playerIndex then 
+		local target="raid" .. tostring(playerIndex)
 
-	local target="raid" .. tostring(playerIndex)
-	local canInspect,cached,refresh=LootCouncil_Lite_inspect:RequestItems(target)
-	local items = LootCouncil_Lite_inspect:GetItems(target);
+		local canInspect,cached,refresh=LootCouncil_Lite_inspect:RequestItems(target)
+		if (LootCouncil_debugMode==true) then
+			print("Player: "..target.."; CanInspect: ".. tostring(canInspect)) 
+		end
 
-	if (LootCouncil_debugMode==true) then
-		print("Player: "..target.."; CanInspect: ".. tostring(canInspect) .. "; Empty items: ".. tostring(items==nil)) 
+		if not canInspect then
+			return "NA";
+		end
+
+		LootCouncil_Lite_inspect:AddCharacter(target);
+		NotifyInspect(target);
+
+		-- Get items and sum
+		local items = LootCouncil_Lite_inspect:GetItems(target);
+		local totalScore, totalItems = LootCouncil_GearSum(items, UnitLevel(target));
+
+		if totalItems and totalItems > 0 then
+			local score = totalScore / totalItems;
+			return tostring(round(score));
+		else
+			return "NA";
+		end
 	end
-
-    if not canInspect and not items then
-        return nil;
-    end
-
-    -- Get stuff in order
-    --local guid = self:AddPlayer(target)
-    --self.inspect:AddCharacter(target);
-    --NotifyInspect(target);
-
-    -- Get items and sum
-    local totalScore, totalItems = LootCouncil_GearSum(items, UnitLevel(target));
-
-	if (LootCouncil_debugMode==true) then
-		print("Player: "..target.."; Score: "..totalScore) 
-	end
-
-    if totalItems and totalItems > 0 then
---        local score = round(totalScore / totalItems,0);
-        local score = totalScore / totalItems;
-        -- self:Debug('SIL:RoughScore', UnitName(target), score, totalItems);
-
-        -- Set a score even tho its crap
-    --        if guid and self:Cache(guid) and (not self:Cache(guid, 'score') or self:Cache(guid, 'items') < totalItems) then
-    --            self:SetScore(guid, score, 1, self:GetAge() + 1);
-    --        end
-        return tostring(round(score));
-    else
-        return nil;
-    end
 end
 
 

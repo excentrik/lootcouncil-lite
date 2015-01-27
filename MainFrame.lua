@@ -52,7 +52,7 @@ local currSortIndex = 0
 
 local L = LootCouncilLocalization;
 
-LootCouncil_Browser.MainDebug = true; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
+LootCouncil_Browser.MainDebug = false; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
 -- 1 = debug on (all print commands fired)
 -- 0 = debuf off (no print commands)
 
