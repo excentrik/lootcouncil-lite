@@ -1,157 +1,18 @@
 ﻿-- Author      : Matthew Enthoven (Alias: Blacksen)
 -- Create Date : 1/04/2010 12:24:31 PM
 
-LootCouncil_debugMode = false; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
+LootCouncil_Lite_debugMode = false; --NOTE: This is a variable for DEACTIVATING all messages through guild chat or whispers. When you enable it, the addon won't send people messages
 -- 1 = debug on (no messages sent)
 -- 0 = debug off (messages sent as normal)
 
---local LibStub:GetLibrary("LibInspect"):AddHook('LootCouncil_Lite', 'items', function(...) LootCouncil_GetPlayerIlvl(...); end);
-local LootCouncil_Lite_inspect = LibStub:GetLibrary("LibInspect"); 
+LootCouncil_Lite = LibStub("AceAddon-3.0"):NewAddon('LootCouncil_Lite', "AceEvent-3.0", "AceConsole-3.0", "AceTimer-3.0");
+LootCouncil_Lite.version = GetAddOnMetadata("LootCouncil_Lite", "Version");
+LootCouncil_Lite.inspect = LibStub:GetLibrary("LibInspect"); 
+LootCouncil_Lite.purge=360; -- How often to automaticly purge the ilvl database
+LootCouncil_Lite.age = 1800; -- How long till ilvl information is refreshed
+LootCouncil_Lite.lastScan = {};
 
-------------- isBlank ---------------------------------
--- Checks if a string is blank
--------------------------------------------------------
-function LootCouncil_isBlank(x)
-  return not not tostring(x):find("^%s*$")
-end
-
-------------- logical2string ---------------------------------
--- Converts a logical to a number string
--------------------------------------------------------
-function LootCouncil_logical2string(x)
-	if x then
-		return "1"
-	else
-		return "0"
-	end
-end
-
-------------- convertStringList -----------------------
--- Converts a string to a list
--------------------------------------------------------
-function LootCouncil_convertStringList(str)
-	-- STILL NEEDS ERROR PROTECTION
-	if not LootCouncil_isBlank(str) then
-		if (LootCouncil_debugMode==true) then
-			print("Converting string to list:"..str)
-		end
-		local div='[^%a%såÅäÄöÖÖáàãâæçéèêëüÜíìîïñóòõôøœßúùû]' -- NEED TO CHECK BETTER UTF-8 SUPPORT
-		--local div='[^[%z%s\65-\90\97-\122\194-\244][\128-\191]*]'
-		local pos,arr = 0,{}
-		local tmp_str
-		for st,sp in function() return string.find(str,div,pos,false) end do
-			tmp_str=strtrim(string.sub(str,pos,st-1))
-			if not LootCouncil_isBlank(tmp_str) then
-				if (LootCouncil_debugMode==true) then
-					print("Adding string ("..tmp_str..") to list")
-				end
-				table.insert(arr,tmp_str)
-			end
-			pos = sp + 1
-		end
-		tmp_str=strtrim(string.sub(str,pos))
-		if not LootCouncil_isBlank(tmp_str) then
-			table.insert(arr,tmp_str)
-		end
-		if (LootCouncil_debugMode==true) then
-			print("Adding string ("..tmp_str..") to list")
-		end
-
-		return arr
-	else
-		return nil
-	end
-end
-
-function LootCouncil_GearSum(items,level)
-    if items and type(items) == 'table' then
-        local totalItems = 0;
-        local totalScore = 0;
-
-        for i,itemLink in pairs(items) do
-            if itemLink and not ( i == INVSLOT_BODY or i == INVSLOT_RANGED or i == INVSLOT_TABARD ) then
-                local name, link, itemRarity , itemLevel = GetItemInfo(itemLink);
-               -- local itemLevel = self.itemUpgrade:GetUpgradedItemLevel(itemLink); -- TO BE IMPLEMENTED
-
-                if itemLevel then
-
-                    -- Fix for heirlooms
---                    if itemRarity == 7 then
---                        itemLevel = self:Heirloom(level, itemLink);
---                   end
-
-                    totalItems = totalItems + 1;
-                    totalScore = totalScore + itemLevel;
-                end
-            end
-        end
-
-        return totalScore, totalItems;
-    else
-        return nil;
-    end
-end
-
-
------------ LootCouncil_GetPlayerIlvl -----------------------
--- Retrieve the latest information about the ilvl of a player
-------------------------------------------------------------
-function LootCouncil_GetPlayerIlvl(playerIndex)
-
-	if playerIndex then 
-		local target="raid" .. tostring(playerIndex)
-
-		local canInspect,cached,refresh=LootCouncil_Lite_inspect:RequestItems(target)
-		if (LootCouncil_debugMode==true) then
-			print("Player: "..target.."; CanInspect: ".. tostring(canInspect)) 
-		end
-
-		if not canInspect then
-			return "NA";
-		end
-
-		LootCouncil_Lite_inspect:AddCharacter(target);
-		NotifyInspect(target);
-
-		-- Get items and sum
-		local items = LootCouncil_Lite_inspect:GetItems(target);
-		local totalScore, totalItems = LootCouncil_GearSum(items, UnitLevel(target));
-
-		if totalItems and totalItems > 0 then
-			local score = totalScore / totalItems;
-			return tostring(round(score));
-		else
-			return "NA";
-		end
-	end
-end
-
-
-function LootCouncil_SendChatMessage(msg ,chatType ,language ,channel)
-
-if string.lower(chatType) == "officer" or string.lower(chatType) == "raid" or string.lower(chatType) == "whisper" or string.lower(chatType) == "raid_warning" or string.lower(chatType) == "guild" then
-	-- Send message
-	SendChatMessage(msg ,chatType ,nil ,channel);
-else
-	-- Find channel number
-	local index
-	if channel then
-		index = GetChannelName(channel)
-	else
-		index,channel = GetChannelName(chatType)
-	end
-
-	-- Send message
-	if index >0 then
-		SendChatMessage(msg ,"CHANNEL" ,nil ,index);
-	else
-		print("You have not joined channel ".. LootCouncil_Channel ..". Using officer channel for communication.")
-		print(chatType)
-		SendChatMessage(msg ,"OFFICER");
-	end
-end
-
-end
+if not LootCouncil_Lite_CacheGUID or type(LootCouncil_Lite_CacheGUID) ~= 'table' then LootCouncil_Lite_CacheGUID = {}; end
 
 LootCouncil_TheCouncil = {};
 LootCouncil_Browser = {}
@@ -174,27 +35,81 @@ LootCouncil_SplitRaids = false;
 
 LootCouncil_awaitingItem = false;
 
-LootCouncil_Browser.private = LootCouncil_privateVoting;
-LootCouncil_Browser.single = LootCouncil_singleVote;
-LootCouncil_Browser.spec = LootCouncil_displaySpec;
-LootCouncil_Browser.self = LootCouncil_selfVoting;
-LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
-LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
-LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
-LootCouncil_Browser.SplitRaids=LootCouncil_SplitRaids;
-
 LootCouncil_LinkWhisper = true;
 LootCouncil_LinkOfficer = true;
 LootCouncil_LinkRaid = false;
 LootCouncil_LinkGuild = false;
-LootCouncil_Version="2.7"
+
 
 LootCouncil_Channel="OFFICER"
 
-LootCouncil_Lite_inspect:AddHook('LootCouncil_Lite', 'items', function(...) LootCouncil_ProcessInspect(...); end);
+--LootCouncil_Lite_inspect:AddHook('LootCouncil_Lite', 'items', function(...) LootCouncil_ProcessInspect(...); end);
 
 RegisterAddonMessagePrefix("L00TCOUNCIL");
 
+------------- isBlank ---------------------------------
+-- Checks if a string is blank
+-------------------------------------------------------
+function LootCouncil_isBlank(x)
+  return not not tostring(x):find("^%s*$")
+end
+
+------------- logical2string ---------------------------------
+-- Converts a logical to a number string
+-------------------------------------------------------
+function LootCouncil_logical2string(x)
+	if x then
+		return "1"
+	else
+		return "0"
+	end
+end
+
+------------- round ---------------------------------
+-- Rounds a number to x decimals
+-------------------------------------------------------
+function LootCouncil_round(num,idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
+
+------------- convertStringList -----------------------
+-- Converts a string to a list
+-------------------------------------------------------
+function LootCouncil_convertStringList(str)
+	-- STILL NEEDS ERROR PROTECTION
+	if not LootCouncil_isBlank(str) then
+--		if LootCouncil_Lite_debugMode then
+--			print("Converting string to list:"..str)
+--		end
+		local div='[^%a%såÅäÄöÖÖáàãâæçéèêëüÜíìîïñóòõôøœßúùû]' -- NEED TO CHECK BETTER UTF-8 SUPPORT
+		--local div='[^[%z%s\65-\90\97-\122\194-\244][\128-\191]*]'
+		local pos,arr = 0,{}
+		local tmp_str
+		for st,sp in function() return string.find(str,div,pos,false) end do
+			tmp_str=strtrim(string.sub(str,pos,st-1))
+			if not LootCouncil_isBlank(tmp_str) then
+--				if LootCouncil_Lite_debugMode then
+--					print("Adding string ("..tmp_str..") to list")
+--				end
+				table.insert(arr,tmp_str)
+			end
+			pos = sp + 1
+		end
+		tmp_str=strtrim(string.sub(str,pos))
+		if not LootCouncil_isBlank(tmp_str) then
+			table.insert(arr,tmp_str)
+		end
+--		if LootCouncil_Lite_debugMode then
+--			print("Adding string ("..tmp_str..") to list")
+--		end
+
+		return arr
+	else
+		return nil
+	end
+end
 
 do
 	----------- Slash Command Manager -----------
@@ -265,3 +180,52 @@ do
 	end
 end
 
+
+function LootCouncil_SendChatMessage(msg ,chatType ,language ,channel)
+
+if string.lower(chatType) == "officer" or string.lower(chatType) == "raid" or string.lower(chatType) == "whisper" or string.lower(chatType) == "raid_warning" or string.lower(chatType) == "guild" then
+	-- Send message
+	SendChatMessage(msg ,chatType ,nil ,channel);
+else
+	-- Find channel number
+	local index
+	if channel then
+		index = GetChannelName(channel)
+	else
+		index,channel = GetChannelName(chatType)
+	end
+
+	-- Send message
+	if index >0 then
+		SendChatMessage(msg ,"CHANNEL" ,nil ,index);
+	else
+		print("You have not joined channel ".. LootCouncil_Channel ..". Using officer channel for communication.")
+		print(chatType)
+		SendChatMessage(msg ,"OFFICER");
+	end
+end
+
+end
+
+------------- searchCharName -----------------------
+-- Search by the name of a character in the MasterLootCandidates
+----------------------------------------------------------
+
+function LootCouncil_searchCharName(candidate)
+	local raidIndex= nil
+	if candidate then
+		-- Needs better support for party/raid
+		 raidIndex = UnitInRaid(Ambiguate(candidate,"none"));		
+	end
+	return raidIndex
+end
+
+------------- Array Lookup -----------------------
+-- Checking if an array contains a given value
+----------------------------------------------------------
+function LootCouncil_inTable(tbl, item)
+	for key, value in pairs(tbl) do	
+		if value == item then return key end
+	end
+	return false
+end

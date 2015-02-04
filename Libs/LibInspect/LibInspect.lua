@@ -297,8 +297,8 @@ function lib:InspectReady(guid)
     -- Few more error checks
     if not guid then return false end
     if InCombatLockdown() then return false end
-    
-    --- print('LibInspect:InspectReady', guid, self.cache[guid]);
+
+    --print('LibInspect:InspectReady', guid, self.cache[guid]);
     
     -- Make sure we have a target and its the same as the cache
     if self.cache[guid] and self.cache[guid].target and UnitGUID(self.cache[guid].target) == guid then
@@ -318,7 +318,7 @@ function lib:InspectReady(guid)
             local items, count = self:GetItems(target, guid);
             local talents = self:GetTalents(target, guid);
             
-            --- print('LibInspect:InspectReady Done', UnitName(target), guid, self.rescanGUID[target], count);
+            --print('LibInspect:InspectReady Done', target, UnitName(target), guid, self.rescanGUID[target], count);
             
             -- Do a 2nd pass if there aren't many items
             if count <= self.rescan and self.rescanGUID[target] ~= guid then
@@ -348,12 +348,12 @@ function lib:GetItems(target, guid)
             items[i] = itemLink;
             
             if itemLink then 
-                 --- print('LibInspect:GetItems', UnitName(target), i, itemLink);
+                --  print('LibInspect:GetItems', UnitName(target), i, itemLink);
                 count = count + 1; 
             end
         end
         
-        --- print('LibInspect:GetItems Total', UnitName(target), count);
+        --print('LibInspect:GetItems Total', UnitName(target), count);
         
         return items, count;
     else

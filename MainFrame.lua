@@ -52,26 +52,45 @@ local currSortIndex = 0
 
 local L = LootCouncilLocalization;
 
-LootCouncil_Browser.MainDebug = false; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
+LootCouncil_Browser_MainDebug = false; -- Note: This is a variable for ACTIVATING all debug text. Lots of random stuff. Highly recommended to turn OFF
 -- 1 = debug on (all print commands fired)
 -- 0 = debuf off (no print commands)
 
--- 4.0 Change On
-local LootCouncil_Lite = LibStub("AceAddon-3.0"):NewAddon("LootCouncil_Lite", "AceHook-3.0")
+LootCouncil_Browser.private = LootCouncil_privateVoting;
+LootCouncil_Browser.single = LootCouncil_singleVote;
+LootCouncil_Browser.spec = LootCouncil_displaySpec;
+LootCouncil_Browser.self = LootCouncil_selfVoting;
+LootCouncil_Browser.confirmEnd = LootCouncil_confirmEnding;
+LootCouncil_Browser.EnchantersList = LootCouncil_convertStringList(LootCouncil_Enchanters);
+LootCouncil_Browser.MLI = LootCouncil_masterLootIntegration;
+LootCouncil_Browser.SplitRaids=LootCouncil_SplitRaids;
+
 
 -------------- MainFrame_OnLoad --------------
 -- Loads the Addon Frame
 ----------------------------------------------
 function MainFrame_OnLoad()
-    MainFrame:RegisterEvent("CHAT_MSG_OFFICER");
-    MainFrame:RegisterEvent("CHAT_MSG_CHANNEL");
-    MainFrame:RegisterEvent("CHAT_MSG_RAID");
-    MainFrame:RegisterEvent("CHAT_MSG_RAID_LEADER");
-    MainFrame:RegisterEvent("CHAT_MSG_GUILD");
-    MainFrame:RegisterEvent("CHAT_MSG_ADDON");
-    MainFrame:RegisterEvent("CHAT_MSG_WHISPER");
-    MainFrame:SetScript("OnEvent", MainFrame_EventHandler);
-    MainFrame:Hide();
+		
+	-- Tell the player we are being loaded
+	print(format('%s: %s','LootCouncil_Lite', tostring(LootCouncil_Lite.version)));
+
+	-- Update ilvl score cache
+	LootCouncil_Lite.inspect:AddHook('LootCouncil_Lite', 'items', function(...) if isInitiator then LootCouncil_Lite:ProcessInspect(...);end; end);
+	LootCouncil_Lite:RegisterEvent("GROUP_ROSTER_UPDATE", function() LootCouncil_Lite:UpdateGroup() end);
+	LootCouncil_Lite:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", function() LootCouncil_Lite:StartScore('player'); end);
+	--LootCouncil_Lite:RegisterEvent("INSPECT_READY", function(self,event,...) LootCouncil_Lite:RoughScore(self,event,LootCouncil_Lite:GUIDtoName(...)) end);
+	LootCouncil_Lite:AutoPurge(true);
+	LootCouncil_Lite:StartScore('player');
+
+	MainFrame:RegisterEvent("CHAT_MSG_OFFICER");
+	MainFrame:RegisterEvent("CHAT_MSG_CHANNEL");
+	MainFrame:RegisterEvent("CHAT_MSG_RAID");
+	MainFrame:RegisterEvent("CHAT_MSG_RAID_LEADER");
+	MainFrame:RegisterEvent("CHAT_MSG_GUILD");
+	MainFrame:RegisterEvent("CHAT_MSG_ADDON");
+	MainFrame:RegisterEvent("CHAT_MSG_WHISPER");
+	MainFrame:SetScript("OnEvent", MainFrame_EventHandler);	
+	MainFrame:Hide();
 	
 	CurrentCouncilLabel:SetText(LootCouncilLocalization["CURRENT_COUNCIL"]);
 	CurrentItemLabel:SetText(LootCouncilLocalization["CURRENT_ITEM"]);
@@ -361,10 +380,10 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 			if isValid == 0 then -- Fires when player is IN a raid but NOT a raid officer
 				print(LootCouncilLocalization["NOSTART_1"]);
 				print(LootCouncilLocalization["NOSTART_NOT_RAIDASSIST"]);
-			elseif isValid == 3 and LootCouncil_Browser.MainDebug==false then -- Fires when player is NOT in a raid and is NOT the guild leader
+			elseif isValid == 3 and LootCouncil_Browser_MainDebug==false then -- Fires when player is NOT in a raid and is NOT the guild leader
 				print(LootCouncilLocalization["NOSTART_1"]);
 				print(LootCouncilLocalization["NOSTART_NOT_GM"]);
-			elseif isValid == 1 or (isValid ==3 and LootCouncil_Browser.MainDebug==true) then -- Fires when player is either a raid officer or guild leader
+			elseif isValid == 1 or (isValid ==3 and LootCouncil_Browser_MainDebug==true) then -- Fires when player is either a raid officer or guild leader
 				GuildRoster();
 				--LootCouncil_Browser.updateEnchantersList()
 				LootCouncil_Browser.WhisperList = {}
@@ -489,7 +508,7 @@ function LootCouncil_Browser.prepareLootFrame()
 	else
 		CurrentItemLink:SetText(LootCouncilLocalization["LOADING"]);
 	end
-	CurrentItemLevelLabel:Show(); -- Show the Lable for item level
+	CurrentItemLevelLabel:Show(); -- Show the Label for item level
 	
 	
 	EmptyTexture:Hide(); -- Hide the empty texture
@@ -564,7 +583,7 @@ function LootCouncil_Browser.heardStart(sender, item)
 		isInitiator = false; -- We're NOT the initiator
 		local rprsName, rprsLink = GetItemInfo(item); -- Get the item link (since we just got sent the item string)
 		itemRunning = rprsLink;
-		SendAddonMessage("L00TCOUNCIL", "echo "..LootCouncil_Version, "WHISPER", theInitiator);
+		SendAddonMessage("L00TCOUNCIL", "echo "..LootCouncil_Lite.version, "WHISPER", theInitiator);
 	else
 		print(string.format(LootCouncilLocalization["TOO_LOW_RANK"], sender));
 	end
@@ -592,10 +611,10 @@ function LootCouncil_Browser.processEcho(sender, ver)
 			end
 		end
 		
-		if (not ver) or (not (LootCouncil_Version == ver)) then
-			if (not ver) or tonumber(LootCouncil_Version) > tonumber(ver) then
+		if (not ver) or (not (string.sub(LootCouncil_Lite.version,1,-3) == ver)) then
+			if (not ver) or tonumber(string.sub(LootCouncil_Lite.version,1,-3)) > tonumber(ver) then
 				if LootCouncil_debugMode == false then
-					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["OUTDATED"], LootCouncil_Version), "WHISPER", nil, sender)
+					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["OUTDATED"], string.sub(LootCouncil_Lite.version,1,-3)), "WHISPER", nil, sender)
 				end
 			else
 				print(string.format(LootCouncilLocalization["OUTDATED"], ver))
@@ -2230,6 +2249,9 @@ function LootCouncil_Browser.updateIlvl(player, ilvl)
 		if theEntry and theEntry[1] == player then -- If this entry is the player we care about
 			theEntry[16] = ilvl; -- Then add their spec
 			LootCouncil_Browser.Update()
+			if isInitiator and auctionRunning then
+				LootCouncil_Browser.sendGlobalMessage("ilvl "..player.." "..ilvl)
+			end
 			break;
 		end
 	end
@@ -2535,7 +2557,7 @@ function GroupLootDropDownLCL_Initialize()
 			for i=1, MAX_RAIDERS do				
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
 				if candidate then
-					index=LootCouncil_Browser.searchCharName(candidate);
+					index=LootCouncil_searchCharName(candidate);
 					if index then
 					local name, rank , partyNum = LootCouncil_Browser.getRaidCharInfo(index);
 					if partyNum==UIDROPDOWNMENU_MENU_VALUE then
@@ -2565,7 +2587,7 @@ function GroupLootDropDownLCL_Initialize()
 			for i=1, MAX_RAIDERS do			
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);				
 				if candidate and getn(LootCouncil_Browser.EnchantersList)>0 then
-					index=LootCouncil_Browser.inTable(LootCouncil_Browser.EnchantersList, Ambiguate(candidate,"none"))					
+					index=LootCouncil_inTable(LootCouncil_Browser.EnchantersList, Ambiguate(candidate,"none"))					
 					if index then
 						-- Add candidate button						
 							local pClass, eClass = UnitClass(candidate)
@@ -2702,7 +2724,7 @@ function GroupLootDropDownLCL_Initialize()
 			for i=1, MAX_RAIDERS do
 				candidate = GetMasterLootCandidate(LootFrame.selectedSlot, i);
 				if candidate then
-					index= LootCouncil_Browser.searchCharName(candidate)
+					index= LootCouncil_searchCharName(candidate)
 					if index then
 						name, _, subgroup, _, _, _, _, _, isDead =LootCouncil_Browser.getRaidCharInfo(index)
 
@@ -2860,7 +2882,7 @@ function LootCouncil_Browser.giveItemAway()
 end
 
 function LootCouncil_Browser.printd(msg)
-	if (LootCouncil_Browser.MainDebug == true) then
+	if (LootCouncil_Browser_MainDebug == true) then
 		print(msg)
 	end
 end
@@ -2878,7 +2900,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 		local readyToAdd = true;
 		local name = theInfo[1];
 		local spec = theInfo[2];
-		local ilvl = LootCouncil_GetPlayerIlvl(LootCouncil_Browser.searchCharName(name));
+		local ilvl = LootCouncil_Lite:GetPlayerIlvl(name);
 		local fullSpec = "special";
 		if spec == "M" then
 			fullSpec = "MAIN";
@@ -3308,28 +3330,7 @@ function LootCouncil_Browser.updateEnchantersList()
 			end
 end
 
-------------- searchCharName -----------------------
--- Search by the name of a character in the MasterLootCandidates
-----------------------------------------------------------
 
-function LootCouncil_Browser.searchCharName(candidate)
-	local raidIndex= nil
-	if candidate then
-		-- Needs better support for party/raid
-		 raidIndex = UnitInRaid(Ambiguate(candidate,"none"));		
-	end
-	return raidIndex
-end
-
-------------- Array Lookup -----------------------
--- Checking if an array contains a given value
-----------------------------------------------------------
-function LootCouncil_Browser.inTable(tbl, item)
-	for key, value in pairs(tbl) do	
-		if value == item then return key end
-	end
-	return false
-end
 
 ------------- searchSameRaid -----------------------
 -- Search if a player is in the same raid as initiator

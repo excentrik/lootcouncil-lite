@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Script file="MainFrame.lua" />
+	<Script file="MainFrame.lua" />	
 	<Button name="LootCouncil_Header" virtual="true">
 		<Scripts>
 			<OnClick>LootCouncil_Browser.sortTable(self:GetID())</OnClick>
