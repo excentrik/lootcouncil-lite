@@ -394,7 +394,7 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				isInitiator=true; -- We're the initiator, so set that
 				theInitiator = LootCouncil_Browser.getUnitName("player");
 				--Send out the messages regarding the item
-				if LootCouncil_debugMode == false then
+				if LootCouncil_Lite_debugMode == false then
 					LootCouncil_SendChatMessage(LootCouncilLocalization["START_FIRED"], LootCouncil_Channel); 
 					LootCouncil_SendChatMessage("item: "..itemRunning, LootCouncil_Channel);
 				else
@@ -422,11 +422,11 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				LootCouncil_Browser.showMainFrame();
 				councilList = LootCouncil_Browser.getUnitName("player");
 				councilNum = 1;
-				if UnitInRaid("player") and LootCouncil_debugMode == false then
+				if UnitInRaid("player") and LootCouncil_Lite_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning,theInitiator), "RAID_WARNING");
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning,theInitiator), "RAID");
 				else
-					if LootCouncil_debugMode == false then
+					if LootCouncil_Lite_debugMode == false then
 						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning), "GUILD");
 						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning), "GUILD");
 					end
@@ -613,7 +613,7 @@ function LootCouncil_Browser.processEcho(sender, ver)
 		
 		if (not ver) or (not (string.sub(LootCouncil_Lite.version,1,-3) == ver)) then
 			if (not ver) or tonumber(string.sub(LootCouncil_Lite.version,1,-3)) > tonumber(ver) then
-				if LootCouncil_debugMode == false then
+				if LootCouncil_Lite_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["OUTDATED"], string.sub(LootCouncil_Lite.version,1,-3)), "WHISPER", nil, sender)
 				end
 			else
@@ -949,7 +949,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							theEntry[3] = piLevel.." - "..piLevel2 -- Get the itemlevels set
 							theEntry[12] = 2; -- switch the flag for two items
 							theEntry[14] = psLink2; -- hold the second link
-							if LootCouncil_debugMode == false then -- If we're displaying messages
+							if LootCouncil_Lite_debugMode == false then -- If we're displaying messages
 								-- Send the player a message saying we got the update
 								if spec == "-" then
 									LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -963,7 +963,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2)
 							LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 						else -- Else they only have 1 item, so we don't need to do as much
-							if LootCouncil_debugMode == false then -- If we're displaying messages
+							if LootCouncil_Lite_debugMode == false then -- If we're displaying messages
 								-- Send the player a message saying we got the update
 								if spec == "-" then
 									LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -982,7 +982,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							LootCouncil_Browser.SelectEntry(indexOfPlayer)
 						end
 					else -- They haven't already linked an item, so we need to put them in the table.
-						if LootCouncil_debugMode == false then -- If we're sending messages
+						if LootCouncil_Lite_debugMode == false then -- If we're sending messages
 							-- then let them know we got the message
 							if spec == "-" then 
 								LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["NEW_ENTRY"], itemRunning), "WHISPER", nil, name); -- Whisper them about their consideration
@@ -1008,7 +1008,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 						--Update the clients that we have a new item entry.
 						LootCouncil_Browser.sendGlobalMessage("itemEntry "..name.." "..actualItemString) -- Send out a global 
 						if psLink2 and (specialSlot == true) then -- If this is a 2-item slot and they linked 2 items
-							if LootCouncil_debugMode == false then -- Send them a message about the items we got
+							if LootCouncil_Lite_debugMode == false then -- Send them a message about the items we got
 								LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK2"]..psLink.." - "..psLink2, "WHISPER", nil, name); -- Send them about BOTH items
 							end
 							LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2) -- Alert other councilmen about the second item that we got
@@ -1031,7 +1031,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 							})
 							LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 						else -- Else they only linked 1 item or this isn't a special slot
-							if LootCouncil_debugMode == false then -- send them a message saying we got the item
+							if LootCouncil_Lite_debugMode == false then -- send them a message saying we got the item
 								LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK1"]..psLink, "WHISPER", nil, name);
 							end
 							table.insert(LootCouncil_Browser.Elects, {
@@ -1058,7 +1058,7 @@ function LootCouncil_Browser.newEntry(name, msg) --Add a new entry to the loot t
 						LootCouncil_Browser.Update(); -- AND WE'RE DONE! UPDATE THE FRAME!
 					end
 				else -- They didn't send items that fit the slots we were considering
-					if LootCouncil_debugMode == false then
+					if LootCouncil_Lite_debugMode == false then
 						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["BAD_SLOT"], itemRunning), "WHISPER", nil, name);
 					end
 				end
@@ -1830,7 +1830,7 @@ end
 -- Clears the house cus this loot session is done!
 ---------------------------------------------------------------
 function LootCouncil_Browser.closeLootCouncilSession()
-	if isInitiator == true and LootCouncil_debugMode == false then -- if we're the initiator, let people know we're done with this session
+	if isInitiator == true and LootCouncil_Lite_debugMode == false then -- if we're the initiator, let people know we're done with this session
 		LootCouncil_SendChatMessage("item: "..itemRunning, LootCouncil_Channel);
 		currSortIndex = -1
 		LootCouncil_Browser.sortTable(6)
@@ -2949,7 +2949,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						theEntry[3] = piLevel.." - "..piLevel2 -- Get the itemlevels set
 						theEntry[12] = 2; -- switch the flag for two items
 						theEntry[14] = psLink2; -- hold the second link
-						if LootCouncil_debugMode == false then -- If we're displaying messages
+						if LootCouncil_Lite_debugMode == false then -- If we're displaying messages
 							-- Send the player a message saying we got the update
 							if spec == "-" then
 								LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -2964,7 +2964,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 						LootCouncil_Browser.sendGlobalMessage("ilvl "..name.." "..ilvl)
 					else -- Else they only have 1 item, so we don't need to do as much
-						if LootCouncil_debugMode == false then -- If we're displaying messages
+						if LootCouncil_Lite_debugMode == false then -- If we're displaying messages
 							-- Send the player a message saying we got the update
 							if spec == "-" then
 								LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["UPDATE_PROCESSED"], itemRunning), "WHISPER", nil, name);
@@ -2984,7 +2984,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						LootCouncil_Browser.SelectEntry(indexOfPlayer)
 					end
 				else -- They haven't already linked an item, so we need to put them in the table.
-					if LootCouncil_debugMode == false then -- If we're sending messages
+					if LootCouncil_Lite_debugMode == false then -- If we're sending messages
 						-- then let them know we got the message
 						if spec == "-" then 
 							LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["NEW_ENTRY"], itemRunning), "WHISPER", nil, name); -- Whisper them about their consideration
@@ -3010,7 +3010,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 					--Update the clients that we have a new item entry.
 					LootCouncil_Browser.sendGlobalMessage("itemEntry "..name.." "..actualItemString) -- Send out a global 
 					if psLink2 and (specialSlot == true) then -- If this is a 2-item slot and they linked 2 items
-						if LootCouncil_debugMode == false then -- Send them a message about the items we got
+						if LootCouncil_Lite_debugMode == false then -- Send them a message about the items we got
 							LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK2"]..psLink.." - "..psLink2, "WHISPER", nil, name); -- Send them about BOTH items
 						end
 						LootCouncil_Browser.sendGlobalMessage("secondEntry "..name.." "..actualItemString2) -- Alert other councilmen about the second item that we got
@@ -3035,7 +3035,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 						LootCouncil_Browser.sendGlobalMessage("spec "..name.." "..spec)
 						LootCouncil_Browser.sendGlobalMessage("ilvl "..name.." "..ilvl)
 					else -- Else they only linked 1 item or this isn't a special slot
-						if LootCouncil_debugMode == false then -- send them a message saying we got the item
+						if LootCouncil_Lite_debugMode == false then -- send them a message saying we got the item
 							LootCouncil_SendChatMessage(LootCouncilLocalization["UPDATE_PROCESSED_FEEDBACK1"]..psLink, "WHISPER", nil, name);
 						end
 						table.insert(LootCouncil_Browser.Elects, {
@@ -3064,7 +3064,7 @@ function LootCouncil_Browser.addNewEntry2(index)
 					LootCouncil_Browser.Update(); -- AND WE'RE DONE! UPDATE THE FRAME!
 				end
 			else -- They didn't send items that fit the slots we were considering
-				if LootCouncil_debugMode == false then
+				if LootCouncil_Lite_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["BAD_SLOT"], itemRunning), "WHISPER", nil, name);
 				end
 			end
@@ -3201,7 +3201,7 @@ function LootCouncil_Browser.parseSpec(msg, actualItemString, actualItemString2)
 --		end
 		
 		-- SEARCH FOR OFF SPEC RELATED KEYWORDS
-		keywords= { "offspec", "off","os"};
+		keywords= { "offspec", "off"};
 		for i,v in ipairs(keywords) do
 			if string.find(string_to_search, keywords[i]) then
 				spec = "OFF"

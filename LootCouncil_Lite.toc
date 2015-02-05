@@ -1,6 +1,6 @@
 ## Title: LootCouncil_Lite
 ## SavedVariables: LootCouncil_minRank, LootCouncil_sawFirstMessage, LootCouncil_privateVoting, LootCouncil_singleVote, LootCouncil_LinkWhisper, LootCouncil_LinkOfficer, LootCouncil_LinkGuild, LootCouncil_LinkRaid, LootCouncil_displaySpec, LootCouncil_selfVoting, LootCouncil_scale, LootCouncil_confirmEnding, LootCouncil_masterLootIntegration, LootCouncil_Enchanters, LootCouncil_Channel, LootCouncil_SplitRaids,LootCouncil_Lite_CacheGUID
-## Version: 2.7.0
+## Version: 2.7.2
 ## Notes: Assists loot councils in faster, more accurate decisions.
 ## Author: Matthew "Blacksen" Enthoven and Nicolau "Excentriko" Goncalves
 ## Interface: 60000
@@ -9,6 +9,7 @@
 Localization.enUS.lua
 Localization.frFR.lua
 Localization.ruRU.lua
+Localization.ptBR.lua
 embeds.xml
 Globals.lua
 Inspect.lua
