@@ -93,7 +93,7 @@ function LootCouncil_Lite:GetPlayerIlvl(playerName)
 		if guid then
 			local score, age, items, startScore = LootCouncil_Lite:GetScore(LootCouncil_Lite:GetGUID(target), true, target)
 			if score then
-				return tostring(round(score));
+				return tostring(LootCouncil_round(score));
 			end
 		end
 		return "NA";
