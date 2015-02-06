@@ -423,12 +423,12 @@ function LootCouncil_Browser.initiateLootCouncil(item)
 				councilList = LootCouncil_Browser.getUnitName("player");
 				councilNum = 1;
 				if UnitInRaid("player") and LootCouncil_Lite_debugMode == false then
-					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning), "RAID_WARNING");
+					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning,theInitiator), "RAID_WARNING");
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning,theInitiator), "RAID");
 				else
 					if LootCouncil_Lite_debugMode == false then
 						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE1"], itemRunning), "GUILD");
-						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning,theInitiator), "GUILD");
+						LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["START_MSG_PULSE2"], itemRunning), "GUILD");
 					end
 				end
 				
@@ -611,8 +611,8 @@ function LootCouncil_Browser.processEcho(sender, ver)
 			end
 		end
 		
-		if (not ver) or (not (string.sub(LootCouncil_Lite.version,1,3) == ver)) then
-			if (not ver) or tonumber(string.sub(LootCouncil_Lite.version,1,3)) > tonumber(ver) then
+		if (not ver) or (not (string.sub(LootCouncil_Lite.version,1,-3) == ver)) then
+			if (not ver) or tonumber(string.sub(LootCouncil_Lite.version,1,-3)) > tonumber(ver) then
 				if LootCouncil_Lite_debugMode == false then
 					LootCouncil_SendChatMessage(string.format(LootCouncilLocalization["OUTDATED"], string.sub(LootCouncil_Lite.version,1,-3)), "WHISPER", nil, sender)
 				end
