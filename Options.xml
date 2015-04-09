@@ -196,7 +196,7 @@
 				</Scripts>
 				<FontString inherits="GameFontNormal" />
 			</EditBox>
-			<Slider name="ScaleSlider" enableMouse="true" minValue="0.5" maxValue="1" valueStep="0.02" orientation="HORIZONTAL">
+			<Slider name="ScaleSlider" enableMouse="true" minValue="0.1" maxValue="1" valueStep="0.05" orientation="HORIZONTAL">
 				<Size>
 					<AbsDimension x="197" y="20" />
 				</Size>
